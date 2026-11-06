@@ -1,0 +1,71 @@
+{
+  "expo": {
+    "name": "Carmen Limpio",
+    "slug": "carmen-limpio",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "platforms": [
+      "android"
+    ],
+    "scheme": "carmen-limpio",
+    "android": {
+      "package": "mx.carmenlimpio.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B4F6C",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "./plugins/cmake-moderno.js",
+      "@maplibre/maplibre-react-native",
+      [
+        "expo-font",
+        {
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "Figtree",
+                "fontDefinitions": [
+                  {
+                    "path": "../../node_modules/@expo-google-fonts/figtree/400Regular/Figtree_400Regular.ttf",
+                    "weight": 400
+                  },
+                  {
+                    "path": "../../node_modules/@expo-google-fonts/figtree/500Medium/Figtree_500Medium.ttf",
+                    "weight": 500
+                  },
+                  {
+                    "path": "../../node_modules/@expo-google-fonts/figtree/600SemiBold/Figtree_600SemiBold.ttf",
+                    "weight": 600
+                  },
+                  {
+                    "path": "../../node_modules/@expo-google-fonts/figtree/700Bold/Figtree_700Bold.ttf",
+                    "weight": 700
+                  },
+                  {
+                    "path": "../../node_modules/@expo-google-fonts/figtree/800ExtraBold/Figtree_800ExtraBold.ttf",
+                    "weight": 800
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B4F6C",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 288
+        }
+      ]
+    ]
+  }
+}

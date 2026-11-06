@@ -1,0 +1,408 @@
+import {
+  ATRIBUCION_OSM,
+  AVISO_HORARIOS,
+  AVISO_NO_OFICIAL,
+  AVISO_POR_CONFIRMAR,
+  AVISO_TRAZADO,
+  COLORES,
+  DIAS_CARTEL,
+  etiquetaRuta,
+  limitesDe,
+  lugaresUbicados,
+  NOMBRE_DIA,
+  notaExcepcion,
+  paradasDeLugar,
+  paradasDelDia,
+  rutaPorId,
+  textoHorario,
+  trazadoDeRuta,
+  type Dia,
+  type ParadaDeRuta,
+} from '@carmen-limpio/compartido';
+import { Ionicons } from '@expo/vector-icons';
+import { Camera, GeoJSONSource, Layer, Map as Mapa, type CameraRef } from '@maplibre/maplibre-react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useMemo, useRef, useState } from 'react';
+import {
+  Animated,
+  FlatList,
+  Linking,
+  PanResponder,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  Aviso,
+  BarraEstado,
+  BotonFlotante,
+  DiasSemana,
+  EtiquetaTurno,
+  InsigniaRuta,
+  Pastilla,
+  Pestanas,
+} from '../../componentes/ui';
+import { FUENTE, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
+
+// El servidor público de OpenStreetMap solo sirve para el prototipo.
+const ESTILO_OSM = {
+  version: 8 as const,
+  sources: {
+    osm: {
+      type: 'raster' as const,
+      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+      tileSize: 256,
+      maxzoom: 19,
+    },
+  },
+  layers: [{ id: 'osm', type: 'raster' as const, source: 'osm' }],
+};
+
+type Pestana = 'lugares' | 'horario';
+
+const PESTANAS: { id: Pestana; texto: string }[] = [
+  { id: 'lugares', texto: 'Lugares' },
+  { id: 'horario', texto: 'Horario' },
+];
+
+const ALTURA_CABECERA = 134;
+const ZOOM_LUGAR = 15;
+
+function FilaParada({
+  parada,
+  elegida,
+  onPress,
+}: {
+  parada: ParadaDeRuta;
+  elegida: boolean;
+  onPress: () => void;
+}) {
+  const { lugar, horario } = parada;
+  const ubicado = horario.confianza !== 'ninguna';
+  const excepcion = notaExcepcion(horario.dias);
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected: elegida }}
+      onPress={onPress}
+      style={[estilos.parada, elegida && estilos.paradaElegida]}
+    >
+      <Ionicons
+        color={ubicado ? COLORES.primario : COLORES.inactivoTexto}
+        name={ubicado ? 'location' : 'location-outline'}
+        size={20}
+      />
+      <View style={estilos.paradaCuerpo}>
+        <Text style={TEXTO.fila}>{lugar.nombre}</Text>
+        {!ubicado && <Text style={TEXTO.apoyo}>Sin ubicar en el mapa</Text>}
+        {elegida && <Text style={TEXTO.apoyo}>{textoHorario(horario.dias, horario.turno)}</Text>}
+        {excepcion && !elegida && <Text style={estilos.excepcion}>{excepcion}</Text>}
+        {horario.porConfirmar && <Text style={estilos.excepcion}>{AVISO_POR_CONFIRMAR}</Text>}
+      </View>
+      {elegida && <Ionicons color={COLORES.textoSuave} name="chevron-forward" size={20} style={estilos.paradaFlecha} />}
+    </Pressable>
+  );
+}
+
+export default function MapaRuta() {
+  const { rutaId, lugar } = useLocalSearchParams<{ rutaId: string; lugar?: string }>();
+  const { top, bottom } = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const [elegido, setElegido] = useState(lugar);
+  const [pestana, setPestana] = useState<Pestana>('lugares');
+  const [dia, setDia] = useState<Dia | null>(null);
+  const ruta = rutaPorId(rutaId);
+  const trazado = trazadoDeRuta(rutaId);
+  const camara = useRef<CameraRef>(null);
+  const lista = useRef<FlatList<ParadaDeRuta>>(null);
+
+  const alturaCerrado = ALTURA_CABECERA + bottom;
+  const alturaAbierto = Math.round(height * 0.84);
+  const alturaMedio = Math.round(height * 0.48);
+  const paradas = [alturaAbierto - alturaMedio, alturaAbierto - alturaCerrado, 0];
+  const desplazamiento = useRef(new Animated.Value(alturaAbierto - alturaMedio)).current;
+  const posicion = useRef(alturaAbierto - alturaMedio);
+  const [espacioLista, setEspacioLista] = useState(alturaAbierto - alturaMedio);
+
+  const moverA = (destino: number) => {
+    posicion.current = destino;
+    setEspacioLista(destino);
+    Animated.spring(desplazamiento, {
+      bounciness: 0,
+      speed: 18,
+      toValue: destino,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const arrastre = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, { dy }) => Math.abs(dy) > 4,
+      onPanResponderMove: (_, { dy }) => {
+        const siguiente = Math.max(0, Math.min(alturaAbierto - alturaCerrado, posicion.current + dy));
+        desplazamiento.setValue(siguiente);
+      },
+      onPanResponderRelease: (_, { dy, vy }) => {
+        const proyectado = posicion.current + dy + vy * 180;
+        const destino = paradas.reduce((cercano, p) =>
+          Math.abs(p - proyectado) < Math.abs(cercano - proyectado) ? p : cercano,
+        );
+        moverA(destino);
+      },
+    }),
+  ).current;
+
+  const limites = useMemo(() => trazado && limitesDe(trazado), [trazado]);
+  const margenMapa = useMemo(
+    () => ({ top: top + 90, right: 40, bottom: alturaMedio + 30, left: 40 }),
+    [top, alturaMedio],
+  );
+
+  const linea = useMemo<GeoJSON.Feature | undefined>(
+    () =>
+      trazado && {
+        type: 'Feature',
+        properties: {},
+        geometry: { type: 'LineString', coordinates: trazado.linea },
+      },
+    [trazado],
+  );
+
+  const delDia = useMemo(() => (ruta ? paradasDelDia(ruta, dia) : []), [ruta, dia]);
+
+  const puntos = useMemo<GeoJSON.FeatureCollection>(() => {
+    const visibles = new Set(delDia.map((p) => p.lugar.id));
+    return {
+      type: 'FeatureCollection',
+      features: (trazado?.paradas ?? [])
+        .filter((p) => p.lugarIds.some((id) => visibles.has(id)))
+        .map((p) => ({
+          type: 'Feature',
+          properties: {
+            lugarId: p.lugarIds.find((id) => visibles.has(id)),
+            elegido: elegido !== undefined && p.lugarIds.includes(elegido),
+          },
+          geometry: { type: 'Point', coordinates: p.coordenadas },
+        })),
+    };
+  }, [trazado, delDia, elegido]);
+
+  if (!ruta || !trazado || !linea || !limites) {
+    return <Text style={[TEXTO.cuerpo, estilos.vacio]}>No encontramos esta ruta.</Text>;
+  }
+
+  const lugarIds = elegido ? (paradasDeLugar(trazado, elegido)[0]?.lugarIds ?? []) : [];
+  const paradasEnLista = [
+    ...delDia.filter((p) => lugarIds.includes(p.lugar.id)),
+    ...delDia.filter((p) => !lugarIds.includes(p.lugar.id)),
+  ];
+
+  const elegir = (parada: ParadaDeRuta) => {
+    const [punto] = paradasDeLugar(trazado, parada.lugar.id);
+    if (!punto || lugarIds.includes(parada.lugar.id)) {
+      router.push(`/lugar/${parada.lugar.id}`);
+      return;
+    }
+    setElegido(parada.lugar.id);
+    lista.current?.scrollToOffset({ offset: 0, animated: true });
+    camara.current?.easeTo({ center: punto.coordenadas, zoom: ZOOM_LUGAR, padding: margenMapa, duration: 500 });
+  };
+
+  return (
+    <View style={estilos.pantalla}>
+      <BarraEstado estilo="dark" />
+      <Mapa attribution={false} logo={false} mapStyle={ESTILO_OSM} style={StyleSheet.absoluteFill}>
+        <Camera bounds={limites} duration={0} padding={margenMapa} ref={camara} />
+        <GeoJSONSource data={linea} id="linea">
+          <Layer
+            id="linea-ruta"
+            layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+            paint={{ 'line-color': COLORES.primario, 'line-opacity': 0.8, 'line-width': 5 }}
+            type="line"
+          />
+        </GeoJSONSource>
+        <GeoJSONSource
+          data={puntos}
+          id="puntos"
+          onPress={({ nativeEvent }) => setElegido(nativeEvent.features[0]?.properties?.lugarId)}
+        >
+          <Layer
+            id="puntos-ruta"
+            layout={{ 'circle-sort-key': ['case', ['get', 'elegido'], 1, 0] }}
+            paint={{
+              'circle-color': ['case', ['get', 'elegido'], COLORES.acentoTexto, COLORES.superficie],
+              'circle-radius': ['case', ['get', 'elegido'], 10, 7],
+              'circle-stroke-color': COLORES.primario,
+              'circle-stroke-width': 3,
+            }}
+            type="circle"
+          />
+        </GeoJSONSource>
+      </Mapa>
+
+      <View pointerEvents="box-none" style={[estilos.superior, { top: top + 8 }]}>
+        <BotonFlotante etiqueta="Regresar" icono="arrow-back" onPress={() => router.back()} />
+        <View style={estilos.ilustrativo}>
+          <Ionicons color={COLORES.acentoTexto} name="alert-circle" size={16} />
+          <Text style={estilos.ilustrativoTexto}>Trazado ilustrativo</Text>
+        </View>
+        <View style={estilos.equilibrio} />
+      </View>
+
+      <View style={[estilos.recentrar, { top: top + 66 }]}>
+        <BotonFlotante
+          etiqueta="Ver toda la ruta"
+          icono="scan"
+          onPress={() => camara.current?.fitBounds(limites, { padding: margenMapa, duration: 500 })}
+        />
+      </View>
+
+      <Pressable
+        accessibilityRole="link"
+        onPress={() => Linking.openURL('https://www.openstreetmap.org/copyright')}
+        style={[estilos.atribucion, { top: top + 62 }]}
+      >
+        <Text style={estilos.atribucionTexto}>{ATRIBUCION_OSM}</Text>
+      </Pressable>
+
+      <Animated.View
+        style={[estilos.panel, { height: alturaAbierto, transform: [{ translateY: desplazamiento }] }]}
+      >
+        <View {...arrastre.panHandlers} style={estilos.panelCabecera}>
+          <Pressable
+            accessibilityLabel="Cambiar el tamaño del panel"
+            accessibilityRole="button"
+            onPress={() => moverA(posicion.current === 0 ? paradas[0]! : 0)}
+            style={estilos.asa}
+          >
+            <View style={estilos.asaLinea} />
+          </Pressable>
+          <View style={estilos.titulo}>
+            <InsigniaRuta numero={ruta.numero} turno={ruta.turno} />
+            <View style={estilos.tituloTexto}>
+              <View style={estilos.tituloFila}>
+                <Text accessibilityRole="header" style={TEXTO.subtitulo}>
+                  Ruta {ruta.numero}
+                </Text>
+                <EtiquetaTurno turno={ruta.turno} />
+              </View>
+              <Text style={TEXTO.apoyo}>
+                {lugaresUbicados(trazado)} de {ruta.paradas.length} lugares ubicados
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <Pestanas onChange={setPestana} opciones={PESTANAS} valor={pestana} />
+
+        {pestana === 'lugares' ? (
+          <FlatList
+            contentContainerStyle={{ paddingBottom: espacioLista + bottom + 16 }}
+            data={paradasEnLista}
+            keyExtractor={(p) => p.lugar.id}
+            ListHeaderComponent={
+              <ScrollView contentContainerStyle={estilos.dias} horizontal showsHorizontalScrollIndicator={false}>
+                <Pastilla activa={dia === null} onPress={() => setDia(null)} texto="Todos" />
+                {DIAS_CARTEL.map((d) => (
+                  <Pastilla activa={dia === d} key={d} onPress={() => setDia(d)} texto={NOMBRE_DIA[d]} />
+                ))}
+              </ScrollView>
+            }
+            ref={lista}
+            renderItem={({ item }) => (
+              <FilaParada
+                elegida={lugarIds.includes(item.lugar.id)}
+                onPress={() => elegir(item)}
+                parada={item}
+              />
+            )}
+          />
+        ) : (
+          <ScrollView contentContainerStyle={[estilos.horario, { paddingBottom: espacioLista + bottom + 16 }]}>
+            <Text style={TEXTO.fila}>{etiquetaRuta(ruta)}</Text>
+            <DiasSemana dias={DIAS_CARTEL} />
+            <Text style={estilos.ventana}>{textoHorario(DIAS_CARTEL, ruta.turno)}</Text>
+            <Aviso icono="map">{AVISO_TRAZADO}</Aviso>
+            <Text style={TEXTO.apoyo}>{AVISO_HORARIOS}</Text>
+            <Aviso>{AVISO_NO_OFICIAL}</Aviso>
+          </ScrollView>
+        )}
+      </Animated.View>
+    </View>
+  );
+}
+
+const estilos = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: COLORES.fondo },
+  superior: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    left: 16,
+    position: 'absolute',
+    right: 16,
+  },
+  equilibrio: { width: 46 },
+  recentrar: { position: 'absolute', right: 16 },
+  ilustrativo: {
+    ...SOMBRA,
+    alignItems: 'center',
+    backgroundColor: COLORES.acentoSuave,
+    borderRadius: RADIO.completo,
+    elevation: 4,
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  ilustrativoTexto: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
+  atribucion: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: RADIO.chico,
+    left: 16,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    position: 'absolute',
+  },
+  atribucionTexto: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 12, fontWeight: '500' },
+  panel: {
+    ...SOMBRA,
+    backgroundColor: COLORES.superficie,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    bottom: 0,
+    elevation: 12,
+    left: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    right: 0,
+  },
+  panelCabecera: { paddingBottom: 10, paddingHorizontal: 20 },
+  asa: { alignItems: 'center', height: 28, justifyContent: 'center' },
+  asaLinea: { backgroundColor: COLORES.borde, borderRadius: RADIO.completo, height: 5, width: 44 },
+  titulo: { alignItems: 'center', flexDirection: 'row', gap: 12 },
+  tituloTexto: { flex: 1 },
+  tituloFila: { alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  dias: { gap: 8, paddingHorizontal: 20, paddingVertical: 12 },
+  parada: {
+    alignItems: 'flex-start',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORES.borde,
+    flexDirection: 'row',
+    gap: 10,
+    minHeight: 52,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
+  paradaElegida: { backgroundColor: COLORES.primarioSuave },
+  paradaCuerpo: { flex: 1, gap: 2 },
+  paradaFlecha: { alignSelf: 'center' },
+  excepcion: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 15, fontWeight: '500', lineHeight: 21 },
+  horario: { gap: 14, padding: 20 },
+  ventana: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  vacio: { padding: 20 },
+});
