@@ -1,0 +1,155 @@
+{
+ "kmObligatorios": 512,
+ "tramosObligatorios": 9466,
+ "excluidosKm": {
+  "vías de servicio": 72.9,
+  "andadores": 6,
+  "fuera de zona urbana": 11.7
+ },
+ "supuestos": {
+  "VEL_SERVICIO": 6,
+  "VEL_TRASLADO": 25,
+  "HORAS_TURNO": 8
+ },
+ "salida": {
+  "lat": 18.6733699,
+  "lon": -91.745211
+ },
+ "rutas": [
+  {
+   "ruta": "M1",
+   "turno": "matutino",
+   "kmServicio": 20.3,
+   "kmRepaso": 32,
+   "kmAcceso": 0.2,
+   "horas": 4.7,
+   "tramos": 393
+  },
+  {
+   "ruta": "M2",
+   "turno": "matutino",
+   "kmServicio": 38.4,
+   "kmRepaso": 15.3,
+   "kmAcceso": 16.6,
+   "horas": 7.7,
+   "tramos": 715
+  },
+  {
+   "ruta": "M3",
+   "turno": "matutino",
+   "kmServicio": 39.6,
+   "kmRepaso": 14,
+   "kmAcceso": 17.8,
+   "horas": 7.9,
+   "tramos": 738
+  },
+  {
+   "ruta": "M4",
+   "turno": "matutino",
+   "kmServicio": 30.9,
+   "kmRepaso": 15.6,
+   "kmAcceso": 9.1,
+   "horas": 6.1,
+   "tramos": 569
+  },
+  {
+   "ruta": "M5",
+   "turno": "matutino",
+   "kmServicio": 40.2,
+   "kmRepaso": 20.9,
+   "kmAcceso": 20.9,
+   "horas": 8.4,
+   "tramos": 609
+  },
+  {
+   "ruta": "M6",
+   "turno": "matutino",
+   "kmServicio": 26.7,
+   "kmRepaso": 12.4,
+   "kmAcceso": 6.3,
+   "horas": 5.2,
+   "tramos": 559
+  },
+  {
+   "ruta": "M7",
+   "turno": "matutino",
+   "kmServicio": 34.7,
+   "kmRepaso": 14.9,
+   "kmAcceso": 12,
+   "horas": 6.9,
+   "tramos": 642
+  },
+  {
+   "ruta": "V1",
+   "turno": "vespertino",
+   "kmServicio": 33.3,
+   "kmRepaso": 15.6,
+   "kmAcceso": 8.5,
+   "horas": 6.5,
+   "tramos": 589
+  },
+  {
+   "ruta": "V2",
+   "turno": "vespertino",
+   "kmServicio": 38.3,
+   "kmRepaso": 23.4,
+   "kmAcceso": 19.3,
+   "horas": 8.1,
+   "tramos": 638
+  },
+  {
+   "ruta": "V3",
+   "turno": "vespertino",
+   "kmServicio": 28.5,
+   "kmRepaso": 8.7,
+   "kmAcceso": 10.1,
+   "horas": 5.5,
+   "tramos": 559
+  },
+  {
+   "ruta": "V4",
+   "turno": "vespertino",
+   "kmServicio": 42,
+   "kmRepaso": 52.9,
+   "kmAcceso": 21.4,
+   "horas": 10,
+   "tramos": 741
+  },
+  {
+   "ruta": "V5",
+   "turno": "vespertino",
+   "kmServicio": 26.5,
+   "kmRepaso": 11.9,
+   "kmAcceso": 8.5,
+   "horas": 5.2,
+   "tramos": 507
+  },
+  {
+   "ruta": "V6",
+   "turno": "vespertino",
+   "kmServicio": 42,
+   "kmRepaso": 23.1,
+   "kmAcceso": 18.6,
+   "horas": 8.7,
+   "tramos": 881
+  },
+  {
+   "ruta": "V7",
+   "turno": "vespertino",
+   "kmServicio": 35.8,
+   "kmRepaso": 14.9,
+   "kmAcceso": 13.5,
+   "horas": 7.1,
+   "tramos": 601
+  },
+  {
+   "ruta": "V8",
+   "turno": "vespertino",
+   "kmServicio": 34.7,
+   "kmRepaso": 17,
+   "kmAcceso": 6.9,
+   "horas": 6.7,
+   "tramos": 725
+  }
+ ]
+}

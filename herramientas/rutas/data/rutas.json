@@ -1,0 +1,25 @@
+{
+  "fuente": "Carteles 'Ubica tu ruta' (SOS de la Isla / Carmen siempre Limpio) proporcionados por el usuario",
+  "turnos": {
+    "matutino": {"inicio": "07:00", "fin": "15:00"},
+    "vespertino": {"inicio": "15:00", "fin": "23:00"}
+  },
+  "dias": ["martes", "jueves", "sabado"],
+  "rutas": [
+    {"id":"M1","turno":"matutino","numero":1,"lugares":["Villas San José","Santa Ana"]},
+    {"id":"M2","turno":"matutino","numero":2,"lugares":["Maderas","Isla del Carmen","Puente de la Unidad","San Nicolás","Avenida Nardos","Av. Boquerón por Bellavista hasta calle Santa María de Guadalupe"]},
+    {"id":"M3","turno":"matutino","numero":3,"lugares":["Perla del Golfo","Ortiz Ávila","Tierra y Libertad","Playa Palmas","Ampliación San Nicolás","Potrero 1","Potrero 2"]},
+    {"id":"M4","turno":"matutino","numero":4,"lugares":["San Manuel","Frac. Palmira","Arcila","Los Ríos","Los Arcos 1","Los Arcos 2","La Rivera","San Francisco","Av. Nardos"]},
+    {"id":"M5","turno":"matutino","numero":5,"lugares":["San Carlos","Obrera","Frac. Misión del Carmen","Priv. Rinconada","Avenida Boquerón del Palmar"]},
+    {"id":"M6","turno":"matutino","numero":6,"lugares":["Frac. San Miguel","Frac. Villa del Mar","Frac. Villa Florencia","Frac. Encantada","Frac. Ángeles","Frac. Puerta de Hierro","Frac. Dorado","Santa Isabel","Frac. Santa Ágata 1","Avenida Parque Central"]},
+    {"id":"M7","turno":"matutino","numero":7,"lugares":["Frac. Santa Mónica","Colonia Isla de Tris (Maestros)","Frac. Capistrano","23 de Julio","Av. Puerto de Progreso"]},
+    {"id":"V1","turno":"vespertino","numero":1,"lugares":["Zona Centro","Frac. Real del Carmen","Frac. Villa Magna","Villa Girasol",{"nombre":"Frac. San Joaquín","dias":["martes","jueves"]},"Frac. Nacozari","Frac. Hacienda Dorada","Frac. Libertad 1","Frac. Libertad 2","Frac. Héroe de Nacozari 1","Frac. Héroe de Nacozari 2","Frac. Esperanza 1","Frac. Esperanza 2",{"nombre":"Renovación VII","dias":["jueves","sabado"],"nota":"Cartel: 'Ruta 7 los martes'; se infiere que Ruta 1 cubre jueves y sábado"},"Priv. Santa Ana","Priv. San Joaquín"]},
+    {"id":"V2","turno":"vespertino","numero":2,"lugares":["Frac. Lagos","Frac. Mundo Maya","Mercados","Mariscos","Morelos","AFA","Chechén","Rastro Municipal",{"nombre":"Bivalvo","dias":["martes"]},"Calle 20 (de la 47 a la 25)"]},
+    {"id":"V3","turno":"vespertino","numero":3,"lugares":["Renovación 1","Renovación 2","Renovación 3",{"nombre":"Bivalvo","dias":["jueves","sabado"],"nota":"Cartel escribe 'Bivalbo'"}]},
+    {"id":"V4","turno":"vespertino","numero":4,"lugares":["Avenida 20","Avenida 22","Avenida 24","Avenida 31","Avenida 35","Avenida 26","Avenida 47","Periférica Norte","Camarón","Castellot","Corregidora (Concordia hasta Club Bucaneros)","56","Ampliación 56","10 de Julio","Prolongación Periférica","25","21 de Abril","Contadores","Av. Concordia","Av. Belisario","Av. Central","Av. Puerto Progreso","Av. Puerto de Campeche"]},
+    {"id":"V5","turno":"vespertino","numero":5,"lugares":["Frac. Reforma","Frac. Raíces","Frac. Lepavides","Frac. Mediterráneo","Colonia Reforma 57"]},
+    {"id":"V6","turno":"vespertino","numero":6,"lugares":["Volcanes","Luis Donaldo Colosio","Las Pilas","Plutarco Elías Calles","18 de Marzo"]},
+    {"id":"V7","turno":"vespertino","numero":7,"lugares":["Constelaciones 1","Constelaciones 2","Santa Rita 1","Santa Rita 2","Santa Rita 3","Orizaba","Compositores",{"nombre":"Renovación VII","dias":["martes"]}]},
+    {"id":"V8","turno":"vespertino","numero":8,"lugares":["Solidaridad","Belisario","Puesta del Sol","Privadas de Avenida del Mar","Fraccionamiento Bicentenario 1","Fraccionamiento Bicentenario 2","Fraccionamiento Bicentenario 3","Fraccionamiento Villa Marina"]}
+  ]
+}

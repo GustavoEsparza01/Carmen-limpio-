@@ -1,0 +1,2311 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:27:06Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1708175362,
+  "lat": 18.6351953,
+  "lon": -91.8331322,
+  "tags": {
+    "amenity": "place_of_worship",
+    "denomination": "Iglesia del Jésus",
+    "name": "Iglesia del Jésus"
+  }
+},
+{
+  "type": "node",
+  "id": 1708175934,
+  "lat": 18.6314642,
+  "lon": -91.8297150,
+  "tags": {
+    "amenity": "place_of_worship",
+    "denomination": "catholic",
+    "name": "Iglesia del Guanal",
+    "religion": "christian"
+  }
+},
+{
+  "type": "node",
+  "id": 1708179613,
+  "lat": 18.6479308,
+  "lon": -91.8148958,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Wing's Army"
+  }
+},
+{
+  "type": "node",
+  "id": 2332266585,
+  "lat": 18.6400702,
+  "lon": -91.8385731,
+  "tags": {
+    "amenity": "marketplace",
+    "name": "Mercado Alonso Felipe de Andrade"
+  }
+},
+{
+  "type": "node",
+  "id": 2332266902,
+  "lat": 18.6405785,
+  "lon": -91.8389165,
+  "tags": {
+    "amenity": "marketplace",
+    "name": "La Campesina"
+  }
+},
+{
+  "type": "node",
+  "id": 2332267095,
+  "lat": 18.6384447,
+  "lon": -91.8345226,
+  "tags": {
+    "amenity": "fountain",
+    "name": "Fuente del centro Cultural UNACAR"
+  }
+},
+{
+  "type": "node",
+  "id": 2332267544,
+  "lat": 18.6450893,
+  "lon": -91.8182704,
+  "tags": {
+    "amenity": "fountain",
+    "name": "Glorieta del Camaron"
+  }
+},
+{
+  "type": "node",
+  "id": 2332268687,
+  "lat": 18.6385859,
+  "lon": -91.8346035,
+  "tags": {
+    "amenity": "theatre",
+    "name": "Centro cultural de la UNACAR"
+  }
+},
+{
+  "type": "node",
+  "id": 2332274023,
+  "lat": 18.6384040,
+  "lon": -91.8381322,
+  "tags": {
+    "leisure": "playground",
+    "name": "Los juegos del Malecon"
+  }
+},
+{
+  "type": "node",
+  "id": 2332283947,
+  "lat": 18.6397764,
+  "lon": -91.8380791,
+  "tags": {
+    "name": "Mercado de las Artesanias",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 2332284739,
+  "lat": 18.6393189,
+  "lon": -91.8377460,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "La Calzada"
+  }
+},
+{
+  "type": "node",
+  "id": 2332326152,
+  "lat": 18.6633931,
+  "lon": -91.8323810,
+  "tags": {
+    "leisure": "playground",
+    "name": "Los juegos de playa Norte"
+  }
+},
+{
+  "type": "node",
+  "id": 2333215256,
+  "lat": 18.6568346,
+  "lon": -91.7921895,
+  "tags": {
+    "brand": "Chedraui",
+    "brand:wikidata": "Q2961952",
+    "name": "Chedraui",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2333318971,
+  "lat": 18.6456176,
+  "lon": -91.8011936,
+  "tags": {
+    "name": "Wall Mart",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2333319209,
+  "lat": 18.6464736,
+  "lon": -91.8018394,
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "Sport City"
+  }
+},
+{
+  "type": "node",
+  "id": 2334477859,
+  "lat": 18.6475599,
+  "lon": -91.8152194,
+  "tags": {
+    "name": "La Mega Comercial",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2363973805,
+  "lat": 18.6600240,
+  "lon": -91.7762283,
+  "tags": {
+    "amenity": "school",
+    "name": "Colegio Joaquin Clausell"
+  }
+},
+{
+  "type": "node",
+  "id": 2363991116,
+  "lat": 18.6620286,
+  "lon": -91.7699851,
+  "tags": {
+    "addr:postcode": "24157",
+    "name": "Fraccionamiento Villa Marina",
+    "place": "hamlet"
+  }
+},
+{
+  "type": "node",
+  "id": 2885644072,
+  "lat": 18.6539740,
+  "lon": -91.8076528,
+  "tags": {
+    "name": "Zentralia",
+    "shop": "mall"
+  }
+},
+{
+  "type": "node",
+  "id": 2967117221,
+  "lat": 18.6356523,
+  "lon": -91.8348671,
+  "tags": {
+    "amenity": "fountain",
+    "name": "Fuente de Anton de Alaminos"
+  }
+},
+{
+  "type": "node",
+  "id": 3221190021,
+  "lat": 18.6625373,
+  "lon": -91.8314068,
+  "tags": {
+    "amenity": "bus_station",
+    "name": "Playa Norte Bus Station"
+  }
+},
+{
+  "type": "node",
+  "id": 4406330189,
+  "lat": 18.6371317,
+  "lon": -91.8347235,
+  "tags": {
+    "addr:street": "24",
+    "amenity": "pharmacy",
+    "name": "Ysa",
+    "name:es": "Ysa"
+  }
+},
+{
+  "type": "node",
+  "id": 4406331789,
+  "lat": 18.6367464,
+  "lon": -91.8346161,
+  "tags": {
+    "addr:street": "24",
+    "amenity": "fast_food",
+    "name": "Domino`s Pizza",
+    "name:es": "Domino`s Pizza"
+  }
+},
+{
+  "type": "node",
+  "id": 4517383093,
+  "lat": 18.6547266,
+  "lon": -91.8088511,
+  "tags": {
+    "addr:city": "cd.del Carmen",
+    "addr:housenumber": "12 Colonia aeropuerto",
+    "addr:postcode": "24119",
+    "addr:street": "Centro comercial Zentralia Av.corregidora",
+    "amenity": "restaurant",
+    "branch": "Zentralia Cd del Carmen",
+    "brand": "Toks",
+    "brand:wikidata": "Q48835586",
+    "cuisine": "mexican",
+    "name": "Toks",
+    "toilets:wheelchair": "yes",
+    "website": "https://www.toks.com.mx/",
+    "wheelchair": "yes",
+    "wheelchair:description": "Restaurante con estacionamiento,cuenta con rampas para acceso , baños muy accesibles."
+  }
+},
+{
+  "type": "node",
+  "id": 5090758589,
+  "lat": 18.6635380,
+  "lon": -91.8300489,
+  "tags": {
+    "amenity": "restaurant",
+    "capacity": "40",
+    "name": "Restaurant Carmita"
+  }
+},
+{
+  "type": "node",
+  "id": 5104319490,
+  "lat": 18.6635079,
+  "lon": -91.8302505,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Restauran ls Delfines"
+  }
+},
+{
+  "type": "node",
+  "id": 5104319995,
+  "lat": 18.6638277,
+  "lon": -91.8221637,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Azul de Playa"
+  }
+},
+{
+  "type": "node",
+  "id": 5104321434,
+  "lat": 18.6638073,
+  "lon": -91.8221051,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Iguanas Beach"
+  }
+},
+{
+  "type": "node",
+  "id": 5104321469,
+  "lat": 18.6639989,
+  "lon": -91.8212394,
+  "tags": {
+    "amenity": "bar",
+    "name": "La Camelia Pisto Bar Banda"
+  }
+},
+{
+  "type": "node",
+  "id": 5104325559,
+  "lat": 18.6642282,
+  "lon": -91.8206932,
+  "tags": {
+    "amenity": "bar",
+    "name": "Las Mandarinas"
+  }
+},
+{
+  "type": "node",
+  "id": 5104328043,
+  "lat": 18.6647482,
+  "lon": -91.8197521,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "El Tiburón"
+  }
+},
+{
+  "type": "node",
+  "id": 5104331760,
+  "lat": 18.6647078,
+  "lon": -91.8195915,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "El Paisano Sinaloense"
+  }
+},
+{
+  "type": "node",
+  "id": 5104331761,
+  "lat": 18.6646981,
+  "lon": -91.8193699,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Marisquería verdejo Bulnes"
+  }
+},
+{
+  "type": "node",
+  "id": 5104335934,
+  "lat": 18.6639929,
+  "lon": -91.8170755,
+  "tags": {
+    "amenity": "bar",
+    "name": "Narnia Bar"
+  }
+},
+{
+  "type": "node",
+  "id": 5104337362,
+  "lat": 18.6644112,
+  "lon": -91.8172091,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "El patrón en la playa"
+  }
+},
+{
+  "type": "node",
+  "id": 5104337368,
+  "lat": 18.6645779,
+  "lon": -91.8151392,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Circus Sea Food"
+  }
+},
+{
+  "type": "node",
+  "id": 5104337695,
+  "lat": 18.6645912,
+  "lon": -91.8145018,
+  "tags": {
+    "amenity": "bar",
+    "name": "Neverland Cocktail Bar & Lounge"
+  }
+},
+{
+  "type": "node",
+  "id": 5104338473,
+  "lat": 18.6642041,
+  "lon": -91.8151431,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Restaurant Chiper"
+  }
+},
+{
+  "type": "node",
+  "id": 5104339898,
+  "lat": 18.6636877,
+  "lon": -91.8145132,
+  "tags": {
+    "amenity": "nightclub",
+    "name": "Ibiza Night Club"
+  }
+},
+{
+  "type": "node",
+  "id": 5104340645,
+  "lat": 18.6641323,
+  "lon": -91.8127106,
+  "tags": {
+    "leisure": "dance",
+    "name": "Club Naval Ciudad Del Carmen"
+  }
+},
+{
+  "type": "node",
+  "id": 5104341262,
+  "lat": 18.6641625,
+  "lon": -91.8131637,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Restaurante Q' tal"
+  }
+},
+{
+  "type": "node",
+  "id": 5104343038,
+  "lat": 18.6623449,
+  "lon": -91.8316392,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Casa Canela"
+  }
+},
+{
+  "type": "node",
+  "id": 5104343039,
+  "lat": 18.6623373,
+  "lon": -91.8315614,
+  "tags": {
+    "amenity": "bar",
+    "name": "Shotimilco"
+  }
+},
+{
+  "type": "node",
+  "id": 5104343040,
+  "lat": 18.6623017,
+  "lon": -91.8317545,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Los Trompos"
+  }
+},
+{
+  "type": "node",
+  "id": 5104343041,
+  "lat": 18.6623068,
+  "lon": -91.8318135,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "La Pigua Restaurante"
+  }
+},
+{
+  "type": "node",
+  "id": 5104343043,
+  "lat": 18.6624618,
+  "lon": -91.8324894,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Sensei Sushi Bar"
+  }
+},
+{
+  "type": "node",
+  "id": 5104402616,
+  "lat": 18.6616484,
+  "lon": -91.8343444,
+  "tags": {
+    "amenity": "bank",
+    "name": "Chomex"
+  }
+},
+{
+  "type": "node",
+  "id": 5104402730,
+  "lat": 18.6620338,
+  "lon": -91.8332722,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Krudelios"
+  }
+},
+{
+  "type": "node",
+  "id": 5104402784,
+  "lat": 18.6616893,
+  "lon": -91.8340825,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "La Cabaña de Don Pepe"
+  }
+},
+{
+  "type": "node",
+  "id": 5104407650,
+  "lat": 18.6562334,
+  "lon": -91.7893837,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Restaurante de Mariscos Jandeiros"
+  }
+},
+{
+  "type": "node",
+  "id": 5104407746,
+  "lat": 18.6555576,
+  "lon": -91.7886640,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Los Trompos"
+  }
+},
+{
+  "type": "node",
+  "id": 5104408937,
+  "lat": 18.6546876,
+  "lon": -91.7889419,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Iglesia de Jesucristo de los Santos de los Últimos Días",
+    "religion": "christian"
+  }
+},
+{
+  "type": "node",
+  "id": 5104409046,
+  "lat": 18.6551543,
+  "lon": -91.7894019,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Jangadeiro Frutos Do Mar"
+  }
+},
+{
+  "type": "node",
+  "id": 5104409265,
+  "lat": 18.6543990,
+  "lon": -91.7898760,
+  "tags": {
+    "leisure": "park",
+    "name": "Pareque de Bomberos"
+  }
+},
+{
+  "type": "node",
+  "id": 5104409863,
+  "lat": 18.6547385,
+  "lon": -91.7899366,
+  "tags": {
+    "name": "Jangadeiro Frutos Do Mar",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5104409870,
+  "lat": 18.6551901,
+  "lon": -91.7901193,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Dairy Queen",
+    "brand:wikidata": "Q1141226",
+    "cuisine": "ice_cream;burger",
+    "name": "Dairy Queen",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5104409955,
+  "lat": 18.6553968,
+  "lon": -91.7902410,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Little Caesars",
+    "brand:wikidata": "Q1393809",
+    "brand:wikipedia": "en:Little Caesars",
+    "cuisine": "pizza",
+    "name": "Little Caesars",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5104410355,
+  "lat": 18.6557604,
+  "lon": -91.7904171,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Boston's Restaurant & Sports Bar"
+  }
+},
+{
+  "type": "node",
+  "id": 5104410484,
+  "lat": 18.6563147,
+  "lon": -91.7925061,
+  "tags": {
+    "brand": "Chedraui",
+    "brand:wikidata": "Q2961952",
+    "name": "Chedraui",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5104410525,
+  "lat": 18.6559261,
+  "lon": -91.7892056,
+  "tags": {
+    "leisure": "fitness_centre",
+    "name": "Bikram Yoga Ciudad del Carmen",
+    "sport": "yoga"
+  }
+},
+{
+  "type": "node",
+  "id": 5104410744,
+  "lat": 18.6535055,
+  "lon": -91.7928657,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Servicio De Combustibles Raymel SA de CV"
+  }
+},
+{
+  "type": "node",
+  "id": 5104410881,
+  "lat": 18.6542541,
+  "lon": -91.7912374,
+  "tags": {
+    "alt_name": "Kentucky Fried Chicken",
+    "amenity": "fast_food",
+    "brand": "KFC",
+    "brand:wikidata": "Q524757",
+    "brand:wikipedia": "en:KFC",
+    "cuisine": "chicken",
+    "name": "KFC",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5104411465,
+  "lat": 18.6537339,
+  "lon": -91.7923068,
+  "tags": {
+    "amenity": "fast_food",
+    "branch": "SAN FRANCISCO",
+    "brand": "Domino's",
+    "brand:wikidata": "Q839466",
+    "cuisine": "pizza",
+    "name": "Domino's",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5104411832,
+  "lat": 18.6537650,
+  "lon": -91.7926648,
+  "tags": {
+    "amenity": "atm",
+    "brand": "Bancomer",
+    "brand:wikidata": "Q2876794",
+    "name": "Bancomer",
+    "operator": "Bancomer",
+    "operator:wikidata": "Q2876794"
+  }
+},
+{
+  "type": "node",
+  "id": 5104411948,
+  "lat": 18.6536093,
+  "lon": -91.7926429,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Pemex",
+    "brand:wikidata": "Q871308",
+    "name": "Pemex"
+  }
+},
+{
+  "type": "node",
+  "id": 5104412557,
+  "lat": 18.6541630,
+  "lon": -91.7945567,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Antojitos Maxicanos"
+  }
+},
+{
+  "type": "node",
+  "id": 5104415154,
+  "lat": 18.6553726,
+  "lon": -91.7822696,
+  "tags": {
+    "brand": "Bodega Aurrera",
+    "brand:wikidata": "Q3365858",
+    "name": "Bodega Aurrera",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5104415155,
+  "lat": 18.6556799,
+  "lon": -91.7823268,
+  "tags": {
+    "amenity": "atm",
+    "brand": "Bancomer",
+    "brand:wikidata": "Q2876794",
+    "name": "Bancomer",
+    "operator": "Bancomer",
+    "operator:wikidata": "Q2876794"
+  }
+},
+{
+  "type": "node",
+  "id": 5104415955,
+  "lat": 18.6560715,
+  "lon": -91.7819262,
+  "tags": {
+    "amenity": "restaurant",
+    "brand": "Chili's",
+    "brand:wikidata": "Q1072948",
+    "cuisine": "tex-mex",
+    "name": "Chili's",
+    "official_name": "Chili's Grill & Bar"
+  }
+},
+{
+  "type": "node",
+  "id": 5104416024,
+  "lat": 18.6551436,
+  "lon": -91.7822569,
+  "tags": {
+    "amenity": "bar",
+    "name": "Bodega BioFood Ciudad del Carmen"
+  }
+},
+{
+  "type": "node",
+  "id": 5104416379,
+  "lat": 18.6585796,
+  "lon": -91.7780887,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Restaurante de sushi"
+  }
+},
+{
+  "type": "node",
+  "id": 5104416466,
+  "lat": 18.6552344,
+  "lon": -91.7813813,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Hampton Inn by Hilton Ciudad del Carmen Campeche"
+  }
+},
+{
+  "type": "node",
+  "id": 5104416549,
+  "lat": 18.6581026,
+  "lon": -91.7782565,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Carnitas Y Chicharrones Chuina"
+  }
+},
+{
+  "type": "node",
+  "id": 5104416692,
+  "lat": 18.6584524,
+  "lon": -91.7774384,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Tacos Ramón"
+  }
+},
+{
+  "type": "node",
+  "id": 5104421005,
+  "lat": 18.6528646,
+  "lon": -91.8064074,
+  "tags": {
+    "amenity": "cinema",
+    "brand": "Cinepolis",
+    "brand:wikidata": "Q5686673",
+    "name": "Cinépolis"
+  }
+},
+{
+  "type": "node",
+  "id": 5104422297,
+  "lat": 18.6505941,
+  "lon": -91.8134648,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Burger King",
+    "brand:wikidata": "Q177054",
+    "brand:wikipedia": "en:Burger King",
+    "check_date": "2024-07-02",
+    "check_date:opening_hours": "2024-07-02",
+    "cuisine": "burger",
+    "drive_through": "yes",
+    "name": "Burger King",
+    "opening_hours": "Mo-Su 09:00-22:30",
+    "takeaway": "yes",
+    "website": "https://www.burgerking.com.mx/restaurantes/av-concordia-esq-periferico-norte/?id=507"
+  }
+},
+{
+  "type": "node",
+  "id": 5104424582,
+  "lat": 18.6522627,
+  "lon": -91.8149039,
+  "tags": {
+    "amenity": "bar",
+    "name": "Barezzito"
+  }
+},
+{
+  "type": "node",
+  "id": 5104426285,
+  "lat": 18.6513261,
+  "lon": -91.8126242,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Mc Donald´s"
+  }
+},
+{
+  "type": "node",
+  "id": 5104426946,
+  "lat": 18.6504736,
+  "lon": -91.8128087,
+  "tags": {
+    "amenity": "cinema",
+    "brand": "Cinemex",
+    "brand:wikidata": "Q3333072",
+    "name": "Cinemex"
+  }
+},
+{
+  "type": "node",
+  "id": 5104427384,
+  "lat": 18.6505519,
+  "lon": -91.8124430,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Dairy Queen",
+    "brand:wikidata": "Q1141226",
+    "cuisine": "ice_cream;burger",
+    "name": "Dairy Queen",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5256319934,
+  "lat": 18.6617940,
+  "lon": -91.8186862,
+  "tags": {
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Rush",
+    "outdoor_seating": "yes",
+    "smoking": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 5256325225,
+  "lat": 18.6620528,
+  "lon": -91.8187649,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "seafood",
+    "name": "Cevichito",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5262257873,
+  "lat": 18.6409263,
+  "lon": -91.8386425,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "mexican",
+    "name": "Regis"
+  }
+},
+{
+  "type": "node",
+  "id": 5388620221,
+  "lat": 18.6316376,
+  "lon": -91.8296698,
+  "tags": {
+    "addr:postcode": "24100",
+    "addr:street": "22",
+    "amenity": "school",
+    "name": "parque guanal",
+    "name:en": "guanal park",
+    "name:es": "parque guanal"
+  }
+},
+{
+  "type": "node",
+  "id": 6642022283,
+  "lat": 18.6485025,
+  "lon": -91.8147194,
+  "tags": {
+    "amenity": "casino",
+    "name": "Paradise Island"
+  }
+},
+{
+  "type": "node",
+  "id": 7137429331,
+  "lat": 18.6544629,
+  "lon": -91.7922696,
+  "tags": {
+    "name": "Fraccionamiento San Francisco",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 7137649270,
+  "lat": 18.6438005,
+  "lon": -91.7782296,
+  "tags": {
+    "name": "Fraccionamiento Santa Ágata I",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 7176339625,
+  "lat": 18.6487040,
+  "lon": -91.8174702,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Lapa Lapa"
+  }
+},
+{
+  "type": "node",
+  "id": 7182950785,
+  "lat": 18.6642559,
+  "lon": -91.8223049,
+  "tags": {
+    "amenity": "bar",
+    "cuisine": "mexican",
+    "name": "Iguanas bar",
+    "name:en": "Iguana bar",
+    "name:es": "Iguanas bar",
+    "name:ru": "Бар Игуана"
+  }
+},
+{
+  "type": "node",
+  "id": 7212880949,
+  "lat": 18.6630532,
+  "lon": -91.7541242,
+  "tags": {
+    "name": "Fraccionamiento Buenavista",
+    "place": "hamlet"
+  }
+},
+{
+  "type": "node",
+  "id": 7230088708,
+  "lat": 18.6545671,
+  "lon": -91.8164994,
+  "tags": {
+    "amenity": "fuel",
+    "name": "La Gas"
+  }
+},
+{
+  "type": "node",
+  "id": 7230091399,
+  "lat": 18.6553105,
+  "lon": -91.8167716,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Orsan"
+  }
+},
+{
+  "type": "node",
+  "id": 7230096215,
+  "lat": 18.6609814,
+  "lon": -91.8181240,
+  "tags": {
+    "amenity": "pharmacy",
+    "name": "Farmacias del Ahorro"
+  }
+},
+{
+  "type": "node",
+  "id": 8192099854,
+  "lat": 18.6316301,
+  "lon": -91.8251720,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Pemex",
+    "brand:wikidata": "Q871308",
+    "brand:wikipedia": "en:Pemex",
+    "name": "Pemex"
+  }
+},
+{
+  "type": "node",
+  "id": 8192332172,
+  "lat": 18.6656423,
+  "lon": -91.7575152,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Pemex",
+    "brand:wikidata": "Q871308",
+    "brand:wikipedia": "en:Pemex",
+    "name": "Pemex"
+  }
+},
+{
+  "type": "node",
+  "id": 12221958042,
+  "lat": 18.6567560,
+  "lon": -91.7910890,
+  "tags": {
+    "amenity": "pub",
+    "email": "palmira@mibostons.com.mx",
+    "facebook": "https://www.facebook.com/Bostons.Carmen",
+    "name": "Boston's Pizza",
+    "opening_hours": "Fr-Sa 13:00-24:00; Mo-Th 13:00-23:00; Su 12:00-23:00",
+    "phone": "+52 938 118 9900",
+    "website": "https://bostons.com.mx/ciudaddelcarmen/welcome"
+  }
+},
+{
+  "type": "node",
+  "id": 12686051159,
+  "lat": 18.6388753,
+  "lon": -91.8354190,
+  "tags": {
+    "addr:city": "Cd. del Carmen",
+    "addr:postcode": "24100",
+    "addr:street": "Calle 26",
+    "amenity": "restaurant",
+    "cuisine": "picadas",
+    "food": "snacks",
+    "name": "Picadísimas",
+    "opening_hours": "Mo-Sa 09:00-15:00",
+    "phone": "+52 938 107 5389"
+  }
+},
+{
+  "type": "node",
+  "id": 13119476623,
+  "lat": 18.6511983,
+  "lon": -91.8026537,
+  "tags": {
+    "amenity": "car_rental",
+    "brand": "Hertz",
+    "brand:wikidata": "Q1543874",
+    "brand:wikipedia": "en:The Hertz Corporation",
+    "email": "atencionaclientes@avasa.com.mx",
+    "name": "Hertz",
+    "opening_hours": "Mo-Fr 07:00-19:00; Sa 09:00-18:00; Su 10:00-18:00",
+    "phone": "+52 55 9128 9000",
+    "website": "https://www.hertzmexico.com"
+  }
+},
+{
+  "type": "node",
+  "id": 13522995688,
+  "lat": 18.6358606,
+  "lon": -91.8363734,
+  "tags": {
+    "amenity": "ferry_terminal",
+    "ferry": "yes",
+    "name": "Terminal Turística Isla del Carmen",
+    "public_transport": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 13524809455,
+  "lat": 18.6646222,
+  "lon": -91.8254751,
+  "tags": {
+    "fitness_station": "yes",
+    "leisure": "fitness_station",
+    "name": "Barras Calistenia Playa Norte",
+    "sport": "fitness"
+  }
+},
+{
+  "type": "node",
+  "id": 13565614701,
+  "lat": 18.6507996,
+  "lon": -91.8121591,
+  "tags": {
+    "name": "Soriana Super",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914623,
+  "lat": 18.6488620,
+  "lon": -91.8300790,
+  "tags": {
+    "name": "LOCAL COMERCIAL",
+    "operator": "OXXO",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914624,
+  "lat": 18.6474794,
+  "lon": -91.8321590,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "TEMPLO",
+    "religion": "christian"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914628,
+  "lat": 18.6465195,
+  "lon": -91.8203936,
+  "tags": {
+    "amenity": "hospital",
+    "healthcare": "hospital",
+    "name": "HOSPITAL"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914629,
+  "lat": 18.6484659,
+  "lon": -91.8392179,
+  "tags": {
+    "amenity": "bank",
+    "name": "BANAMEX"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914630,
+  "lat": 18.6519645,
+  "lon": -91.8397504,
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "CENTRO DEPORTIVO"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914631,
+  "lat": 18.6533061,
+  "lon": -91.8283872,
+  "tags": {
+    "leisure": "pitch",
+    "name": "CANCHA",
+    "sport": "futsal"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914633,
+  "lat": 18.6536543,
+  "lon": -91.8277756,
+  "tags": {
+    "leisure": "park",
+    "name": "PARQUE"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914634,
+  "lat": 18.6536645,
+  "lon": -91.8280868,
+  "tags": {
+    "leisure": "garden",
+    "name": "JARDIN"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914636,
+  "lat": 18.6562799,
+  "lon": -91.8292453,
+  "tags": {
+    "amenity": "doctors",
+    "healthcare": "doctor",
+    "name": "CLINICA"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914637,
+  "lat": 18.6570673,
+  "lon": -91.8284271,
+  "tags": {
+    "amenity": "marketplace",
+    "name": "MERCADO"
+  }
+},
+{
+  "type": "node",
+  "id": 14144914638,
+  "lat": 18.6548415,
+  "lon": -91.8334752,
+  "tags": {
+    "amenity": "university",
+    "education": "university",
+    "name": "UNIVERSIDAD"
+  }
+},
+{
+  "type": "way",
+  "id": 113835884,
+  "center": {
+    "lat": 18.6382411,
+    "lon": -91.8357617
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque I. Zaragoza"
+  }
+},
+{
+  "type": "way",
+  "id": 114002631,
+  "center": {
+    "lat": 18.6512642,
+    "lon": -91.8051555
+  },
+  "tags": {
+    "brand": "Soriana",
+    "brand:wikidata": "Q735562",
+    "building": "yes",
+    "name": "Soriana",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 114002676,
+  "center": {
+    "lat": 18.6478706,
+    "lon": -91.7684502
+  },
+  "tags": {
+    "amenity": "prison",
+    "name": "Centro de Rehabilitación Social"
+  }
+},
+{
+  "type": "way",
+  "id": 114002721,
+  "center": {
+    "lat": 18.6475401,
+    "lon": -91.8195229
+  },
+  "tags": {
+    "leisure": "stadium",
+    "name": "Estadio de Béisbol Resurgimiento",
+    "sport": "baseball"
+  }
+},
+{
+  "type": "way",
+  "id": 114004047,
+  "center": {
+    "lat": 18.6667468,
+    "lon": -91.7791241
+  },
+  "tags": {
+    "leisure": "golf_course",
+    "name": "Carmen Country Club"
+  }
+},
+{
+  "type": "way",
+  "id": 114007184,
+  "center": {
+    "lat": 18.6454910,
+    "lon": -91.7812242
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Central"
+  }
+},
+{
+  "type": "way",
+  "id": 114007200,
+  "center": {
+    "lat": 18.6423821,
+    "lon": -91.8213365
+  },
+  "tags": {
+    "brand": "Chedraui",
+    "brand:wikidata": "Q2961952",
+    "building": "yes",
+    "name": "Chedraui",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 114007250,
+  "center": {
+    "lat": 18.6528422,
+    "lon": -91.8385648
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "Unidad Deportiva 20 de Septiembre"
+  }
+},
+{
+  "type": "way",
+  "id": 224502395,
+  "center": {
+    "lat": 18.6370732,
+    "lon": -91.7769719
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "Unidad deportiva Renovación III"
+  }
+},
+{
+  "type": "way",
+  "id": 224502635,
+  "center": {
+    "lat": 18.6359196,
+    "lon": -91.7832104
+  },
+  "tags": {
+    "garden:type": "botanical",
+    "leisure": "garden",
+    "name": "Jardin Botanico UNACAR"
+  }
+},
+{
+  "type": "way",
+  "id": 224513587,
+  "center": {
+    "lat": 18.6507517,
+    "lon": -91.8123653
+  },
+  "tags": {
+    "building": "yes",
+    "designation": "Plaza Real",
+    "name": "Plaza Real",
+    "shop": "mall"
+  }
+},
+{
+  "type": "way",
+  "id": 224513971,
+  "center": {
+    "lat": 18.6405327,
+    "lon": -91.8389372
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Mercado La Campesina"
+  }
+},
+{
+  "type": "way",
+  "id": 227447353,
+  "center": {
+    "lat": 18.6587692,
+    "lon": -91.7770976
+  },
+  "tags": {
+    "name": "Plaza Residencial del Lago",
+    "shop": "mall"
+  }
+},
+{
+  "type": "way",
+  "id": 227736821,
+  "center": {
+    "lat": 18.6601555,
+    "lon": -91.7761719
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Colegio Joaquin Clausell"
+  }
+},
+{
+  "type": "way",
+  "id": 231772016,
+  "center": {
+    "lat": 18.6631324,
+    "lon": -91.7933267
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Colegio Continental"
+  }
+},
+{
+  "type": "way",
+  "id": 231772600,
+  "center": {
+    "lat": 18.6559823,
+    "lon": -91.7908142
+  },
+  "tags": {
+    "name": "Plaza Palmira",
+    "shop": "mall"
+  }
+},
+{
+  "type": "way",
+  "id": 316001005,
+  "center": {
+    "lat": 18.6550038,
+    "lon": -91.7860333
+  },
+  "tags": {
+    "amenity": "bus_station",
+    "bus": "yes",
+    "name": "ADO Bus Station",
+    "public_transport": "station"
+  }
+},
+{
+  "type": "way",
+  "id": 316007464,
+  "center": {
+    "lat": 18.6585490,
+    "lon": -91.8439714
+  },
+  "tags": {
+    "leisure": "stadium",
+    "name": "Estadio Nelson Barrera Romellón",
+    "sport": "baseball"
+  }
+},
+{
+  "type": "way",
+  "id": 397559551,
+  "center": {
+    "lat": 18.6429779,
+    "lon": -91.7842766
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque de Juan Diego"
+  }
+},
+{
+  "type": "way",
+  "id": 514549388,
+  "center": {
+    "lat": 18.6369352,
+    "lon": -91.7894632
+  },
+  "tags": {
+    "amenity": "cafe",
+    "building": "yes",
+    "name": "el dicho"
+  }
+},
+{
+  "type": "way",
+  "id": 514554610,
+  "center": {
+    "lat": 18.6594644,
+    "lon": -91.7805880
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Virgen Maria"
+  }
+},
+{
+  "type": "way",
+  "id": 514556129,
+  "center": {
+    "lat": 18.6621444,
+    "lon": -91.7946597
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "building": "yes",
+    "cuisine": "regional",
+    "name": "El taco"
+  }
+},
+{
+  "type": "way",
+  "id": 514557999,
+  "center": {
+    "lat": 18.6549004,
+    "lon": -91.8088812
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "brand": "Toks",
+    "brand:wikidata": "Q48835586",
+    "building": "yes",
+    "cuisine": "mexican",
+    "name": "Toks"
+  }
+},
+{
+  "type": "way",
+  "id": 514560308,
+  "center": {
+    "lat": 18.6632432,
+    "lon": -91.7964429
+  },
+  "tags": {
+    "building": "yes",
+    "name": "mercado"
+  }
+},
+{
+  "type": "way",
+  "id": 514560317,
+  "center": {
+    "lat": 18.6638652,
+    "lon": -91.7971455
+  },
+  "tags": {
+    "amenity": "cafe",
+    "building": "yes",
+    "name": "el dicho"
+  }
+},
+{
+  "type": "way",
+  "id": 514560835,
+  "center": {
+    "lat": 18.6562835,
+    "lon": -91.8083212
+  },
+  "tags": {
+    "leisure": "garden",
+    "name": "jardin verde"
+  }
+},
+{
+  "type": "way",
+  "id": 514564119,
+  "center": {
+    "lat": 18.6581918,
+    "lon": -91.7788220
+  },
+  "tags": {
+    "amenity": "kindergarten",
+    "education": "kindergarten",
+    "name": "Jardín de Niños OMEP"
+  }
+},
+{
+  "type": "way",
+  "id": 514575008,
+  "center": {
+    "lat": 18.6349052,
+    "lon": -91.8173469
+  },
+  "tags": {
+    "addr:street": "5 de Mayo",
+    "amenity": "school",
+    "name": "Primaria Niño Artillero"
+  }
+},
+{
+  "type": "way",
+  "id": 558815324,
+  "center": {
+    "lat": 18.6345519,
+    "lon": -91.8317051
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Monumento a la Bandera"
+  }
+},
+{
+  "type": "way",
+  "id": 558815326,
+  "center": {
+    "lat": 18.6314865,
+    "lon": -91.8293120
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "parque guanal"
+  }
+},
+{
+  "type": "way",
+  "id": 558830309,
+  "center": {
+    "lat": 18.6407205,
+    "lon": -91.8331463
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque de las Madres"
+  }
+},
+{
+  "type": "way",
+  "id": 558836719,
+  "center": {
+    "lat": 18.6456306,
+    "lon": -91.8336338
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Tecolutla"
+  }
+},
+{
+  "type": "way",
+  "id": 558838709,
+  "center": {
+    "lat": 18.6433298,
+    "lon": -91.7862382
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque al Periodista"
+  }
+},
+{
+  "type": "way",
+  "id": 558838710,
+  "center": {
+    "lat": 18.6409241,
+    "lon": -91.7817648
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Renovacion"
+  }
+},
+{
+  "type": "way",
+  "id": 558839742,
+  "center": {
+    "lat": 18.6536191,
+    "lon": -91.8281391
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Lázaro Cárdenas"
+  }
+},
+{
+  "type": "way",
+  "id": 694604238,
+  "center": {
+    "lat": 18.6608069,
+    "lon": -91.8318589
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Escuela Secundaria General No 17"
+  }
+},
+{
+  "type": "way",
+  "id": 754727143,
+  "center": {
+    "lat": 18.6352397,
+    "lon": -91.8349393
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque 1 del Malecón"
+  }
+},
+{
+  "type": "way",
+  "id": 754727144,
+  "center": {
+    "lat": 18.6443453,
+    "lon": -91.8303787
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Tila"
+  }
+},
+{
+  "type": "way",
+  "id": 778300724,
+  "center": {
+    "lat": 18.6583639,
+    "lon": -91.8395790
+  },
+  "tags": {
+    "addr:city": "Ciudad del Carmen",
+    "addr:postcode": "24115",
+    "addr:street": "Avenida Héroes del 21 de Abril",
+    "description": "Parque y Zona verde en la Colonia Playa Norte",
+    "leisure": "park",
+    "name": "EcoParque Carmen",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "way",
+  "id": 878495767,
+  "center": {
+    "lat": 18.6390446,
+    "lon": -91.8351511
+  },
+  "tags": {
+    "amenity": "theatre",
+    "building": "yes",
+    "name": "Teatro de la Ciudad"
+  }
+},
+{
+  "type": "way",
+  "id": 885003942,
+  "center": {
+    "lat": 18.6451530,
+    "lon": -91.8196448
+  },
+  "tags": {
+    "amenity": "hospital",
+    "healthcare": "hospital",
+    "name": "Hospital Pemex"
+  }
+},
+{
+  "type": "way",
+  "id": 1200957762,
+  "center": {
+    "lat": 18.6449650,
+    "lon": -91.8081766
+  },
+  "tags": {
+    "amenity": "bus_station",
+    "building": "yes",
+    "bus": "yes",
+    "name": "ADO Cd. del Carmen",
+    "public_transport": "station"
+  }
+},
+{
+  "type": "way",
+  "id": 1308843995,
+  "center": {
+    "lat": 18.6377028,
+    "lon": -91.8363659
+  },
+  "tags": {
+    "amenity": "townhall",
+    "building": "yes",
+    "name": "Palacio Municipal de Carmen"
+  }
+},
+{
+  "type": "way",
+  "id": 1341650037,
+  "center": {
+    "lat": 18.6378121,
+    "lon": -91.8233395
+  },
+  "tags": {
+    "amenity": "school",
+    "fixme": "Las dimensiones podrían estar erradas. Si sabe que la escuela ocupa un área más pequeña, redúzcala.",
+    "name": "Escuela Primaria República de Honduras"
+  }
+},
+{
+  "type": "way",
+  "id": 1370895649,
+  "center": {
+    "lat": 18.6595649,
+    "lon": -91.8361212
+  },
+  "tags": {
+    "amenity": "college",
+    "name": "CONALEP"
+  }
+},
+{
+  "type": "way",
+  "id": 1370895650,
+  "center": {
+    "lat": 18.6599825,
+    "lon": -91.8347951
+  },
+  "tags": {
+    "amenity": "college",
+    "name": "CECATI 50 DGCFT"
+  }
+},
+{
+  "type": "way",
+  "id": 1370895651,
+  "center": {
+    "lat": 18.6603671,
+    "lon": -91.8331405
+  },
+  "tags": {
+    "amenity": "college",
+    "name": "Centro de Estudios Tecnológicos Industrial y de Servicio 20 Melchor Ocampo"
+  }
+},
+{
+  "type": "way",
+  "id": 1388381255,
+  "center": {
+    "lat": 18.6414471,
+    "lon": -91.7923823
+  },
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Servifácil",
+    "name": "Estación Isla de Tris",
+    "self_service": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1459174050,
+  "center": {
+    "lat": 18.6641477,
+    "lon": -91.8003237
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escuela Secundaria Técnica No. 7"
+  }
+},
+{
+  "type": "way",
+  "id": 1459919637,
+  "center": {
+    "lat": 18.6357095,
+    "lon": -91.8229380
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escuela Secundaria Técnica No. 21"
+  }
+},
+{
+  "type": "way",
+  "id": 1459919651,
+  "center": {
+    "lat": 18.6473863,
+    "lon": -91.8219395
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escuela Secundaria Técnica No. 25"
+  }
+},
+{
+  "type": "way",
+  "id": 1459941073,
+  "center": {
+    "lat": 18.6607746,
+    "lon": -91.8026743
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escuela Secundaria Técnica No. 26"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008753,
+  "center": {
+    "lat": 18.6589292,
+    "lon": -91.8265168
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Morelos"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008754,
+  "center": {
+    "lat": 18.6592377,
+    "lon": -91.8257886
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Templo San José del Mar",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008755,
+  "center": {
+    "lat": 18.6553088,
+    "lon": -91.8226710
+  },
+  "tags": {
+    "alt_name": "Parque Playón",
+    "leisure": "park",
+    "name": "Parque Primero de Mayo"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008767,
+  "center": {
+    "lat": 18.6562370,
+    "lon": -91.8465612
+  },
+  "tags": {
+    "amenity": "university",
+    "education": "university",
+    "name": "CETMAR 29"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008768,
+  "center": {
+    "lat": 18.6573932,
+    "lon": -91.8452817
+  },
+  "tags": {
+    "amenity": "university",
+    "education": "university",
+    "name": "UPN Unidad 042"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008791,
+  "center": {
+    "lat": 18.6384845,
+    "lon": -91.8350324
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Santuario Diocesano Mariano de Nuestra Señora del Carmen",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 1474008794,
+  "center": {
+    "lat": 18.6387745,
+    "lon": -91.8346229
+  },
+  "tags": {
+    "amenity": "theatre",
+    "building": "yes",
+    "name": "Centro Cultural Universitario"
+  }
+},
+{
+  "type": "way",
+  "id": 1474191510,
+  "center": {
+    "lat": 18.6469068,
+    "lon": -91.8186435
+  },
+  "tags": {
+    "amenity": "university",
+    "education": "university",
+    "name": "Universidad Autónoma del Carmen"
+  }
+},
+{
+  "type": "way",
+  "id": 1474191512,
+  "center": {
+    "lat": 18.6468867,
+    "lon": -91.8213547
+  },
+  "tags": {
+    "amenity": "hospital",
+    "healthcare": "hospital",
+    "name": "Hospital ISSSTE Ciudad del Carmen",
+    "operator": "Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado",
+    "operator:short": "ISSSTE",
+    "operator:type": "public",
+    "operator:wikidata": "Q954557"
+  }
+},
+{
+  "type": "way",
+  "id": 1474191516,
+  "center": {
+    "lat": 18.6526733,
+    "lon": -91.8123563
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "UDIUnidad Deportiva Infantil"
+  }
+},
+{
+  "type": "way",
+  "id": 1474191520,
+  "center": {
+    "lat": 18.6527210,
+    "lon": -91.8095144
+  },
+  "tags": {
+    "amenity": "university",
+    "education": "university",
+    "name": "Universidad Autónoma del Carmen Campus II"
+  }
+},
+{
+  "type": "way",
+  "id": 1474191521,
+  "center": {
+    "lat": 18.6526691,
+    "lon": -91.8095913
+  },
+  "tags": {
+    "leisure": "stadium",
+    "name": "Estadio Delfín"
+  }
+},
+{
+  "type": "way",
+  "id": 1474205549,
+  "center": {
+    "lat": 18.6522687,
+    "lon": -91.8091212
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "Unidad Deportiva"
+  }
+},
+{
+  "type": "way",
+  "id": 1474209027,
+  "center": {
+    "lat": 18.6522327,
+    "lon": -91.8390774
+  },
+  "tags": {
+    "building": "yes",
+    "leisure": "sports_hall",
+    "name": "Polideportivo \"Jorge G. Lara Repetto\""
+  }
+},
+{
+  "type": "way",
+  "id": 1474209028,
+  "center": {
+    "lat": 18.6526846,
+    "lon": -91.8369770
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque de los niños"
+  }
+},
+{
+  "type": "way",
+  "id": 1474209029,
+  "center": {
+    "lat": 18.6549594,
+    "lon": -91.8356878
+  },
+  "tags": {
+    "amenity": "kindergarten",
+    "education": "kindergarten",
+    "name": "Jardín de Niños Isla de Tris"
+  }
+},
+{
+  "type": "way",
+  "id": 1474209030,
+  "center": {
+    "lat": 18.6550759,
+    "lon": -91.8354036
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque de la colonia Miami"
+  }
+},
+{
+  "type": "way",
+  "id": 1474219538,
+  "center": {
+    "lat": 18.6586800,
+    "lon": -91.8424981
+  },
+  "tags": {
+    "leisure": "pitch",
+    "name": "Campo José Ángel \"Nana\" Romellón",
+    "sport": "baseball"
+  }
+},
+{
+  "type": "way",
+  "id": 1474219539,
+  "center": {
+    "lat": 18.6590014,
+    "lon": -91.8417546
+  },
+  "tags": {
+    "leisure": "pitch",
+    "name": "Campo Playa Norte 1",
+    "sport": "soccer"
+  }
+},
+{
+  "type": "way",
+  "id": 1474219540,
+  "center": {
+    "lat": 18.6592836,
+    "lon": -91.8411105
+  },
+  "tags": {
+    "leisure": "pitch",
+    "name": "Campo Softbol Salvador González Pacheco",
+    "sport": "softball"
+  }
+},
+{
+  "type": "way",
+  "id": 1474219545,
+  "center": {
+    "lat": 18.6600240,
+    "lon": -91.8388773
+  },
+  "tags": {
+    "amenity": "conference_centre",
+    "building": "yes",
+    "name": "Centro de Convenciones Carmen XXI"
+  }
+},
+{
+  "type": "way",
+  "id": 1474219551,
+  "center": {
+    "lat": 18.6637221,
+    "lon": -91.8397178
+  },
+  "tags": {
+    "amenity": "events_venue",
+    "building": "yes",
+    "name": "Domo del Mar"
+  }
+},
+{
+  "type": "way",
+  "id": 1474219552,
+  "center": {
+    "lat": 18.6634933,
+    "lon": -91.8320207
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Playa Norte"
+  }
+},
+{
+  "type": "way",
+  "id": 1474236100,
+  "center": {
+    "lat": 18.6624307,
+    "lon": -91.8317340
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Plaza Punta Norte",
+    "shop": "mall"
+  }
+},
+{
+  "type": "way",
+  "id": 1474254218,
+  "center": {
+    "lat": 18.6608242,
+    "lon": -91.8020435
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Primaria Urbana Federal Virginia Díaz Rivero"
+  }
+},
+{
+  "type": "way",
+  "id": 1474254223,
+  "center": {
+    "lat": 18.6612351,
+    "lon": -91.7804392
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Primaria Ramón G. Bonfil"
+  }
+},
+{
+  "type": "way",
+  "id": 1474256165,
+  "center": {
+    "lat": 18.6511472,
+    "lon": -91.7670906
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "Unidad Deportiva Pemex Mundo Maya"
+  }
+},
+{
+  "type": "way",
+  "id": 1474256370,
+  "center": {
+    "lat": 18.6379639,
+    "lon": -91.7801115
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Parque Renovación II"
+  }
+},
+{
+  "type": "relation",
+  "id": 18111836,
+  "center": {
+    "lat": 18.3273540,
+    "lon": -92.3637884
+  },
+  "tags": {
+    "distance": "167.50",
+    "from": "Villahermosa",
+    "name": "Carretera Villahermosa - Cd. del Carmen",
+    "network": "MX:MEX",
+    "ref": "180",
+    "route": "road",
+    "to": "Ciudad del Carmen",
+    "type": "route"
+  }
+}
+
+  ]
+}

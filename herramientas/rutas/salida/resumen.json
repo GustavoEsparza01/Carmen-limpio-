@@ -1,0 +1,178 @@
+{
+ "salida": {
+  "lat": 18.6733699,
+  "lon": -91.745211
+ },
+ "resumen": [
+  {
+   "ruta": "M1",
+   "turno": "matutino",
+   "lugares": 2,
+   "ubicados": 2,
+   "faltan": [],
+   "kmServicio": 4.2,
+   "kmTraslado": 9.8
+  },
+  {
+   "ruta": "M2",
+   "turno": "matutino",
+   "lugares": 6,
+   "ubicados": 5,
+   "faltan": [
+    "Puente de la Unidad"
+   ],
+   "kmServicio": 7.5,
+   "kmTraslado": 11.3
+  },
+  {
+   "ruta": "M3",
+   "turno": "matutino",
+   "lugares": 7,
+   "ubicados": 3,
+   "faltan": [
+    "Ortiz Ávila",
+    "Tierra y Libertad",
+    "Potrero 1",
+    "Potrero 2"
+   ],
+   "kmServicio": 6.6,
+   "kmTraslado": 10.8
+  },
+  {
+   "ruta": "M4",
+   "turno": "matutino",
+   "lugares": 9,
+   "ubicados": 9,
+   "faltan": [],
+   "kmServicio": 8.7,
+   "kmTraslado": 9.8
+  },
+  {
+   "ruta": "M5",
+   "turno": "matutino",
+   "lugares": 5,
+   "ubicados": 5,
+   "faltan": [],
+   "kmServicio": 7.3,
+   "kmTraslado": 14.2
+  },
+  {
+   "ruta": "M6",
+   "turno": "matutino",
+   "lugares": 10,
+   "ubicados": 6,
+   "faltan": [
+    "Frac. Villa del Mar",
+    "Frac. Encantada",
+    "Frac. Puerta de Hierro",
+    "Avenida Parque Central"
+   ],
+   "kmServicio": 4.2,
+   "kmTraslado": 10.3
+  },
+  {
+   "ruta": "M7",
+   "turno": "matutino",
+   "lugares": 5,
+   "ubicados": 5,
+   "faltan": [],
+   "kmServicio": 3.1,
+   "kmTraslado": 11.9
+  },
+  {
+   "ruta": "V1",
+   "turno": "vespertino",
+   "lugares": 16,
+   "ubicados": 13,
+   "faltan": [
+    "Frac. Real del Carmen",
+    "Frac. Hacienda Dorada",
+    "Renovación VII"
+   ],
+   "kmServicio": 13.8,
+   "kmTraslado": 15
+  },
+  {
+   "ruta": "V2",
+   "turno": "vespertino",
+   "lugares": 10,
+   "ubicados": 7,
+   "faltan": [
+    "Mariscos",
+    "AFA",
+    "Rastro Municipal"
+   ],
+   "kmServicio": 22,
+   "kmTraslado": 8.4
+  },
+  {
+   "ruta": "V3",
+   "turno": "vespertino",
+   "lugares": 4,
+   "ubicados": 4,
+   "faltan": [],
+   "kmServicio": 3.9,
+   "kmTraslado": 10.4
+  },
+  {
+   "ruta": "V4",
+   "turno": "vespertino",
+   "lugares": 23,
+   "ubicados": 20,
+   "faltan": [
+    "56",
+    "Ampliación 56",
+    "10 de Julio"
+   ],
+   "kmServicio": 34.1,
+   "kmTraslado": 8.4
+  },
+  {
+   "ruta": "V5",
+   "turno": "vespertino",
+   "lugares": 5,
+   "ubicados": 1,
+   "faltan": [
+    "Frac. Reforma",
+    "Frac. Raíces",
+    "Frac. Lepavides",
+    "Colonia Reforma 57"
+   ],
+   "kmServicio": 0.3,
+   "kmTraslado": 11.3
+  },
+  {
+   "ruta": "V6",
+   "turno": "vespertino",
+   "lugares": 5,
+   "ubicados": 5,
+   "faltan": [],
+   "kmServicio": 5.3,
+   "kmTraslado": 10.7
+  },
+  {
+   "ruta": "V7",
+   "turno": "vespertino",
+   "lugares": 8,
+   "ubicados": 7,
+   "faltan": [
+    "Renovación VII"
+   ],
+   "kmServicio": 6.1,
+   "kmTraslado": 10.6
+  },
+  {
+   "ruta": "V8",
+   "turno": "vespertino",
+   "lugares": 8,
+   "ubicados": 5,
+   "faltan": [
+    "Fraccionamiento Bicentenario 1",
+    "Fraccionamiento Bicentenario 2",
+    "Fraccionamiento Bicentenario 3"
+   ],
+   "kmServicio": 18.3,
+   "kmTraslado": 8.8
+  }
+ ]
+}

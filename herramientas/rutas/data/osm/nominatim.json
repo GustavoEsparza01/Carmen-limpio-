@@ -1,0 +1,433 @@
+{
+ "Villas San José": [],
+ "Fraccionamiento Santa Ana": [
+  {
+   "name": "Privada Santa Ana, FRACC. HEROE DE NACOZARI, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6552206,
+   "lon": -91.7750285
+  }
+ ],
+ "Puente de la Unidad": [],
+ "Ortiz Ávila": [],
+ "Tierra y Libertad": [],
+ "Ampliación San Nicolás": [],
+ "Potrero": [],
+ "Fraccionamiento Palmira": [
+  {
+   "name": "Plaza Palmira, Avenida Portales, Fraccionamiento San Francisco",
+   "cat": "shop/mall",
+   "lat": 18.6558776,
+   "lon": -91.791338
+  }
+ ],
+ "Los Ríos": [],
+ "Misión del Carmen": [
+  {
+   "name": "Calle Misión Colonial, COL. LA RIVERA, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.654326,
+   "lon": -91.7793449
+  },
+  {
+   "name": "Calle Misión Guadalupe, COL. LA RIVERA, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6540041,
+   "lon": -91.7792291
+  }
+ ],
+ "Privada Rinconada": [],
+ "Fraccionamiento Villa del Mar": [],
+ "Fraccionamiento La Encantada": [],
+ "Fraccionamiento Los Ángeles": [],
+ "Puerta de Hierro": [],
+ "Fraccionamiento Santa Mónica": [
+  {
+   "name": "Calle Paseo Santa Mónica Poniente, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6409865,
+   "lon": -91.7769378
+  },
+  {
+   "name": "Calle Paseo Santa Mónica Oriente, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6411009,
+   "lon": -91.776639
+  },
+  {
+   "name": "Calle Paseo Santa Mónica Norte, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6416394,
+   "lon": -91.777044
+  },
+  {
+   "name": "Calle Paseo Santa Mónica Sur, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6404551,
+   "lon": -91.7765316
+  }
+ ],
+ "Fraccionamiento Capistrano": [
+  {
+   "name": "Calle Paseo Capistrano Oriente, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6396127,
+   "lon": -91.775965
+  },
+  {
+   "name": "Calle Paseo Capistrano Poniente, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6394777,
+   "lon": -91.7762581
+  },
+  {
+   "name": "Calle Paseo Capistrano Norte, Fraccionamiento Santa Ágata I, COL. RENOVACION III",
+   "cat": "highway/residential",
+   "lat": 18.6401275,
+   "lon": -91.7765037
+  }
+ ],
+ "Fraccionamiento Real del Carmen": [
+  {
+   "name": "Gepp Cedis Ciudad del Carmen, Calle Carmen Puerto Real, Fraccionamiento Villa Marina",
+   "cat": "building/warehouse",
+   "lat": 18.6680674,
+   "lon": -91.7523224
+  },
+  {
+   "name": "Hotel Extended Suites Ciudad del Carmen Aeropuerto, Avenida Isla de Tris, Fraccionamiento San Francisco",
+   "cat": "tourism/hotel",
+   "lat": 18.6554923,
+   "lon": -91.7899624
+  },
+  {
+   "name": "City Express Junior Ciudad del Carmen Aeropuerto, Avenida Isla de Tris, Fraccionamiento San Francisco",
+   "cat": "tourism/hotel",
+   "lat": 18.653194,
+   "lon": -91.7940637
+  },
+  {
+   "name": "Hyatt Place Ciudad del Carmen, Avenida Isla de Tris, Fraccionamiento San Francisco",
+   "cat": "tourism/hotel",
+   "lat": 18.6552008,
+   "lon": -91.7893119
+  }
+ ],
+ "Villa Magna": [],
+ "Villa Girasol": [],
+ "Fraccionamiento San Joaquín": [
+  {
+   "name": "Privada San Joaquín, Fraccionamiento Santa Ágata I, FRACC. RESIDENCIAL SAN MIGUEL",
+   "cat": "highway/residential",
+   "lat": 18.6458221,
+   "lon": -91.7760206
+  },
+  {
+   "name": "Privada San Joaquín, FRACC. BIVALBO, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6562432,
+   "lon": -91.7753577
+  }
+ ],
+ "Fraccionamiento Nacozari": [],
+ "Hacienda Dorada": [],
+ "Fraccionamiento Libertad": [
+  {
+   "name": "Privada Libertad, Fraccionamiento Santa Ágata I, FRACC. HEROE DE NACOZARI",
+   "cat": "highway/residential",
+   "lat": 18.647216,
+   "lon": -91.7733433
+  },
+  {
+   "name": "Álvaro Antillano Aguilar, Fraccionamiento Santa Ágata I, FRACC. HEROE DE NACOZARI",
+   "cat": "highway/tertiary",
+   "lat": 18.6462841,
+   "lon": -91.7732719
+  },
+  {
+   "name": "Álvaro Antillano Aguilar, FRACC. BIVALBO, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6582272,
+   "lon": -91.7770495
+  }
+ ],
+ "Fraccionamiento Esperanza": [
+  {
+   "name": "Calle Esperanza Calderas, FRACC. HEROE DE NACOZARI, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.653731,
+   "lon": -91.7762581
+  }
+ ],
+ "Renovación VII": [],
+ "Fraccionamiento Lagos": [],
+ "Mundo Maya": [
+  {
+   "name": "Unidad Deportiva Pemex Mundo Maya, Calle Xpujil, FRACC. HEROE DE NACOZARI",
+   "cat": "leisure/sports_centre",
+   "lat": 18.6513247,
+   "lon": -91.7671684
+  }
+ ],
+ "Mercado Alonso Felipe de Andrade": [
+  {
+   "name": "Mercado Alonso Felipe de Andrade, Calle 20, COL. CENTRO",
+   "cat": "amenity/marketplace",
+   "lat": 18.6400702,
+   "lon": -91.8385731
+  }
+ ],
+ "Mercado": [
+  {
+   "name": "mercado, Almendra, FRACC. SAN MANUEL",
+   "cat": "building/yes",
+   "lat": 18.6632348,
+   "lon": -91.7964412
+  },
+  {
+   "name": "MERCADO, Calle 57-A, Ciudad del Carmen",
+   "cat": "amenity/marketplace",
+   "lat": 18.6570673,
+   "lon": -91.8284271
+  }
+ ],
+ "Mariscos": [
+  {
+   "name": "Restaurante de Mariscos Jandeiros, Privada Hacienda, Fraccionamiento San Francisco",
+   "cat": "amenity/restaurant",
+   "lat": 18.6562334,
+   "lon": -91.7893837
+  }
+ ],
+ "Colonia Morelos": [
+  {
+   "name": "Calle José María Morelos y Pavón, COL. FRANCISCO I. MADERO, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6474151,
+   "lon": -91.8079283
+  }
+ ],
+ "AFA": [],
+ "Chechén": [
+  {
+   "name": "Calle Chechén, COL. 23 DE JULIO, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6402597,
+   "lon": -91.7888305
+  },
+  {
+   "name": "Calle Chechén, Fraccionamiento San Francisco, FRACC. PUEBLO MAYA",
+   "cat": "highway/residential",
+   "lat": 18.6549466,
+   "lon": -91.7979241
+  },
+  {
+   "name": "Glorieta del Chechen, Avenida Puerto de Progreso, Fraccionamiento Santa Ágata I",
+   "cat": "historic/monument",
+   "lat": 18.6422922,
+   "lon": -91.7891069
+  }
+ ],
+ "Rastro Municipal": [],
+ "Colonia Camarón": [
+  {
+   "name": "Glorieta del Camaron, Avenida Aviación, Colonia Aeropuerto",
+   "cat": "amenity/fountain",
+   "lat": 18.6450893,
+   "lon": -91.8182704
+  }
+ ],
+ "Colonia 56": [
+  {
+   "name": "Colonia Estrella, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6387813,
+   "lon": -91.8177652
+  },
+  {
+   "name": "Colonia Limonar, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6372194,
+   "lon": -91.8222595
+  },
+  {
+   "name": "Colonia Aeropuerto, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.650167,
+   "lon": -91.8069935
+  },
+  {
+   "name": "Colonia Cuauhtemoc, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6410215,
+   "lon": -91.8283535
+  },
+  {
+   "name": "Colonia Belisario Dominguez, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6528905,
+   "lon": -91.7903441
+  }
+ ],
+ "Ampliación 56": [],
+ "10 de Julio": [
+  {
+   "name": "Avenida Luis D. Colosio, COL. BENITO JUAREZ, Ciudad del Carmen",
+   "cat": "highway/primary",
+   "lat": 18.6426476,
+   "lon": -91.8130064
+  },
+  {
+   "name": "Avenida Luis D. Colosio, COL. SALITRAL, Ciudad del Carmen",
+   "cat": "highway/primary",
+   "lat": 18.639153,
+   "lon": -91.8207035
+  },
+  {
+   "name": "Avenida Luis D. Colosio, COL. PUNTILLA, Ciudad del Carmen",
+   "cat": "highway/primary",
+   "lat": 18.6329015,
+   "lon": -91.8249658
+  },
+  {
+   "name": "Avenida Luis D. Colosio, Colonia Limonar, Ciudad del Carmen",
+   "cat": "highway/primary",
+   "lat": 18.6365722,
+   "lon": -91.8231477
+  },
+  {
+   "name": "Avenida Luis D. Colosio, COL. FRANCISCO I. MADERO, Ciudad del Carmen",
+   "cat": "highway/primary",
+   "lat": 18.6445487,
+   "lon": -91.8088157
+  }
+ ],
+ "Prolongación Periférica": [],
+ "Colonia 25": [
+  {
+   "name": "Colonia Estrella, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6387813,
+   "lon": -91.8177652
+  },
+  {
+   "name": "Colonia Belisario Dominguez, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6528905,
+   "lon": -91.7903441
+  },
+  {
+   "name": "Colonia Aeropuerto, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.650167,
+   "lon": -91.8069935
+  },
+  {
+   "name": "Colonia Cuauhtemoc, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6410215,
+   "lon": -91.8283535
+  },
+  {
+   "name": "Colonia Limonar, Ciudad del Carmen, Carmen",
+   "cat": "place/hamlet",
+   "lat": 18.6372194,
+   "lon": -91.8222595
+  }
+ ],
+ "21 de Abril": [
+  {
+   "name": "Calle Héroes del 21 de Abril, COL. PLAYA NORTE, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6545202,
+   "lon": -91.8473364
+  },
+  {
+   "name": "Avenida Héroes del 21 de Abril, COL. PLAYA NORTE, Ciudad del Carmen",
+   "cat": "highway/tertiary",
+   "lat": 18.6596943,
+   "lon": -91.8377205
+  },
+  {
+   "name": "Calle 21 de Abril, COL. EMILIANO ZAPATA, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6385431,
+   "lon": -91.8162921
+  },
+  {
+   "name": "Calle 21 de Abril, Colonia Estrella, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6388052,
+   "lon": -91.8164627
+  }
+ ],
+ "Colonia Contadores": [],
+ "Club Bucaneros": [],
+ "Fraccionamiento Reforma": [],
+ "Fraccionamiento Raíces": [],
+ "Lepavides": [],
+ "Fraccionamiento Mediterráneo": [
+  {
+   "name": "Calle Paseo del Mediterráneo, Fraccionamiento Santa Ágata I, COL. SOLIDARIDAD URBANA",
+   "cat": "highway/tertiary",
+   "lat": 18.6486884,
+   "lon": -91.7794769
+  }
+ ],
+ "Colonia Reforma 57": [],
+ "Constelaciones": [],
+ "Orizaba": [
+  {
+   "name": "Calle Pico de Orizaba, FRACC. RAFAEL DE J. LOZANO CONTRERAS, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6475939,
+   "lon": -91.786917
+  }
+ ],
+ "Puesta del Sol": [],
+ "Bicentenario": [],
+ "18 de Marzo": [
+  {
+   "name": "Calle 18 de Marzo, Fraccionamiento Santa Ágata I, FRACC. HEROE DE NACOZARI",
+   "cat": "highway/residential",
+   "lat": 18.6492162,
+   "lon": -91.7728727
+  },
+  {
+   "name": "Privada 18 de Marzo, Colonia Cuauhtemoc, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6455521,
+   "lon": -91.8261298
+  },
+  {
+   "name": "Calle 18 de Marzo, Colonia Estrella, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6389906,
+   "lon": -91.8184923
+  }
+ ],
+ "Colonia Castellot": [],
+ "San Joaquín": [
+  {
+   "name": "Privada San Joaquín, Fraccionamiento Santa Ágata I, FRACC. RESIDENCIAL SAN MIGUEL",
+   "cat": "highway/residential",
+   "lat": 18.6458221,
+   "lon": -91.7760206
+  },
+  {
+   "name": "Privada San Joaquín, FRACC. BIVALBO, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6562432,
+   "lon": -91.7753577
+  }
+ ],
+ "Santa Ana": [
+  {
+   "name": "Privada Santa Ana, FRACC. HEROE DE NACOZARI, Ciudad del Carmen",
+   "cat": "highway/residential",
+   "lat": 18.6552206,
+   "lon": -91.7750285
+  }
+ ],
+ "Villa del Mar": []
+}
