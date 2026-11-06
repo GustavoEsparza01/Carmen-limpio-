@@ -1,0 +1,279 @@
+:root {
+  --primario: #0b4f6c;
+  --primario-suave: #e3eff4;
+  --acento-suave: #fdf0dc;
+  --acento-texto: #7c3a06;
+  --texto: #16242c;
+  --texto-suave: #4a5c66;
+  --fondo: #f7f9fa;
+  --superficie: #ffffff;
+  --borde: #d5dee3;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--texto);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+}
+
+h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.encabezado {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--primario);
+  color: #fff;
+}
+
+.encabezado h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.encabezado p {
+  margin: 0;
+  opacity: 0.85;
+}
+
+.navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 24px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borde);
+}
+
+.navegacion a {
+  padding: 14px 12px;
+  border-bottom: 3px solid transparent;
+  color: var(--texto-suave);
+  text-decoration: none;
+}
+
+.navegacion a:hover {
+  color: var(--primario);
+}
+
+.navegacion a[aria-current='page'] {
+  border-bottom-color: var(--primario);
+  color: var(--primario);
+  font-weight: 600;
+}
+
+.vista-previa {
+  margin: 0;
+  padding: 8px 24px;
+  background: var(--primario-suave);
+  color: var(--primario);
+  font-size: 14px;
+}
+
+.contenido {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.pie {
+  padding: 12px 24px;
+  border-top: 1px solid var(--borde);
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.pila {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tarjeta {
+  min-width: 0;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.suave {
+  margin: 0 0 8px;
+  color: var(--texto-suave);
+  line-height: 1.45;
+}
+
+.aviso {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--acento-suave);
+  color: var(--acento-texto);
+  line-height: 1.45;
+}
+
+.nota {
+  margin: 4px 0 0;
+  color: var(--acento-texto);
+  font-size: 14px;
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.cifra {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cifra-etiqueta {
+  margin: 2px 0 4px;
+  font-weight: 600;
+}
+
+.columnas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.maestro-detalle {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  border-bottom: 1px solid var(--borde);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--texto-suave);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tr[aria-current='true'] {
+  background: var(--primario-suave);
+}
+
+th.numero,
+td.numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.lista-rutas {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0;
+  list-style: none;
+}
+
+.fila-ruta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fila-ruta:hover {
+  background: var(--fondo);
+}
+
+.fila-ruta[aria-pressed='true'] {
+  background: var(--primario-suave);
+  color: var(--primario);
+  font-weight: 600;
+}
+
+.selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+select {
+  min-height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+.mapa {
+  height: 420px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+  .contenido {
+    padding: 16px;
+  }
+
+  .columnas,
+  .maestro-detalle {
+    grid-template-columns: 1fr;
+  }
+}
