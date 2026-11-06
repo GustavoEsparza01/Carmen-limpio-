@@ -1,0 +1,98 @@
+# Decisiones
+
+Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin confirmar.
+
+## 2026-11-05 · Fase 0
+
+- **Empezamos por el front.** El usuario pidió arrancar con el front; el plan original pone la base de datos como Fase 1. Se hizo primero la Fase 0, que es común a ambos caminos. El orden de las fases siguientes está por confirmar.
+- **Raíz del repositorio:** `Documents/Carmen-limpio`. El contenido de `entrega-carmen-limpio/` se movió ahí y el prompt quedó en `docs/PROMPT-CARMEN-LIMPIO.md`.
+- **Git pendiente.** El prompt indica que el repositorio ya existe, pero la carpeta no tiene `.git`. El usuario decidió probar en local antes de conectar GitHub. Se borró el `.git` que `create-expo-app` generó en `apps/movil`.
+- **Pruebas en emulador:** se usa el AVD `Pixel_8_Pro_API_33` con el controlador AEHD.
+- **`ANDROID_HOME` es obligatoria para compilar.** `apps/movil/android/local.properties` la sustituye en esta máquina, pero `android/` es generado: `expo prebuild --clean` borra ese archivo.
+- **Versiones instaladas:** Expo 58, React Native 0.88, React 19.3.0, Vite 8, React Leaflet 5, TypeScript 6.0.
+- **React con versión exacta** en la app y el panel, porque Expo la fija y dos copias en el monorepo causan errores.
+- **Paleta propia** azul petróleo, para no parecerse al verde de los carteles.
+- **Identificador Android:** `mx.carmenlimpio.app`. **Supuesto:** es difícil de cambiar una vez publicada la app.
+- **`compartido` se consume como TypeScript fuente**, sin paso de compilación. Sus imports llevan `.ts` para que `node --test` los ejecute directamente.
+- **`npm audit`:** 5 alertas moderadas en herramientas de desarrollo de Expo (`glob`, `minimatch`). No se corrigen: la solución sugerida degrada a Expo 53.
+- **Mapa móvil:** no hay clave de Google Maps, así que el valor predeterminado es MapLibre con OpenStreetMap. Se instalará en la fase de consulta.
+
+## Hallazgos del análisis de datos
+
+- Conteos confirmados: 15 rutas, 123 entradas, confianza 54 alta, 31 media, 12 baja y 26 sin ubicar. Las 15 rutas se cotejaron visualmente con los tres carteles.
+- `paradas.geojson` tiene 132 puntos para 90 combinaciones de ruta y lugar: un lugar lineal, como una avenida, genera dos puntos. El cargador no debe tratarlos como duplicados.
+- `generar-salidas.ts` y `generar-cobertura.ts` escriben en `supabase/` relativo a su carpeta. Tras la mudanza crearían `herramientas/rutas/supabase/` en lugar de actualizar el `supabase/` de la raíz. Corregir en la Fase 1.
+- Hay nombres que el cartel escribe distinto para un mismo sitio (`Avenida Nardos` / `Av. Nardos`, `Av. Puerto de Progreso` / `Av. Puerto Progreso`). La búsqueda debe encontrarlos todos.
+
+## 2026-11-05 · Consulta en la app (parte 1)
+
+- **Proyecto en `C:\carmen-limpio`.** Se copió desde `Documents/Carmen-limpio` por el límite de rutas de Windows. La copia original sigue intacta hasta confirmar que todo funciona.
+- **Compilación nativa en Windows.** Los módulos con C++ (`safe-area-context`, `screens`) generan rutas de unos 316 caracteres, sin importar dónde esté el proyecto. El `ninja` 1.10.2 de CMake 3.22 no las admite. Solución: CMake 3.31.6 (lo fija `apps/movil/plugins/cmake-moderno.js`) y `LongPathsEnabled` en Windows.
+- **Intentos descartados:** unidad virtual con `subst` (Gradle mezcla las dos rutas) y `CMAKE_OBJECT_PATH_MAX` (CMake no acorta esas rutas).
+- **Módulos excluidos:** `react-native.config.js` deja fuera `gesture-handler`, `reanimated` y `worklets`, que npm instala con `expo-router` y la app no usa. Hay que quitarlos de ahí si algún día se usan.
+- **`Avenida Nardos` y `Av. Nardos` son un solo lugar** con sus dos rutas (M2 y M4). Por eso hay 120 lugares para 123 entradas.
+- **Los lugares sin tipo evidente en el nombre quedan como `otro`.** No se dedujo si son colonias.
+
+## 2026-11-05 · Primera compilación en el emulador
+
+- **Bloqueo de compilación resuelto.** Con CMake 3.31.6 y `LongPathsEnabled`, `expo run:android` compiló e instaló la app en `Pixel_8_Pro_API_33`. La exclusión de `gesture-handler`, `reanimated` y `worklets` no impidió que la app funcionara.
+- **Parte 1 probada en el emulador:** búsqueda (con y sin acentos, y sin resultados), detalle, Bivalvo con dos horarios, Renovación VII con su aviso por confirmar y sin mapa, y lugar guardado que persiste al reiniciar.
+- **Pendiente de revisar:** al reabrir con el enlace del development build, la app volvió al detalle en lugar de a inicio. Desde el ícono abre en inicio. Falta ver si ocurre fuera del modo de desarrollo.
+- **Pendiente:** el splash y el ícono siguen siendo los predeterminados de Expo.
+
+## 2026-11-05 · Consulta por ruta
+
+- **Pedido por el usuario:** lista de rutas y, al elegir una, sus lugares. Se accede con "Ver todas las rutas" en inicio.
+- **La lista se separa por turno,** porque el número no identifica una ruta: la Ruta 1 matutina y la vespertina son recorridos distintos.
+- **Se habla de "lugares", no de "colonias":** las rutas también incluyen avenidas, privadas y fraccionamientos.
+- **Los lugares van en orden alfabético.** Los carteles no indican el orden del recorrido, así que no se sugiere uno.
+- **`RUTAS` se deriva de `LUGARES`,** sin regenerar el catálogo. Una prueba la compara con `rutas.json`.
+
+## 2026-11-05 · Mapa en la app
+
+- **Mapa:** `@maplibre/maplibre-react-native` 11 con el servidor público de OpenStreetMap, sin clave. Ese servidor solo sirve para el prototipo: antes de publicar hay que cambiar de proveedor de mapas base.
+- **Solo escenario `carteles`.** `generar-trazado.ts` copia el tramo `servicio` y los puntos a `packages/compartido`. `traslado` no se muestra porque no es recolección. Una prueba compara cada línea con `rutas.geojson`.
+- **Un punto puede representar varios lugares.** El trazador guarda un punto por nodo, así que 7 lugares ubicados no tenían punto propio: Los Arcos 2, Frac. Esperanza 2, Frac. Héroe de Nacozari 1, Frac. Libertad 2, Priv. San Joaquín, Santa Rita 2 y Santa Rita 3. Se ligan al punto del lugar con la misma ubicación y se conservan los 132 puntos.
+- **Frac. San Joaquín y Priv. San Joaquín comparten punto con días distintos,** por eso el mapa lista cada lugar con su propio horario.
+- **Cámara con `bounds`, no `initialViewState`.** Con `initialViewState` la Ruta 1 vespertina abría demasiado acercada. `limites` va memorizado para que elegir un punto no reinicie la cámara.
+- **Sin conexión:** trazado y puntos vienen en la app. El mapa base solo aparece si sus mosaicos ya estaban en caché.
+- **`--port`:** si otro Metro ocupa el 8081, `expo start --port 8082` necesita también `adb reverse tcp:8082 tcp:8082`.
+- **Limitación de datos visible:** las rutas V1, V2 y V4 mezclan lugares lejanos entre sí, y su línea atraviesa la isla. El aviso de trazado ilustrativo lo cubre, pero conviene validarlas.
+
+## 2026-11-05 · Panel web (parte 1, solo lectura)
+
+- **Primero solo lectura con datos locales.** Inicio de sesión, edición, avisos y permisos dependen de Supabase, que no está conectado. El panel lo dice en un aviso permanente y no simula esas funciones.
+- **Vistas:** Resumen, Rutas, Unidades y Comparar escenarios. Navegación por `#` en la URL, sin agregar un paquete de rutas.
+- **`propuesta` vive solo en `apps/panel/public/datos/`.** `generar-propuesta-panel.ts` la copia ahí y el panel la carga bajo demanda. No entra en `packages/compartido`, para que no pueda llegar a la app ciudadana.
+- **Dos mapas separados, no capas en un mismo mapa,** porque `M1`, `V1`, etc. no significan lo mismo en ambos escenarios.
+- **`UNIDADES` se deriva de las rutas** y sigue siendo un supuesto. Las placas quedan como pendientes.
+- **Pendiente de revisar:** la zona V4 de la propuesta incluye un tramo al otro lado del puente, y por eso su mapa abre muy alejado.
+
+## 2026-11-05 · Diseño de la app
+
+- **Tema propio** en `apps/movil/estilos/tema.ts` y componentes en `apps/movil/componentes/ui.tsx`. El azul petróleo sigue como color principal, con ámbar para matutino e índigo para vespertino. Todas las combinaciones de texto cumplen AA (4.5:1 o más).
+- **Fuente Figtree** (licencia OFL), integrada al APK con el plugin de `expo-font` para que no parpadee al cargar. Cambiarla exige recompilar.
+- **Ícono y splash:** el pin inicial fue reemplazado por el camarón (ver "Logo del camarón").
+- **Días en círculos L M M J V S D,** siempre acompañados del texto con la ventana. Ver los días no reemplaza la advertencia de que no es una hora de llegada.
+- **Probado en 720×1280 con letra al 130%:** todo cabe. La rueda de desarrollo tapa parte del título, pero no existirá en la versión final.
+- **Metro se cuelga tras recompilar.** Si no responde, hay que levantar uno nuevo.
+
+## 2026-11-05 · Rediseño con mapa y panel deslizable
+
+- **Referencia del usuario:** capturas de Wanderlog en before.click. Se tomaron patrones de interfaz (mapa con panel inferior, pestañas, pastillas de día, botones flotantes, listas planas), no su marca, colores, iconos ni textos.
+- **`mapa/[rutaId]` reemplaza a `rutas/[id]`.** Mapa y lista quedan en una sola pantalla, con panel de tres posiciones.
+- **Panel con `Animated` y `PanResponder`.** `gesture-handler` y `reanimated` siguen excluidos por el límite de rutas de Windows, así que no se usan librerías de hojas inferiores.
+- **Sin puntos numerados.** La referencia numera sus paradas, pero los carteles no indican el orden del recorrido y numerar sugeriría uno.
+- **Sin fotos de lugares:** no hay imágenes con derechos de uso y no se inventan.
+- **Filtro por día en el mapa.** `paradasDelDia` respeta las excepciones por lugar. Filtra la lista y los puntos, no la línea, porque el trazado es uno solo por ruta.
+- **`BarraEstado`** fija el color de la barra de estado al enfocar cada pantalla.
+- **Trazado ilustrativo** siempre visible en una etiqueta sobre el mapa, y la atribución de OpenStreetMap también. El texto completo está en la pestaña Horario.
+- **Faltan colores de fondo vivos:** quedaron para las capturas de la tienda, no para la app.
+
+## 2026-11-05 · Logo del camarón
+
+- **Mascota elegida por el usuario** como ícono y pantalla de carga, por ser representativa de Ciudad del Carmen. Reemplaza al pin de ubicación.
+- **Origen y derechos sin confirmar.** La imagen es una captura de 403×337 con el texto "¡Uh chito!". **Pendiente antes de publicar:** saber quién es el autor, obtener permiso y confirmar que no pertenece a "Carmen siempre Limpio" ni a SOS de la Isla, cuya identidad no se puede usar.
+- **Tratamiento:** se quitó el fondo gris, se agregó un borde blanco de calcomanía y se colocó sobre el azul petróleo. El globo solo aparece en la pantalla de carga: en el ícono no se leería.
+- **Android recorta en círculo:** el ícono visible es 683 de 1024 píxeles y el splash, 2/3 del lienzo. Por eso el dibujo mide 520 píxeles en ambos, y `imageWidth` es 288.
+- **Calidad:** la captura se amplió y se ve bien en el teléfono, pero conviene pedir el archivo original en alta resolución antes de publicar. El recorte base está en `apps/movil/assets/fuente/`.

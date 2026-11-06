@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+*.log
+
+# Secretos: solo .env.example entra al repositorio
+.env
+.env.*
+!.env.example
+
+# Expo
+.expo/
+expo-env.d.ts

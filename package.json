@@ -1,0 +1,20 @@
+{
+  "name": "carmen-limpio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plataforma para consultar y dar seguimiento a la recolección de residuos en Ciudad del Carmen, Campeche.",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "panel": "npm run dev -w @carmen-limpio/panel",
+    "movil": "npm run start -w @carmen-limpio/movil",
+    "android": "npm run android -w @carmen-limpio/movil",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test -w @carmen-limpio/compartido"
+  }
+}
