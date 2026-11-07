@@ -37,6 +37,8 @@ export const AVISO_TRAZADO =
 
 export const AVISO_POR_CONFIRMAR = 'Por confirmar: estos días se dedujeron del cartel.';
 
+export const AVISO_SIMULACION = 'Simulación: no es la ubicación real de ningún camión.';
+
 export const ATRIBUCION_OSM = '© OpenStreetMap';
 
 // Paleta propia: no reutiliza la identidad visual de los carteles.
