@@ -20,6 +20,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ESTILO_MAPA } from '../../componentes/mapaBase';
+import { Aparecer } from '../../componentes/movimiento';
 import {
   AtribucionOSM,
   Aviso,
@@ -241,11 +242,13 @@ export default function MapaCiudad() {
       </View>
 
       <View pointerEvents="box-none" style={estilos.inferior}>
-        {ruta ? (
-          <TarjetaRuta onCerrar={limpiar} onElegir={setElegida} otras={otras} ruta={ruta} />
-        ) : (
-          <Leyenda />
-        )}
+        <Aparecer key={ruta?.id ?? 'leyenda'}>
+          {ruta ? (
+            <TarjetaRuta onCerrar={limpiar} onElegir={setElegida} otras={otras} ruta={ruta} />
+          ) : (
+            <Leyenda />
+          )}
+        </Aparecer>
       </View>
     </View>
   );

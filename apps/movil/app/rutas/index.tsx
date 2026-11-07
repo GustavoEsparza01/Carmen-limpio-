@@ -95,7 +95,7 @@ export default function Rutas() {
 const estilos = StyleSheet.create({
   pantalla: { flex: 1, backgroundColor: COLORES.fondo },
   pestanas: { backgroundColor: COLORES.superficie },
-  lista: { padding: 16 },
+  lista: { padding: 20 },
   encabezado: { gap: 4, paddingBottom: 12, paddingHorizontal: 4 },
   tarjeta: {
     ...TARJETA,

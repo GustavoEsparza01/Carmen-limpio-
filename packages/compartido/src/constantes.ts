@@ -86,6 +86,7 @@ export const COLORES = {
   textoSuave: '#4A5C66',
   fondo: '#F7F9FA',
   superficie: '#FFFFFF',
+  superficieTranslucida: 'rgba(255, 255, 255, 0.9)',
   borde: '#D5DEE3',
   inactivo: '#E9EEF1',
   inactivoTexto: '#5B6C75',

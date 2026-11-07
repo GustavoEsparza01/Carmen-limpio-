@@ -1,6 +1,5 @@
 import {
   AVISO_REPORTES_DEMOSTRACION,
-  COLORES,
   fechaHoraLegible,
   lugarPorId,
   NOMBRE_ESTADO_REPORTE,
@@ -10,9 +9,10 @@ import {
 } from '@carmen-limpio/compartido';
 import { router } from 'expo-router';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Esqueleto } from '../../componentes/movimiento';
 import { Aviso, BarraEstado, Boton, FilaNavegable, IconoCirculo, PantallaVacia } from '../../componentes/ui';
 import { useDemo } from '../../estado/demo';
-import { FUENTE, TEXTO } from '../../estilos/tema';
+import { ALTURA_TACTIL, CONTENIDO, TEXTO } from '../../estilos/tema';
 
 const TIPOS: { tipo: TipoReporte; icono: 'bus' | 'trash' | 'warning' }[] = [
   { icono: 'bus', tipo: 'noPaso' },
@@ -28,7 +28,16 @@ function descripcionDe(reporte: Reporte) {
 export default function Reportes() {
   const { cargado, sesion, reportes, salir, borrarTodo } = useDemo();
 
-  if (!cargado) return null;
+  if (!cargado) {
+    return (
+      <View style={estilos.contenido}>
+        <Esqueleto alto={72} />
+        <Esqueleto alto={64} />
+        <Esqueleto alto={64} />
+        <Esqueleto alto={64} />
+      </View>
+    );
+  }
 
   if (!sesion) {
     return (
@@ -87,11 +96,11 @@ export default function Reportes() {
         <View style={estilos.enlaces}>
           {reportes.length > 0 && (
             <Pressable accessibilityRole="button" onPress={confirmarBorrado} style={estilos.enlace}>
-              <Text style={estilos.enlaceTexto}>Borrar mis datos</Text>
+              <Text style={TEXTO.enlace}>Borrar mis datos</Text>
             </Pressable>
           )}
           <Pressable accessibilityRole="button" onPress={() => salir()} style={estilos.enlace}>
-            <Text style={estilos.enlaceTexto}>Salir</Text>
+            <Text style={TEXTO.enlace}>Salir</Text>
           </Pressable>
         </View>
       </View>
@@ -100,10 +109,9 @@ export default function Reportes() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 12, padding: 20 },
+  contenido: CONTENIDO,
   acciones: { gap: 12 },
   pie: { gap: 4, paddingTop: 12 },
   enlaces: { flexDirection: 'row', flexWrap: 'wrap', gap: 20 },
-  enlace: { justifyContent: 'center', minHeight: 48 },
-  enlaceTexto: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
+  enlace: { justifyContent: 'center', minHeight: ALTURA_TACTIL },
 });

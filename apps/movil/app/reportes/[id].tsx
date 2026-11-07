@@ -15,7 +15,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Aviso, BarraEstado, Boton } from '../../componentes/ui';
 import { useDemo } from '../../estado/demo';
-import { RADIO, TARJETA, TEXTO } from '../../estilos/tema';
+import { CONTENIDO, RADIO, TARJETA, TEXTO } from '../../estilos/tema';
 
 function LineaDeTiempo({ reporte }: { reporte: Reporte }) {
   const pasos = pasosDeLinea(reporte);
@@ -102,7 +102,7 @@ export default function DetalleReporte() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 14, padding: 20 },
+  contenido: CONTENIDO,
   encabezado: { gap: 2 },
   tarjeta: { ...TARJETA, gap: 10, padding: 16 },
   foto: { borderRadius: RADIO.grande, height: 200, width: '100%' },

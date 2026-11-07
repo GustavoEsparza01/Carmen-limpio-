@@ -16,7 +16,7 @@ import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ErrorCampo, SelectorFoto, SelectorLugar, SelectorPunto } from '../../componentes/formularioReporte';
 import { Aviso, BarraEstado, Boton, Pastilla } from '../../componentes/ui';
 import { useDemo } from '../../estado/demo';
-import { FUENTE, RADIO, TEXTO } from '../../estilos/tema';
+import { CONTENIDO, RADIO, TEXTO } from '../../estilos/tema';
 
 function esTipo(valor: string | undefined): valor is TipoReporte {
   return valor === 'noPaso' || valor === 'acumulacion' || valor === 'tiradero';
@@ -117,7 +117,7 @@ export default function NuevoReporte() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 16, padding: 20 },
+  contenido: CONTENIDO,
   campo: { gap: 8 },
   fechas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   descripcion: {
@@ -125,9 +125,7 @@ const estilos = StyleSheet.create({
     borderColor: COLORES.borde,
     borderRadius: RADIO.medio,
     borderWidth: 1,
-    color: COLORES.texto,
-    fontFamily: FUENTE,
-    fontSize: 17,
+    ...TEXTO.campo,
     minHeight: 110,
     padding: 14,
   },

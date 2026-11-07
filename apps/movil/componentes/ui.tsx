@@ -13,7 +13,7 @@ import { useFocusEffect } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { useCallback, type ComponentProps, type ReactNode } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { COLOR_TURNO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
+import { ALTURA_TACTIL, COLOR_TURNO, CONTENIDO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
 
 type NombreIcono = ComponentProps<typeof Ionicons>['name'];
 
@@ -112,7 +112,7 @@ export function Boton({
   variante?: 'principal' | 'secundario';
 }) {
   const secundario = variante === 'secundario';
-  const color = secundario ? COLORES.primario : '#FFFFFF';
+  const color = secundario ? COLORES.primario : COLORES.superficie;
   return (
     <Pressable
       accessibilityRole="button"
@@ -340,7 +340,7 @@ const estilos = StyleSheet.create({
   diaActivo: { backgroundColor: COLORES.primario },
   diaHoy: { borderColor: COLORES.acentoTexto, borderWidth: 3 },
   diaTexto: { color: COLORES.inactivoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
-  diaTextoActivo: { color: '#FFFFFF', fontWeight: '700' },
+  diaTextoActivo: { color: COLORES.superficie, fontWeight: '700' },
   insignia: {
     alignItems: 'center',
     borderRadius: RADIO.medio,
@@ -381,7 +381,7 @@ const estilos = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 21,
   },
-  vaciaContenido: { alignItems: 'center', flexGrow: 1, gap: 12, justifyContent: 'center', padding: 28 },
+  vaciaContenido: { ...CONTENIDO, alignItems: 'center', flexGrow: 1, justifyContent: 'center' },
   vaciaIcono: {
     alignItems: 'center',
     backgroundColor: COLORES.primarioSuave,
@@ -408,7 +408,7 @@ const estilos = StyleSheet.create({
   },
   ilustrativoTexto: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
   atribucion: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: COLORES.superficieTranslucida,
     borderRadius: RADIO.chico,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -452,7 +452,7 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
     justifyContent: 'center',
-    minHeight: 46,
+    minHeight: ALTURA_TACTIL,
   },
   pestanaActiva: { borderBottomColor: COLORES.primario },
   pestanaTexto: { fontFamily: FUENTE, fontSize: 16, fontWeight: '500' },
@@ -462,7 +462,7 @@ const estilos = StyleSheet.create({
     backgroundColor: COLORES.inactivo,
     borderRadius: RADIO.chico,
     justifyContent: 'center',
-    minHeight: 40,
+    minHeight: ALTURA_TACTIL,
     paddingHorizontal: 14,
   },
   pastillaActiva: { backgroundColor: COLORES.texto },
@@ -472,16 +472,16 @@ const estilos = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
-  pastillaTextoActiva: { color: '#FFFFFF' },
+  pastillaTextoActiva: { color: COLORES.superficie },
   flotante: {
     ...SOMBRA,
     alignItems: 'center',
     backgroundColor: COLORES.superficie,
     borderRadius: RADIO.completo,
     elevation: 4,
-    height: 46,
+    height: ALTURA_TACTIL,
     justifyContent: 'center',
-    width: 46,
+    width: ALTURA_TACTIL,
   },
   circulo: {
     alignItems: 'center',

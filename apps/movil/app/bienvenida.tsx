@@ -17,9 +17,10 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Mascota } from '../componentes/Mascota';
+import { Aparecer } from '../componentes/movimiento';
 import { Aviso, BarraEstado, Boton, FilaNavegable, IconoCirculo, Pastilla } from '../componentes/ui';
 import { useGuardados } from '../estado/guardados';
-import { FUENTE, RADIO, SOMBRA, TEXTO } from '../estilos/tema';
+import { CONTENIDO, RADIO, SOMBRA, TEXTO } from '../estilos/tema';
 
 const PASOS = 3;
 const OPCIONES: Recordatorio[] = ['nocheAnterior', 'antesDeVentana', 'ninguno'];
@@ -143,7 +144,7 @@ export default function Bienvenida() {
       <BarraEstado estilo="dark" />
       <View style={estilos.barra}>
         <Pressable accessibilityRole="button" hitSlop={14} onPress={terminar}>
-          <Text style={estilos.omitir}>Omitir</Text>
+          <Text style={TEXTO.enlace}>Omitir</Text>
         </Pressable>
         <Text style={TEXTO.apoyo}>
           Paso {paso + 1} de {PASOS}
@@ -155,6 +156,7 @@ export default function Bienvenida() {
         ))}
       </View>
       <ScrollView contentContainerStyle={estilos.contenido} keyboardShouldPersistTaps="handled">
+        <Aparecer key={paso} style={estilos.paso}>
         {paso === 0 && (
           <>
             <PasoColonia onElegir={elegirLugar} />
@@ -165,6 +167,7 @@ export default function Bienvenida() {
           <PasoRecordatorio lugar={lugarId ? lugarPorId(lugarId) : undefined} onSiguiente={() => setPaso(2)} />
         )}
         {paso === 2 && <PasoAcerca onTerminar={terminar} />}
+        </Aparecer>
       </ScrollView>
     </View>
   );
@@ -179,11 +182,11 @@ const estilos = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
   },
-  omitir: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
   progreso: { flexDirection: 'row', gap: 6, paddingHorizontal: 20, paddingTop: 10 },
   punto: { backgroundColor: COLORES.borde, borderRadius: RADIO.completo, flex: 1, height: 5 },
   puntoActivo: { backgroundColor: COLORES.primario },
-  contenido: { gap: 14, padding: 20 },
+  contenido: CONTENIDO,
+  paso: { gap: 14 },
   mascota: { alignItems: 'center' },
   opciones: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   buscador: {
@@ -197,5 +200,5 @@ const estilos = StyleSheet.create({
     minHeight: 60,
     paddingHorizontal: 16,
   },
-  buscadorCampo: { color: COLORES.texto, flex: 1, fontFamily: FUENTE, fontSize: 17, fontWeight: '500', minHeight: 56 },
+  buscadorCampo: { ...TEXTO.campo, flex: 1, minHeight: 56 },
 });

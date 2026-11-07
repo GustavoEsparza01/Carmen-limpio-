@@ -14,7 +14,7 @@ import { useMemo, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useMapaDisponible } from '../estado/conexion';
 import { borrarFoto, elegirFoto, type OrigenFoto } from '../estado/fotos';
-import { FUENTE, RADIO, TEXTO } from '../estilos/tema';
+import { ALTURA_TACTIL, RADIO, TEXTO } from '../estilos/tema';
 import { ESTILO_MAPA } from './mapaBase';
 import { AtribucionOSM, Aviso, Boton, FilaNavegable, IconoCirculo } from './ui';
 
@@ -129,7 +129,7 @@ export function SelectorFoto({ uri, onCambiar }: { uri?: string | undefined; onC
       </View>
       {uri && (
         <Pressable accessibilityRole="button" onPress={quitar} style={estilos.quitar}>
-          <Text style={estilos.quitarTexto}>Quitar la foto</Text>
+          <Text style={TEXTO.enlace}>Quitar la foto</Text>
         </Pressable>
       )}
       {sinPermiso && <Aviso icono="camera-reverse">{AVISO_SIN_PERMISO_CAMARA}</Aviso>}
@@ -144,9 +144,7 @@ const estilos = StyleSheet.create({
     borderColor: COLORES.borde,
     borderRadius: RADIO.medio,
     borderWidth: 1,
-    color: COLORES.texto,
-    fontFamily: FUENTE,
-    fontSize: 17,
+    ...TEXTO.campo,
     minHeight: 52,
     paddingHorizontal: 14,
   },
@@ -155,8 +153,7 @@ const estilos = StyleSheet.create({
   foto: { borderRadius: RADIO.grande, height: 200, width: '100%' },
   botones: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   boton: { flexBasis: 130, flexGrow: 1 },
-  quitar: { alignItems: 'center', justifyContent: 'center', minHeight: 48 },
-  quitarTexto: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
+  quitar: { alignItems: 'center', justifyContent: 'center', minHeight: ALTURA_TACTIL },
   error: { alignItems: 'flex-start', flexDirection: 'row', gap: 6 },
-  errorTexto: { color: COLORES.errorTexto, flex: 1, fontFamily: FUENTE, fontSize: 15, fontWeight: '500', lineHeight: 21 },
+  errorTexto: { ...TEXTO.alerta, color: COLORES.errorTexto, flex: 1 },
 });

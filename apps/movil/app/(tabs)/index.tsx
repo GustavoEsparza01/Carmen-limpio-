@@ -15,6 +15,7 @@ import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Mascota } from '../../componentes/Mascota';
+import { Aparecer, Esqueleto } from '../../componentes/movimiento';
 import { TarjetaHoy } from '../../componentes/TarjetaHoy';
 import {
   BarraEstado,
@@ -28,7 +29,10 @@ import {
 } from '../../componentes/ui';
 import { useAhora } from '../../estado/ahora';
 import { useGuardados } from '../../estado/guardados';
-import { FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../../estilos/tema';
+import { CONTENIDO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../../estilos/tema';
+
+// Alto aproximado de la tarjeta "Hoy", para que el inicio no salte al cargar.
+const ALTO_TARJETA = 420;
 
 function resumen(lugar: Lugar): string {
   const [primero] = lugar.horarios;
@@ -158,13 +162,17 @@ export default function Inicio() {
                   ))}
                 </ScrollView>
               )}
-              {lugarGuardado ? (
-                <TarjetaHoy ahora={ahora} lugar={lugarGuardado} />
-              ) : (
-                <>
+              {!cargado && <Esqueleto alto={ALTO_TARJETA} />}
+              {cargado && lugarGuardado && (
+                <Aparecer key={lugarGuardado.id}>
+                  <TarjetaHoy ahora={ahora} lugar={lugarGuardado} />
+                </Aparecer>
+              )}
+              {cargado && !lugarGuardado && (
+                <Aparecer style={estilos.grupo}>
                   <Invitacion onElegir={() => buscador.current?.focus()} />
                   <HorarioGeneral />
-                </>
+                </Aparecer>
               )}
               <View style={estilos.accesos}>
                 <TarjetaAcceso
@@ -230,15 +238,9 @@ const estilos = StyleSheet.create({
     minHeight: 60,
     paddingHorizontal: 16,
   },
-  buscadorCampo: {
-    color: COLORES.texto,
-    flex: 1,
-    fontFamily: FUENTE,
-    fontSize: 17,
-    fontWeight: '500',
-    minHeight: 56,
-  },
-  contenido: { gap: 12, padding: 20 },
+  buscadorCampo: { ...TEXTO.campo, flex: 1, minHeight: 56 },
+  contenido: CONTENIDO,
+  grupo: { gap: 14 },
   invitacion: { ...TARJETA, gap: 10, padding: 18 },
   general: { ...TARJETA, gap: 12, padding: 16 },
   generalTurnos: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -256,5 +258,5 @@ const estilos = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 8,
   },
-  pieTexto: { ...TEXTO.apoyo, flex: 1, fontSize: 13, lineHeight: 18 },
+  pieTexto: { ...TEXTO.pequeno, flex: 1 },
 });

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Aviso, BarraEstado } from '../../componentes/ui';
 import { avisos as servicioAvisos } from '../../estado/demo';
-import { FUENTE, RADIO, TARJETA, TEXTO } from '../../estilos/tema';
+import { CONTENIDO, FUENTE, RADIO, TARJETA, TEXTO } from '../../estilos/tema';
 
 const ICONO: Record<TipoAviso, 'time' | 'pause-circle' | 'leaf'> = {
   general: 'leaf',
@@ -40,7 +40,7 @@ export default function Avisos() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 12, padding: 20 },
+  contenido: CONTENIDO,
   tarjeta: { ...TARJETA, gap: 8, padding: 16 },
   encabezado: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   etiqueta: {

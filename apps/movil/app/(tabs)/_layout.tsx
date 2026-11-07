@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import type { ComponentProps } from 'react';
 import type { ColorValue } from 'react-native';
+import { useReducirAnimacion } from '../../estado/animacion';
 import { ENCABEZADO, FUENTE } from '../../estilos/tema';
 
 type NombreIcono = ComponentProps<typeof Ionicons>['name'];
@@ -14,11 +15,14 @@ function icono(activo: NombreIcono, inactivo: NombreIcono) {
 }
 
 export default function Pestanas() {
+  const reducir = useReducirAnimacion();
+
   return (
     <Tabs
       backBehavior="initialRoute"
       screenOptions={{
         ...ENCABEZADO,
+        animation: reducir ? 'none' : 'fade',
         sceneStyle: { backgroundColor: COLORES.fondo },
         tabBarActiveTintColor: COLORES.primario,
         tabBarHideOnKeyboard: true,

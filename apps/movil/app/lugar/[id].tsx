@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { Aviso, BarraEstado, Boton, DiasSemana, EtiquetaTurno, Pastilla } from '../../componentes/ui';
 import { useGuardados } from '../../estado/guardados';
-import { FUENTE, TARJETA, TEXTO } from '../../estilos/tema';
+import { ALTURA_TACTIL, CONTENIDO, TARJETA, TEXTO } from '../../estilos/tema';
 
 const ETIQUETAS: EtiquetaLugar[] = ['casa', 'trabajo', 'otro'];
 const RECORDATORIOS: Recordatorio[] = ['ninguno', 'nocheAnterior', 'antesDeVentana'];
@@ -71,7 +71,7 @@ export default function DetalleLugar() {
               style={estilos.enlace}
             >
               <Ionicons color={COLORES.primario} name="map" size={18} />
-              <Text style={estilos.enlaceTexto}>Ver en el mapa</Text>
+              <Text style={TEXTO.enlace}>Ver en el mapa</Text>
             </Pressable>
           )}
         </View>
@@ -127,20 +127,12 @@ export default function DetalleLugar() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 14, padding: 20 },
+  contenido: CONTENIDO,
   tarjeta: { ...TARJETA, gap: 12, padding: 16 },
   tarjetaEncabezado: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   opciones: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  horario: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  horario: TEXTO.destacado,
   porConfirmar: { alignItems: 'flex-start', flexDirection: 'row', gap: 6 },
-  porConfirmarTexto: {
-    color: COLORES.acentoTexto,
-    flex: 1,
-    fontFamily: FUENTE,
-    fontSize: 15,
-    fontWeight: '500',
-    lineHeight: 21,
-  },
-  enlace: { alignItems: 'center', flexDirection: 'row', gap: 6, minHeight: 44 },
-  enlaceTexto: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
+  porConfirmarTexto: { ...TEXTO.alerta, flex: 1 },
+  enlace: { alignItems: 'center', flexDirection: 'row', gap: 6, minHeight: ALTURA_TACTIL },
 });

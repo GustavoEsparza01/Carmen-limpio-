@@ -43,7 +43,17 @@ export const TEXTO = StyleSheet.create({
     letterSpacing: 0.4,
     lineHeight: 20,
   },
+  destacado: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  enlace: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
+  alerta: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 15, fontWeight: '500', lineHeight: 21 },
+  campo: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '500' },
+  pequeno: { color: COLORES.textoSuave, fontFamily: FUENTE, fontSize: 13, fontWeight: '500', lineHeight: 18 },
 });
+
+// Margen y separación de todas las pantallas con desplazamiento.
+export const CONTENIDO: ViewStyle = { gap: 14, padding: 20 };
+
+export const ALTURA_TACTIL = 48;
 
 // Compartido por el Stack raíz y las pestañas.
 export const ENCABEZADO = {

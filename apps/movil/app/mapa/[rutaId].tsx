@@ -49,7 +49,7 @@ import {
 } from '../../componentes/ui';
 import { CamionSimulado } from '../../componentes/CamionSimulado';
 import { ESTILO_MAPA } from '../../componentes/mapaBase';
-import { FUENTE, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
+import { ALTURA_TACTIL, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
 
 type Pestana = 'lugares' | 'horario';
 
@@ -273,6 +273,7 @@ export default function MapaRuta() {
             accessibilityLabel="Cambiar el tamaño del panel"
             accessibilityRole="button"
             onPress={() => moverA(posicion.current === 0 ? paradas[0]! : 0)}
+            hitSlop={{ bottom: 10, top: 10 }}
             style={estilos.asa}
           >
             <View style={estilos.asaLinea} />
@@ -342,7 +343,7 @@ const estilos = StyleSheet.create({
     position: 'absolute',
     right: 16,
   },
-  equilibrio: { width: 46 },
+  equilibrio: { width: ALTURA_TACTIL },
   recentrar: { gap: 10, position: 'absolute', right: 16 },
   simulacion: {
     ...SOMBRA,
@@ -358,7 +359,7 @@ const estilos = StyleSheet.create({
     position: 'absolute',
     right: 74,
   },
-  simulacionTexto: { color: COLORES.acentoTexto, flex: 1, fontFamily: FUENTE, fontSize: 13, fontWeight: '600' },
+  simulacionTexto: { ...TEXTO.pequeno, color: COLORES.acentoTexto, flex: 1 },
   atribucion: { left: 16, position: 'absolute' },
   panel: {
     ...SOMBRA,
@@ -392,8 +393,8 @@ const estilos = StyleSheet.create({
   paradaElegida: { backgroundColor: COLORES.primarioSuave },
   paradaCuerpo: { flex: 1, gap: 2 },
   paradaFlecha: { alignSelf: 'center' },
-  excepcion: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 15, fontWeight: '500', lineHeight: 21 },
+  excepcion: TEXTO.alerta,
   horario: { gap: 14, padding: 20 },
-  ventana: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  ventana: TEXTO.destacado,
   vacio: { padding: 20 },
 });

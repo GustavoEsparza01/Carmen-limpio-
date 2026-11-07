@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Aviso, BarraEstado, Boton } from '../../componentes/ui';
 import { useDemo } from '../../estado/demo';
-import { TEXTO } from '../../estilos/tema';
+import { CONTENIDO, TEXTO } from '../../estilos/tema';
 
 export default function Privacidad() {
   const { entrar } = useDemo();
@@ -32,6 +32,6 @@ export default function Privacidad() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 14, padding: 20 },
+  contenido: CONTENIDO,
   seccion: { gap: 4 },
 });

@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLOR_ESTADO_HOY, FUENTE, RADIO, TARJETA, TEXTO } from '../estilos/tema';
+import { CamionDecorativo } from './movimiento';
 import { Boton, DiasSemana, EtiquetaTurno } from './ui';
 
 function etiquetaRutas(horarios: readonly Horario[]) {
@@ -46,6 +47,7 @@ export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
         <View style={estilos.etiqueta}>
           <Ionicons color={texto} name={icono} size={18} />
           <Text style={[estilos.etiquetaTexto, { color: texto }]}>{etiqueta}</Text>
+          {(estado === 'antes' || estado === 'enCurso') && <CamionDecorativo color={texto} />}
         </View>
         <Text style={[estilos.mensaje, { color: texto }]}>{mensaje}</Text>
       </Pressable>
@@ -85,15 +87,11 @@ const estilos = StyleSheet.create({
   detalle: { gap: 12, padding: 16 },
   ruta: { alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between' },
   porConfirmar: {
+    ...TEXTO.alerta,
     backgroundColor: COLORES.acentoSuave,
     borderRadius: RADIO.chico,
-    color: COLORES.acentoTexto,
-    fontFamily: FUENTE,
-    fontSize: 15,
-    fontWeight: '500',
-    lineHeight: 21,
     paddingHorizontal: 10,
     paddingVertical: 6,
   },
-  fuente: { ...TEXTO.apoyo, fontSize: 14, lineHeight: 20 },
+  fuente: TEXTO.apoyo,
 });
