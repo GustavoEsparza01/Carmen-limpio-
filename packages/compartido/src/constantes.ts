@@ -38,6 +38,27 @@ export const AVISO_SILUETA = 'Formas ilustrativas: no indican el sentido ni el o
 export const AVISO_SIN_PERMISO =
   'Sin permiso de notificaciones no podemos avisarte. La app sigue funcionando y puedes activarlo en los ajustes del teléfono.';
 
+export const AVISO_SIN_PERMISO_CAMARA = 'Sin permiso de cámara puedes elegir una foto de la galería.';
+
+export const AVISO_AVISOS_EJEMPLO = 'Avisos de ejemplo para mostrar cómo se vería esta sección. Ninguno es real.';
+
+export const TEXTO_PRIVACIDAD_FOTOS = 'La foto se queda en este teléfono y no se publica ni se envía.';
+
+export const AVISO_PRIVACIDAD_BORRADOR = 'Borrador pendiente de revisión legal. Aplica solo a esta demostración.';
+
+// Borrador con la estructura de la LFPDPPP. Lo marcado como pendiente no se ha definido.
+export const BORRADOR_PRIVACIDAD: readonly { titulo: string; texto: string }[] = [
+  { titulo: 'Responsable', texto: 'Pendiente de definir. Carmen Limpio es un proyecto independiente, no oficial.' },
+  {
+    titulo: 'Datos que se usan',
+    texto: 'Lugar, fecha, punto en el mapa, descripción y foto del reporte. No pedimos tu nombre, correo ni teléfono.',
+  },
+  { titulo: 'Finalidad', texto: 'Mostrar cómo funcionarían los reportes. No se atiende ningún reporte.' },
+  { titulo: 'Dónde se guardan', texto: 'Solo en este teléfono. No se envían a nadie ni se transfieren a terceros.' },
+  { titulo: 'Tus derechos', texto: 'Puedes borrar tus reportes y sus fotos cuando quieras desde la sección Reportes.' },
+  { titulo: 'Cambios', texto: 'Este texto cambiará antes de usar datos reales, y se pedirá aceptar la nueva versión.' },
+];
+
 export const AVISO_ILUSTRATIVO = 'Datos ilustrativos, pendientes de validación oficial.';
 
 export const AVISO_HORARIOS =
@@ -56,6 +77,7 @@ export const ATRIBUCION_OSM = '© OpenStreetMap';
 
 // Paleta propia: no reutiliza la identidad visual de los carteles.
 export const COLORES = {
+  errorTexto: '#B3261E',
   primario: '#0B4F6C',
   primarioSuave: '#E3EFF4',
   acentoSuave: '#FDF0DC',
