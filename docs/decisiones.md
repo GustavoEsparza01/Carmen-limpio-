@@ -126,3 +126,16 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Mapa, Reportes y Avisos usan `PantallaVacia`** hasta sus etapas, sin datos de ejemplo. Reportes ya aclara que no se enviarán a nadie.
 - **La tarjeta "Mapa de la ciudad" del inicio sigue desactivada** hasta la etapa 3, porque hoy solo llevaría a la pantalla vacía.
 - **Advertencia de navegación:** "multiple navigation containers" aparece al forzar enlaces directos o cambiar el tamaño de pantalla con `adb`, porque se recrea la actividad. No apareció en el arranque normal.
+
+## 2026-11-06 · Presencia visual, etapa 3: mapa de la ciudad
+
+- **Solo escenario `carteles`.** `TRAZADOS_CIUDAD` se arma con `trazadoDeRuta`, y una prueba compara cada línea con el trazado original.
+- **Una sola fuente para las 15 rutas.** Filtrar cambia la expresión `filter` de las capas, no los datos. Son tres capas sobre esa fuente: borde blanco, matutino y vespertino.
+- **El turno se distingue por el trazo:** continuo en matutino y punteado en vespertino. El color identifica el número de ruta, y la Ruta 1 conserva su color en ambos turnos.
+- **Paleta buscada por computadora.** La primera propuesta confundía las rutas 2 y 5 con deuteranopia (distancia 4.8). La actual tiene una distancia mínima de 33.1 entre los 8 colores en visión normal, protanopia, deuteranopia y tritanopia, con matrices de Machado 2009 y CIE76. Una prueba exige contraste de 3:1 con el mapa claro.
+- **Sin etiquetas de texto sobre el mapa:** requerirían un servidor de tipografías externo. La ruta se identifica con la tarjeta y las pastillas, que usan número e icono de turno además del color.
+- **Rutas superpuestas:** varias comparten avenidas, así que un toque puede alcanzar varias. La tarjeta muestra la primera y ofrece las demás en "También aquí".
+- **Mapa base atenuado sin cambiar de proveedor:** `raster-saturation` -0.7, `raster-contrast` -0.2 y `raster-brightness-min` 0.15. Se aplica también al mapa de cada ruta.
+- **Sin conexión:** MapLibre no avisa cuando fallan los mosaicos, así que al entrar se hace un `HEAD` a un mosaico de la isla, con límite de 6 segundos. El aviso ofrece ver los horarios y reintentar. Solo está en la pestaña Mapa, no en el mapa de cada ruta.
+- **Tarjeta con altura máxima del 42 %:** con letra al 130 % en 720×1280 tapaba el mapa y los filtros. El texto se desplaza por dentro y "Ver esta ruta" queda fija.
+- **Fluidez sin medir de forma fiable:** `gfxinfo` no incluye el dibujo del mapa, que va por OpenGL. Falta confirmarla en un teléfono real.
