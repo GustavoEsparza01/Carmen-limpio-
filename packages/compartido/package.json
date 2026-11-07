@@ -10,7 +10,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/horario.test.ts src/catalogo.test.ts src/rutas.test.ts src/trazado.test.ts src/unidades.test.ts src/simulacion.test.ts"
+    "test": "node --test src/horario.test.ts src/catalogo.test.ts src/rutas.test.ts src/trazado.test.ts src/unidades.test.ts src/simulacion.test.ts src/hoy.test.ts"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

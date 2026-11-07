@@ -35,6 +35,8 @@ export const AVISO_HORARIOS =
 export const AVISO_TRAZADO =
   'Trazado ilustrativo: une los lugares de la ruta, pero no pasa por todas las calles ni tiene validación oficial.';
 
+export const AVISO_FUENTE_HOY = 'Según carteles públicos; el horario puede variar.';
+
 export const AVISO_POR_CONFIRMAR = 'Por confirmar: estos días se dedujeron del cartel.';
 
 export const AVISO_SIMULACION = 'Simulación: no es la ubicación real de ningún camión.';
