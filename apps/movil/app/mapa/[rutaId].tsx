@@ -304,7 +304,7 @@ export default function MapaRuta() {
               <ScrollView contentContainerStyle={estilos.dias} horizontal showsHorizontalScrollIndicator={false}>
                 <Pastilla activa={dia === null} onPress={() => setDia(null)} texto="Todos" />
                 {DIAS_CARTEL.map((d) => (
-                  <Pastilla activa={dia === d} key={d} onPress={() => setDia(d)} texto={NOMBRE_DIA[d]} />
+                  <Pastilla activa={dia === d} key={d} onPress={() => setDia(d)} texto={NOMBRE_DIA[d].replace(/^./, (letra) => letra.toUpperCase())} />
                 ))}
               </ScrollView>
             }

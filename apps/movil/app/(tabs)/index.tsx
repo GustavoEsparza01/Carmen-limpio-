@@ -4,12 +4,13 @@ import {
   COLORES,
   DIAS_CARTEL,
   lugarPorId,
+  NOMBRE_ETIQUETA,
   RUTAS,
   textoHorario,
   type Lugar,
 } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,10 +23,11 @@ import {
   EtiquetaTurno,
   FilaNavegable,
   IconoCirculo,
+  Pastilla,
   TarjetaAcceso,
 } from '../../componentes/ui';
 import { useAhora } from '../../estado/ahora';
-import { useFavorita } from '../../estado/favorita';
+import { useGuardados } from '../../estado/guardados';
 import { FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../../estilos/tema';
 
 function resumen(lugar: Lugar): string {
@@ -66,13 +68,17 @@ function HorarioGeneral() {
 
 export default function Inicio() {
   const { top } = useSafeAreaInsets();
-  const { favoritaId } = useFavorita();
+  const { bienvenidaVista, cargado, guardados } = useGuardados();
+  const [elegidoId, setElegidoId] = useState<string>();
   const ahora = useAhora();
   const buscador = useRef<ComponentRef<typeof TextInput>>(null);
   const [consulta, setConsulta] = useState('');
   const resultados = useMemo(() => buscarLugares(consulta), [consulta]);
   const buscando = consulta.trim().length > 0;
-  const favorita = favoritaId ? lugarPorId(favoritaId) : undefined;
+  const guardado = guardados.find((g) => g.lugarId === elegidoId) ?? guardados[0];
+  const lugarGuardado = guardado ? lugarPorId(guardado.lugarId) : undefined;
+
+  if (cargado && !bienvenidaVista) return <Redirect href="/bienvenida" />;
 
   return (
     <View style={estilos.pantalla}>
@@ -140,8 +146,20 @@ export default function Inicio() {
             </>
           ) : (
             <>
-              {favorita ? (
-                <TarjetaHoy ahora={ahora} lugar={favorita} />
+              {guardados.length > 1 && (
+                <ScrollView contentContainerStyle={estilos.lugares} horizontal showsHorizontalScrollIndicator={false}>
+                  {guardados.map((g) => (
+                    <Pastilla
+                      activa={g.lugarId === guardado?.lugarId}
+                      key={g.lugarId}
+                      onPress={() => setElegidoId(g.lugarId)}
+                      texto={`${NOMBRE_ETIQUETA[g.etiqueta]}: ${lugarPorId(g.lugarId)?.nombre ?? ''}`}
+                    />
+                  ))}
+                </ScrollView>
+              )}
+              {lugarGuardado ? (
+                <TarjetaHoy ahora={ahora} lugar={lugarGuardado} />
               ) : (
                 <>
                   <Invitacion onElegir={() => buscador.current?.focus()} />
@@ -224,6 +242,7 @@ const estilos = StyleSheet.create({
   invitacion: { ...TARJETA, gap: 10, padding: 18 },
   general: { ...TARJETA, gap: 12, padding: 16 },
   generalTurnos: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  lugares: { gap: 8 },
   accesos: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   vacio: { alignItems: 'center', flexDirection: 'row', gap: 12, paddingVertical: 4 },
   vacioTexto: { ...TEXTO.cuerpo, flex: 1 },

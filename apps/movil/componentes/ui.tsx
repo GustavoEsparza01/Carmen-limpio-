@@ -471,7 +471,6 @@ const estilos = StyleSheet.create({
     fontFamily: FUENTE,
     fontSize: 15,
     fontWeight: '600',
-    textTransform: 'capitalize',
   },
   pastillaTextoActiva: { color: '#FFFFFF' },
   flotante: {
