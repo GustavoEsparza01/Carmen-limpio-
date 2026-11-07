@@ -35,6 +35,9 @@ export const AVISO_SIN_MAPA = 'Sin conexión no se puede cargar el mapa base. Lo
 
 export const AVISO_SILUETA = 'Formas ilustrativas: no indican el sentido ni el orden del recorrido.';
 
+export const AVISO_SIN_PERMISO =
+  'Sin permiso de notificaciones no podemos avisarte. La app sigue funcionando y puedes activarlo en los ajustes del teléfono.';
+
 export const AVISO_ILUSTRATIVO = 'Datos ilustrativos, pendientes de validación oficial.';
 
 export const AVISO_HORARIOS =
