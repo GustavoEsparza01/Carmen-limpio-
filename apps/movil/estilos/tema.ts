@@ -45,6 +45,14 @@ export const TEXTO = StyleSheet.create({
   },
 });
 
+// Compartido por el Stack raíz y las pestañas.
+export const ENCABEZADO = {
+  headerShadowVisible: false,
+  headerStyle: { backgroundColor: COLORES.superficie },
+  headerTintColor: COLORES.texto,
+  headerTitleStyle: { fontFamily: FUENTE, fontWeight: '700' },
+} as const;
+
 export const TARJETA: ViewStyle = {
   backgroundColor: COLORES.superficie,
   borderColor: COLORES.borde,

@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { useCallback, type ComponentProps, type ReactNode } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { COLOR_TURNO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
 
 type NombreIcono = ComponentProps<typeof Ionicons>['name'];
@@ -222,6 +222,32 @@ export function BotonFlotante({
   );
 }
 
+export function PantallaVacia({
+  icono,
+  titulo,
+  texto,
+  children,
+}: {
+  icono: NombreIcono;
+  titulo: string;
+  texto: string;
+  children?: ReactNode;
+}) {
+  return (
+    <ScrollView contentContainerStyle={estilos.vaciaContenido}>
+      <BarraEstado estilo="dark" />
+      <View style={estilos.vaciaIcono}>
+        <Ionicons color={COLORES.primario} name={icono} size={44} />
+      </View>
+      <Text accessibilityRole="header" style={[TEXTO.subtitulo, estilos.vaciaTexto]}>
+        {titulo}
+      </Text>
+      <Text style={[TEXTO.cuerpo, estilos.vaciaTexto]}>{texto}</Text>
+      {children && <View style={estilos.vaciaAccion}>{children}</View>}
+    </ScrollView>
+  );
+}
+
 export function IconoCirculo({ icono }: { icono: NombreIcono }) {
   return (
     <View style={estilos.circulo}>
@@ -295,6 +321,18 @@ const estilos = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 21,
   },
+  vaciaContenido: { alignItems: 'center', flexGrow: 1, gap: 12, justifyContent: 'center', padding: 28 },
+  vaciaIcono: {
+    alignItems: 'center',
+    backgroundColor: COLORES.primarioSuave,
+    borderRadius: RADIO.completo,
+    height: 96,
+    justifyContent: 'center',
+    marginBottom: 4,
+    width: 96,
+  },
+  vaciaTexto: { textAlign: 'center' },
+  vaciaAccion: { alignSelf: 'stretch', marginTop: 8 },
   acceso: { ...TARJETA, flexBasis: 170, flexGrow: 1, gap: 6, minHeight: 48, padding: 14 },
   accesoInactivo: { backgroundColor: COLORES.inactivo, elevation: 0, shadowOpacity: 0 },
   fila: {
