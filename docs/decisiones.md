@@ -149,3 +149,9 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Mismo color que en el mapa de la ciudad,** para que una ruta se reconozca en ambas pantallas.
 - **Fluidez:** se comparó el desplazamiento con y sin siluetas y dio casi igual (36 y 38 cuadros, 250 ms), con el emulador muy cargado y en modo de desarrollo. Las siluetas no son la causa de la lentitud, pero falta medirlo en un teléfono real.
 - **El emulador reinició su sistema Android una vez durante las pruebas** (`DeadSystemException`). No venía de la app, y no se repitió.
+
+## 2026-11-06 · Rendimiento del camión simulado
+
+- **Se probó y se descartó dibujarlo como capa del mapa.** El usuario notó lag, y el camión consumía 40-77 % de CPU contra 4-5 % en reposo. Mi hipótesis era que moverlo dentro del mapa costaría menos, pero subió a cerca de 100 %: el hilo de dibujo pasó de unos 50 % a 83 %, porque cada paso redibuja el mapa completo.
+- **Bajar la frecuencia tampoco sirve:** de 20 a 10 actualizaciones por segundo solo bajó de 72-76 % a 66-70 %, así que el coste no depende de las actualizaciones. Se conserva el `Marker` original.
+- **Son medidas en emulador y modo de desarrollo.** Falta medir en un teléfono real. En reposo la app usa 4-5 % en todas las pantallas.
