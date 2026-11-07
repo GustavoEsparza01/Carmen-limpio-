@@ -195,7 +195,9 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 
 ## 2026-11-06 · Imagen del camión simulado
 
-- **El usuario aportó una imagen de un camión de la empresa recolectora** para reemplazar el icono. La foto original lleva el logo de SOS de la Isla, un mural y el lema "Mantén la ciudad limpia". La versión vectorizada conserva mural, lema y restos del logo en la puerta.
-- **Se usa una versión neutra:** caja lisa en azul petróleo y puerta limpia, sin mural ni lema, porque el proyecto no puede usar la identidad de SOS de la Isla y la app no es oficial. Ni la foto ni la versión vectorizada entran al repositorio.
-- **Derechos resueltos:** el usuario confirmó que el camarón y el diseño del camión son propios. La caja lisa se conserva mientras no pida usar el mural, porque la foto original también lleva el logo de SOS de la Isla.
-- **El marcador conserva la etiqueta "Simulación".** Consumo con el camión activo: unos 41 %, igual que con el icono anterior; 3.7 % en reposo.
+- **Excepción autorizada por el usuario a la regla de identidad visual:** el camión simulado lleva los logos de SOS de la Isla, el mural y el lema. El usuario confirmó que el camión y el camarón son diseños propios y pidió mantener los logos. La regla de `CLAUDE.md` sigue vigente para todo lo demás.
+- **Armado de la imagen:** colores de la captura original y recorte de la versión vectorizada, para conservar los logos nítidos sin el fondo de arena.
+- **Se probó primero una versión con caja lisa** y se descartó al recibir la autorización.
+- **Al ir hacia el este la imagen se voltea,** así que el texto del camión queda en espejo. A su tamaño en el mapa casi no se lee. Corregirlo exige una segunda imagen.
+- **La app sigue diciendo que no es oficial** y el marcador conserva la etiqueta "Simulación".
+- **Consumo con el camión activo:** 41-57 % en emulador, dentro del rango del icono anterior; 4 % en reposo.

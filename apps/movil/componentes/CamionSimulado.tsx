@@ -12,7 +12,7 @@ import { RADIO, TEXTO } from '../estilos/tema';
 
 const INTERVALO_MS = 50;
 
-// La caja va lisa a propósito: sin el mural ni el lema de la empresa recolectora.
+// Diseño del usuario, con los logos de SOS de la Isla por decisión suya (ver docs/decisiones.md).
 const IMAGEN = require('../assets/camion-simulado.png');
 const ANCHO_CAMION = 92;
 const ALTO_CAMION = 42;
