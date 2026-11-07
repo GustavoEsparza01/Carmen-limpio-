@@ -103,3 +103,15 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Usa el trazado `carteles` de la misma ruta,** nunca geometría de `propuesta`, porque corre en la app ciudadana.
 - **Siempre etiquetado:** arranca solo con el botón del mapa, lleva "Simulación" pegado al marcador y un aviso visible mientras corre.
 - **Velocidad acelerada:** 150 m/s, con duración de 20 segundos a 2 minutos por vuelta. No muestra hora ni tiempo de llegada, y al terminar vuelve a empezar.
+
+## 2026-11-06 · Presencia visual, etapa 1: inicio con tarjeta "Hoy"
+
+- **Textos ajustados al prompt:** "Recolección en curso" sugería que el camión estaba operando. Se usa "Ventana de recolección abierta" y "Hoy es día de recolección", con la nota "Según carteles públicos; el horario puede variar".
+- **`estadoDeHoy` solo compara la fecha con las ventanas de los carteles.** Calcula el día y la hora con `Intl` y `America/Merida`. Se comprobó en el emulador, que estaba en UTC.
+- **Prioridad cuando hay dos rutas:** ventana abierta, luego la que falta hoy, y por último la próxima. Si dos rutas comparten ventana, como Avenida Nardos, se muestran ambas.
+- **"Por confirmar" sigue a la ventana mencionada,** no al lugar: Renovación VII lo muestra jueves y sábado, y también al anunciar esos días, pero no el martes.
+- **Encabezado desplazable, buscador fijo.** Con encabezado y aviso fijos, en 720×1280 con letra al 130 % solo quedaba un tercio de la pantalla para el contenido. Por eso inicio usa un solo `ScrollView` y la búsqueda dejó de usar `FlatList`: son 120 lugares como máximo.
+- **Aviso de no oficial en una línea fija al pie.** El texto completo sigue en Rutas, en el mapa y en la pestaña Horario.
+- **"Mapa de la ciudad" aparece desactivado** con la leyenda "Próximamente" hasta la etapa 3.
+- **El camarón se usa solo mediante `componentes/Mascota.tsx`,** con la imagen ya recortada del ícono. Sus derechos siguen sin confirmar.
+- **Probar fechas en el emulador:** `adb shell settings put global auto_time 0` y `adb shell cmd alarm set-time <milisegundos>`. Al terminar hay que devolver `auto_time` a 1.
