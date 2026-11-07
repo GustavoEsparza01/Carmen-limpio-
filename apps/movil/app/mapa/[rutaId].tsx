@@ -3,6 +3,7 @@ import {
   AVISO_HORARIOS,
   AVISO_NO_OFICIAL,
   AVISO_POR_CONFIRMAR,
+  AVISO_SIMULACION,
   AVISO_TRAZADO,
   COLORES,
   DIAS_CARTEL,
@@ -46,6 +47,7 @@ import {
   Pastilla,
   Pestanas,
 } from '../../componentes/ui';
+import { CamionSimulado } from '../../componentes/CamionSimulado';
 import { FUENTE, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
 
 // El servidor público de OpenStreetMap solo sirve para el prototipo.
@@ -115,6 +117,7 @@ export default function MapaRuta() {
   const [elegido, setElegido] = useState(lugar);
   const [pestana, setPestana] = useState<Pestana>('lugares');
   const [dia, setDia] = useState<Dia | null>(null);
+  const [simulando, setSimulando] = useState(false);
   const ruta = rutaPorId(rutaId);
   const trazado = trazadoDeRuta(rutaId);
   const camara = useRef<CameraRef>(null);
@@ -242,6 +245,7 @@ export default function MapaRuta() {
             type="circle"
           />
         </GeoJSONSource>
+        {simulando && <CamionSimulado linea={trazado.linea} />}
       </Mapa>
 
       <View pointerEvents="box-none" style={[estilos.superior, { top: top + 8 }]}>
@@ -259,7 +263,19 @@ export default function MapaRuta() {
           icono="scan"
           onPress={() => camara.current?.fitBounds(limites, { padding: margenMapa, duration: 500 })}
         />
+        <BotonFlotante
+          etiqueta={simulando ? 'Detener simulación' : 'Simular camión'}
+          icono={simulando ? 'stop' : 'play'}
+          onPress={() => setSimulando((activo) => !activo)}
+        />
       </View>
+
+      {simulando && (
+        <View style={[estilos.simulacion, { top: top + 96 }]}>
+          <Ionicons color={COLORES.acentoTexto} name="information-circle" size={16} />
+          <Text style={estilos.simulacionTexto}>{AVISO_SIMULACION}</Text>
+        </View>
+      )}
 
       <Pressable
         accessibilityRole="link"
@@ -347,7 +363,22 @@ const estilos = StyleSheet.create({
     right: 16,
   },
   equilibrio: { width: 46 },
-  recentrar: { position: 'absolute', right: 16 },
+  recentrar: { gap: 10, position: 'absolute', right: 16 },
+  simulacion: {
+    ...SOMBRA,
+    alignItems: 'center',
+    backgroundColor: COLORES.acentoSuave,
+    borderRadius: RADIO.chico,
+    elevation: 4,
+    flexDirection: 'row',
+    gap: 6,
+    left: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    position: 'absolute',
+    right: 74,
+  },
+  simulacionTexto: { color: COLORES.acentoTexto, flex: 1, fontFamily: FUENTE, fontSize: 13, fontWeight: '600' },
   ilustrativo: {
     ...SOMBRA,
     alignItems: 'center',
