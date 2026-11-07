@@ -1,5 +1,4 @@
 import {
-  ATRIBUCION_OSM,
   AVISO_HORARIOS,
   AVISO_NO_OFICIAL,
   AVISO_POR_CONFIRMAR,
@@ -27,7 +26,6 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Animated,
   FlatList,
-  Linking,
   PanResponder,
   Pressable,
   ScrollView,
@@ -38,31 +36,20 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
+  AtribucionOSM,
   Aviso,
   BarraEstado,
   BotonFlotante,
   DiasSemana,
+  EtiquetaIlustrativa,
   EtiquetaTurno,
   InsigniaRuta,
   Pastilla,
   Pestanas,
 } from '../../componentes/ui';
 import { CamionSimulado } from '../../componentes/CamionSimulado';
+import { ESTILO_MAPA } from '../../componentes/mapaBase';
 import { FUENTE, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
-
-// El servidor público de OpenStreetMap solo sirve para el prototipo.
-const ESTILO_OSM = {
-  version: 8 as const,
-  sources: {
-    osm: {
-      type: 'raster' as const,
-      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-      tileSize: 256,
-      maxzoom: 19,
-    },
-  },
-  layers: [{ id: 'osm', type: 'raster' as const, source: 'osm' }],
-};
 
 type Pestana = 'lugares' | 'horario';
 
@@ -218,7 +205,7 @@ export default function MapaRuta() {
   return (
     <View style={estilos.pantalla}>
       <BarraEstado estilo="dark" />
-      <Mapa attribution={false} logo={false} mapStyle={ESTILO_OSM} style={StyleSheet.absoluteFill}>
+      <Mapa attribution={false} logo={false} mapStyle={ESTILO_MAPA} style={StyleSheet.absoluteFill}>
         <Camera bounds={limites} duration={0} padding={margenMapa} ref={camara} />
         <GeoJSONSource data={linea} id="linea">
           <Layer
@@ -250,10 +237,7 @@ export default function MapaRuta() {
 
       <View pointerEvents="box-none" style={[estilos.superior, { top: top + 8 }]}>
         <BotonFlotante etiqueta="Regresar" icono="arrow-back" onPress={() => router.back()} />
-        <View style={estilos.ilustrativo}>
-          <Ionicons color={COLORES.acentoTexto} name="alert-circle" size={16} />
-          <Text style={estilos.ilustrativoTexto}>Trazado ilustrativo</Text>
-        </View>
+        <EtiquetaIlustrativa />
         <View style={estilos.equilibrio} />
       </View>
 
@@ -277,13 +261,9 @@ export default function MapaRuta() {
         </View>
       )}
 
-      <Pressable
-        accessibilityRole="link"
-        onPress={() => Linking.openURL('https://www.openstreetmap.org/copyright')}
-        style={[estilos.atribucion, { top: top + 62 }]}
-      >
-        <Text style={estilos.atribucionTexto}>{ATRIBUCION_OSM}</Text>
-      </Pressable>
+      <View style={[estilos.atribucion, { top: top + 62 }]}>
+        <AtribucionOSM />
+      </View>
 
       <Animated.View
         style={[estilos.panel, { height: alturaAbierto, transform: [{ translateY: desplazamiento }] }]}
@@ -379,27 +359,7 @@ const estilos = StyleSheet.create({
     right: 74,
   },
   simulacionTexto: { color: COLORES.acentoTexto, flex: 1, fontFamily: FUENTE, fontSize: 13, fontWeight: '600' },
-  ilustrativo: {
-    ...SOMBRA,
-    alignItems: 'center',
-    backgroundColor: COLORES.acentoSuave,
-    borderRadius: RADIO.completo,
-    elevation: 4,
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  ilustrativoTexto: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
-  atribucion: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: RADIO.chico,
-    left: 16,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    position: 'absolute',
-  },
-  atribucionTexto: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 12, fontWeight: '500' },
+  atribucion: { left: 16, position: 'absolute' },
   panel: {
     ...SOMBRA,
     backgroundColor: COLORES.superficie,

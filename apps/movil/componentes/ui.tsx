@@ -1,9 +1,18 @@
-import { COLORES, DIAS_SEMANA, listaDias, NOMBRE_DIA, VENTANAS, type Dia, type Turno } from '@carmen-limpio/compartido';
+import {
+  ATRIBUCION_OSM,
+  COLORES,
+  DIAS_SEMANA,
+  listaDias,
+  NOMBRE_DIA,
+  VENTANAS,
+  type Dia,
+  type Turno,
+} from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { useCallback, type ComponentProps, type ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { COLOR_TURNO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
 
 type NombreIcono = ComponentProps<typeof Ionicons>['name'];
@@ -201,6 +210,57 @@ export function Pastilla({ texto, activa, onPress }: { texto: string; activa: bo
   );
 }
 
+export function PastillaRuta({
+  numero,
+  turno,
+  color,
+  activa,
+  onPress,
+}: {
+  numero: number;
+  turno: Turno;
+  color: string;
+  activa: boolean;
+  onPress: () => void;
+}) {
+  const { icono } = COLOR_TURNO[turno];
+  const tinta = activa ? COLORES.superficie : COLORES.texto;
+  return (
+    <Pressable
+      accessibilityLabel={`Ruta ${numero}, ${turno}`}
+      accessibilityRole="button"
+      accessibilityState={{ selected: activa }}
+      onPress={onPress}
+      style={[estilos.pastilla, estilos.pastillaRuta, activa && estilos.pastillaActiva]}
+    >
+      <View style={[estilos.pastillaColor, { backgroundColor: color }]} />
+      <Text style={[estilos.pastillaTexto, { color: tinta }]}>{numero}</Text>
+      <Ionicons color={tinta} name={icono} size={14} />
+    </Pressable>
+  );
+}
+
+export function EtiquetaIlustrativa() {
+  return (
+    <View style={estilos.ilustrativo}>
+      <Ionicons color={COLORES.acentoTexto} name="alert-circle" size={16} />
+      <Text style={estilos.ilustrativoTexto}>Trazado ilustrativo</Text>
+    </View>
+  );
+}
+
+export function AtribucionOSM() {
+  return (
+    <Pressable
+      accessibilityRole="link"
+      onPress={() => Linking.openURL('https://www.openstreetmap.org/copyright')}
+      style={estilos.atribucion}
+    >
+      <Text style={estilos.atribucionTexto}>{ATRIBUCION_OSM}</Text>
+    </Pressable>
+  );
+}
+
 export function BotonFlotante({
   icono,
   etiqueta,
@@ -333,6 +393,27 @@ const estilos = StyleSheet.create({
   },
   vaciaTexto: { textAlign: 'center' },
   vaciaAccion: { alignSelf: 'stretch', marginTop: 8 },
+  pastillaRuta: { alignItems: 'center', flexDirection: 'row', gap: 6 },
+  pastillaColor: { borderColor: COLORES.superficie, borderRadius: RADIO.completo, borderWidth: 1.5, height: 16, width: 16 },
+  ilustrativo: {
+    ...SOMBRA,
+    alignItems: 'center',
+    backgroundColor: COLORES.acentoSuave,
+    borderRadius: RADIO.completo,
+    elevation: 4,
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  ilustrativoTexto: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
+  atribucion: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: RADIO.chico,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  atribucionTexto: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 12, fontWeight: '500' },
   acceso: { ...TARJETA, flexBasis: 170, flexGrow: 1, gap: 6, minHeight: 48, padding: 14 },
   accesoInactivo: { backgroundColor: COLORES.inactivo, elevation: 0, shadowOpacity: 0 },
   fila: {
