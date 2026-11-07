@@ -13,8 +13,8 @@ import { router } from 'expo-router';
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Mascota } from '../componentes/Mascota';
-import { TarjetaHoy } from '../componentes/TarjetaHoy';
+import { Mascota } from '../../componentes/Mascota';
+import { TarjetaHoy } from '../../componentes/TarjetaHoy';
 import {
   BarraEstado,
   Boton,
@@ -23,10 +23,10 @@ import {
   FilaNavegable,
   IconoCirculo,
   TarjetaAcceso,
-} from '../componentes/ui';
-import { useAhora } from '../estado/ahora';
-import { useFavorita } from '../estado/favorita';
-import { FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
+} from '../../componentes/ui';
+import { useAhora } from '../../estado/ahora';
+import { useFavorita } from '../../estado/favorita';
+import { FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../../estilos/tema';
 
 function resumen(lugar: Lugar): string {
   const [primero] = lugar.horarios;
@@ -65,7 +65,7 @@ function HorarioGeneral() {
 }
 
 export default function Inicio() {
-  const { top, bottom } = useSafeAreaInsets();
+  const { top } = useSafeAreaInsets();
   const { favoritaId } = useFavorita();
   const ahora = useAhora();
   const buscador = useRef<ComponentRef<typeof TextInput>>(null);
@@ -162,7 +162,7 @@ export default function Inicio() {
         </View>
       </ScrollView>
 
-      <View style={[estilos.pie, { paddingBottom: bottom + 8 }]}>
+      <View style={estilos.pie}>
         <Ionicons color={COLORES.textoSuave} name="information-circle-outline" size={16} />
         <Text style={estilos.pieTexto}>{AVISO_NO_OFICIAL_CORTO}</Text>
       </View>
@@ -230,7 +230,7 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
     paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingVertical: 8,
   },
   pieTexto: { ...TEXTO.apoyo, flex: 1, fontSize: 13, lineHeight: 18 },
 });
