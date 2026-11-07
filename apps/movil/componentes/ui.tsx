@@ -1,4 +1,4 @@
-import { COLORES, DIAS_SEMANA, listaDias, VENTANAS, type Dia, type Turno } from '@carmen-limpio/compartido';
+import { COLORES, DIAS_SEMANA, listaDias, NOMBRE_DIA, VENTANAS, type Dia, type Turno } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
@@ -38,18 +38,47 @@ export function EtiquetaTurno({ turno, conHorario = false }: { turno: Turno; con
   );
 }
 
-export function DiasSemana({ dias }: { dias: readonly Dia[] }) {
+export function DiasSemana({ dias, hoy }: { dias: readonly Dia[]; hoy?: Dia }) {
+  const etiqueta = `Días de recolección: ${listaDias(dias)}${hoy ? `. Hoy es ${NOMBRE_DIA[hoy]}` : ''}`;
   return (
-    <View accessibilityLabel={`Pasa ${listaDias(dias)}`} accessible style={estilos.dias}>
+    <View accessibilityLabel={etiqueta} accessible style={estilos.dias}>
       {DIAS_SEMANA.map((dia) => {
         const activo = dias.includes(dia);
         return (
-          <View key={dia} style={[estilos.dia, activo && estilos.diaActivo]}>
+          <View key={dia} style={[estilos.dia, activo && estilos.diaActivo, dia === hoy && estilos.diaHoy]}>
             <Text style={[estilos.diaTexto, activo && estilos.diaTextoActivo]}>{LETRA_DIA[dia]}</Text>
           </View>
         );
       })}
     </View>
+  );
+}
+
+export function TarjetaAcceso({
+  icono,
+  titulo,
+  subtitulo,
+  onPress,
+}: {
+  icono: NombreIcono;
+  titulo: string;
+  subtitulo: string;
+  // Sin acción, la tarjeta se muestra como no disponible.
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable
+      accessibilityLabel={`${titulo}. ${subtitulo}`}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !onPress }}
+      disabled={!onPress}
+      onPress={onPress}
+      style={({ pressed }) => [estilos.acceso, !onPress && estilos.accesoInactivo, pressed && estilos.filaPresionada]}
+    >
+      <IconoCirculo icono={icono} />
+      <Text style={TEXTO.fila}>{titulo}</Text>
+      <Text style={TEXTO.apoyo}>{subtitulo}</Text>
+    </Pressable>
   );
 }
 
@@ -223,6 +252,7 @@ const estilos = StyleSheet.create({
     maxWidth: 40,
   },
   diaActivo: { backgroundColor: COLORES.primario },
+  diaHoy: { borderColor: COLORES.acentoTexto, borderWidth: 3 },
   diaTexto: { color: COLORES.inactivoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
   diaTextoActivo: { color: '#FFFFFF', fontWeight: '700' },
   insignia: {
@@ -265,6 +295,8 @@ const estilos = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 21,
   },
+  acceso: { ...TARJETA, flexBasis: 170, flexGrow: 1, gap: 6, minHeight: 48, padding: 14 },
+  accesoInactivo: { backgroundColor: COLORES.inactivo, elevation: 0, shadowOpacity: 0 },
   fila: {
     ...TARJETA,
     alignItems: 'center',

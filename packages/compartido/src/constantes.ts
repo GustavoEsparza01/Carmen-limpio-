@@ -27,6 +27,8 @@ export const VENTANAS: Record<Turno, { inicio: string; fin: string }> = {
 export const AVISO_NO_OFICIAL =
   'Carmen Limpio es un proyecto independiente. No es una app oficial del municipio ni de la empresa recolectora.';
 
+export const AVISO_NO_OFICIAL_CORTO = 'App independiente, no oficial.';
+
 export const AVISO_ILUSTRATIVO = 'Datos ilustrativos, pendientes de validación oficial.';
 
 export const AVISO_HORARIOS =
