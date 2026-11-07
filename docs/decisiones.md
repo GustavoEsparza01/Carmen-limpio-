@@ -92,7 +92,7 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 ## 2026-11-05 · Logo del camarón
 
 - **Mascota elegida por el usuario** como ícono y pantalla de carga, por ser representativa de Ciudad del Carmen. Reemplaza al pin de ubicación.
-- **Origen y derechos sin confirmar.** La imagen es una captura de 403×337 con el texto "¡Uh chito!". **Pendiente antes de publicar:** saber quién es el autor, obtener permiso y confirmar que no pertenece a "Carmen siempre Limpio" ni a SOS de la Isla, cuya identidad no se puede usar.
+- **Derechos resueltos el 2026-11-06:** el usuario confirmó que el camarón es diseño propio. La imagen es una captura de 403×337 con el texto "¡Uh chito!".
 - **Tratamiento:** se quitó el fondo gris, se agregó un borde blanco de calcomanía y se colocó sobre el azul petróleo. El globo solo aparece en la pantalla de carga: en el ícono no se leería.
 - **Android recorta en círculo:** el ícono visible es 683 de 1024 píxeles y el splash, 2/3 del lienzo. Por eso el dibujo mide 520 píxeles en ambos, y `imageWidth` es 288.
 - **Calidad:** la captura se amplió y se ve bien en el teléfono, pero conviene pedir el archivo original en alta resolución antes de publicar. El recorte base está en `apps/movil/assets/fuente/`.
@@ -197,6 +197,5 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 
 - **El usuario aportó una imagen de un camión de la empresa recolectora** para reemplazar el icono. La foto original lleva el logo de SOS de la Isla, un mural y el lema "Mantén la ciudad limpia". La versión vectorizada conserva mural, lema y restos del logo en la puerta.
 - **Se usa una versión neutra:** caja lisa en azul petróleo y puerta limpia, sin mural ni lema, porque el proyecto no puede usar la identidad de SOS de la Isla y la app no es oficial. Ni la foto ni la versión vectorizada entran al repositorio.
-- **Sigue pendiente:** el origen de la foto y sus derechos. Si no se confirman, conviene usar un dibujo propio antes de publicar.
-- **El mural muestra un personaje rosa muy parecido al camarón** que usa la app. Eso refuerza el pendiente de "Logo del camarón": podría ser identidad de SOS de la Isla. Hay que resolverlo antes de publicar.
+- **Derechos resueltos:** el usuario confirmó que el camarón y el diseño del camión son propios. La caja lisa se conserva mientras no pida usar el mural, porque la foto original también lleva el logo de SOS de la Isla.
 - **El marcador conserva la etiqueta "Simulación".** Consumo con el camión activo: unos 41 %, igual que con el icono anterior; 3.7 % en reposo.
