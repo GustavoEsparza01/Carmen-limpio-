@@ -155,3 +155,16 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Se probó y se descartó dibujarlo como capa del mapa.** El usuario notó lag, y el camión consumía 40-77 % de CPU contra 4-5 % en reposo. Mi hipótesis era que moverlo dentro del mapa costaría menos, pero subió a cerca de 100 %: el hilo de dibujo pasó de unos 50 % a 83 %, porque cada paso redibuja el mapa completo.
 - **Bajar la frecuencia tampoco sirve:** de 20 a 10 actualizaciones por segundo solo bajó de 72-76 % a 66-70 %, así que el coste no depende de las actualizaciones. Se conserva el `Marker` original.
 - **Son medidas en emulador y modo de desarrollo.** Falta medir en un teléfono real. En reposo la app usa 4-5 % en todas las pantallas.
+
+## 2026-11-06 · Presencia visual, etapa 5: lugares, recordatorios y bienvenida
+
+- **Varios lugares:** `estado/guardados.tsx` reemplaza a `estado/favorita.tsx`. El lugar anterior se migra como "Casa" sin perderlo, y quien ya tenía uno no pasa por la bienvenida. La migración está probada con pruebas automáticas, no en el emulador.
+- **Recordatorios con fecha absoluta, no semanales.** Un disparador semanal usaría la zona del teléfono; así se respeta `America/Merida`. Se programan 28 días y se reprograma cada vez que se abre la app, de modo que dejan de llegar si no se abre en ese plazo.
+- **Sin duplicados:** cada cambio cancela todo y vuelve a programar. Dos rutas en la misma ventana dan un solo aviso.
+- **Alarmas no exactas, con el texto ajustado.** En Android 13, sin `SCHEDULE_EXACT_ALARM`, el sistema puede entregar hasta 1 hora después. No se pide ese permiso, que exige un paso en ajustes y que Play limita a apps de alarmas y calendario. Por eso la app dice "después de las 20:00" y avisa con una hora de anticipación: aun retrasado, llega antes de que abra la ventana.
+- **El permiso se pide al activar un recordatorio** y, si se niega, la app sigue funcionando y lo explica.
+- **`expo-notifications` es nativo:** obligó a recompilar y a reiniciar Metro, porque el Metro anterior no resolvía el paquete. `npm audit` pasó de 5 a 6 alertas moderadas; no se corrigen por la razón ya registrada.
+- **Compartir** usa `Share` de React Native e incluye que la app no es oficial.
+- **Bienvenida de 3 pasos, solo la primera vez y omitible.** "Omitir" va a la izquierda porque en el development build la rueda de desarrollo tapa la esquina derecha.
+- **Sin probar:** que los recordatorios sobrevivan a reiniciar el teléfono.
+- **Pruebas con `wm size`:** cambiar el tamaño puede tumbar el lanzador de Android (`Position exceeds the bound of this CellLayout`). No viene de la app.
