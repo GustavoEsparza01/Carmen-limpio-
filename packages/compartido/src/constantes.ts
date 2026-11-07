@@ -31,6 +31,8 @@ export const AVISO_NO_OFICIAL_CORTO = 'App independiente, no oficial.';
 
 export const AVISO_REPORTES_DEMOSTRACION = 'Es una demostración: los reportes no se enviarán a nadie.';
 
+export const AVISO_SIN_MAPA = 'Sin conexión no se puede cargar el mapa base. Los horarios siguen disponibles.';
+
 export const AVISO_ILUSTRATIVO = 'Datos ilustrativos, pendientes de validación oficial.';
 
 export const AVISO_HORARIOS =
