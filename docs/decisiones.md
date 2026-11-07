@@ -139,3 +139,13 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Sin conexión:** MapLibre no avisa cuando fallan los mosaicos, así que al entrar se hace un `HEAD` a un mosaico de la isla, con límite de 6 segundos. El aviso ofrece ver los horarios y reintentar. Solo está en la pestaña Mapa, no en el mapa de cada ruta.
 - **Tarjeta con altura máxima del 42 %:** con letra al 130 % en 720×1280 tapaba el mapa y los filtros. El texto se desplaza por dentro y "Ver esta ruta" queda fija.
 - **Fluidez sin medir de forma fiable:** `gfxinfo` no incluye el dibujo del mapa, que va por OpenGL. Falta confirmarla en un teléfono real.
+
+## 2026-11-06 · Presencia visual, etapa 4: lista de rutas con silueta
+
+- **Sin `react-native-svg`.** Las siluetas se dibujan con vistas giradas. Evalué el paquete y no se instaló: agrega código nativo con C++, que es lo que dio problemas de rutas largas en Windows, y obligaría a recompilar solo para dibujar una línea.
+- **`siluetaDeRuta` vive en `compartido`.** Proyecta el trazado `carteles`, lo simplifica con Douglas-Peucker a menos de 40 segmentos y respeta la proporción real.
+- **Sin forma cuando la geometría no alcanza:** menos de 2 lugares ubicados o menos de 1 km de línea. Solo aplica a la V5 (0.3 km y 1 de 5 lugares), que muestra "Sin forma" y explica por qué.
+- **Etiquetadas como ilustrativas:** la lista avisa que no indican el sentido ni el orden del recorrido, y cada tarjeta muestra cuántos lugares están ubicados.
+- **Mismo color que en el mapa de la ciudad,** para que una ruta se reconozca en ambas pantallas.
+- **Fluidez:** se comparó el desplazamiento con y sin siluetas y dio casi igual (36 y 38 cuadros, 250 ms), con el emulador muy cargado y en modo de desarrollo. Las siluetas no son la causa de la lentitud, pero falta medirlo en un teléfono real.
+- **El emulador reinició su sistema Android una vez durante las pruebas** (`DeadSystemException`). No venía de la app, y no se repitió.
