@@ -182,3 +182,13 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Avisos de ejemplo:** cada tarjeta lleva la etiqueta "Ejemplo" y dice que no es real. No requieren sesión.
 - **Probado en modo avión.** Sin conexión el mapa base muestra solo los mosaicos en caché; en esa prueba estaban todos, así que falta ver un teléfono sin caché.
 - **Sin probar:** elegir foto de la galería, porque el emulador no tiene fotos y el selector es del sistema.
+
+## 2026-11-06 · Presencia visual, etapa 7: detalles finales
+
+- **Auditoría antes de retocar:** se quitaron los colores sueltos de las pantallas y se unificaron márgenes (`CONTENIDO`) y estilos de texto repetidos (`TEXTO.enlace`, `destacado`, `alerta`, `campo` y `pequeno`).
+- **Áreas táctiles a 48 px (`ALTURA_TACTIL`):** pastillas (40), pestañas y botones flotantes (46) y el enlace del detalle (44). El asa del panel usa `hitSlop` para no cambiar su altura.
+- **Inicio ya no parpadea:** antes mostraba la invitación un instante, aunque hubiera un lugar guardado. Inicio y Reportes usan `Esqueleto` mientras cargan.
+- **Transiciones con `Animated` y controlador nativo:** deslizamiento entre pantallas, fundido entre pestañas y entrada suave de tarjetas (`Aparecer`).
+- **Camión decorativo:** solo en los estados "Hoy" y "Ahora". Rebota en su lugar unos 1.3 segundos y se detiene: no recorre nada para no sugerir una posición real, y no consume CPU en reposo (4.7 % en inicio).
+- **Reducir animaciones:** `useReducirAnimacion` lee la preferencia del teléfono y quita las animaciones. Se comprobó que la app funciona con las animaciones desactivadas, no la ausencia visual de cada una.
+- **Capturas en `docs/capturas/`:** 13 pantallas a la mitad de resolución (2.9 MB). Son del development build, por eso aparece la rueda de desarrollo. Los datos son de prueba y la fecha es simulada.
