@@ -135,7 +135,7 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Paleta buscada por computadora.** La primera propuesta confundía las rutas 2 y 5 con deuteranopia (distancia 4.8). La actual tiene una distancia mínima de 33.1 entre los 8 colores en visión normal, protanopia, deuteranopia y tritanopia, con matrices de Machado 2009 y CIE76. Una prueba exige contraste de 3:1 con el mapa claro.
 - **Sin etiquetas de texto sobre el mapa:** requerirían un servidor de tipografías externo. La ruta se identifica con la tarjeta y las pastillas, que usan número e icono de turno además del color.
 - **Rutas superpuestas:** varias comparten avenidas, así que un toque puede alcanzar varias. La tarjeta muestra la primera y ofrece las demás en "También aquí".
-- **Mapa base atenuado sin cambiar de proveedor:** `raster-saturation` -0.7, `raster-contrast` -0.2 y `raster-brightness-min` 0.15. Se aplica también al mapa de cada ruta.
+- **Mapa base atenuado sin cambiar de proveedor:** `raster-saturation` -0.3, `raster-contrast` -0.08 y `raster-brightness-min` 0.05. Se aplica también al mapa de cada ruta. La primera versión (-0.7, -0.2 y 0.15) se veía demasiado descolorida para el usuario.
 - **Sin conexión:** MapLibre no avisa cuando fallan los mosaicos, así que al entrar se hace un `HEAD` a un mosaico de la isla, con límite de 6 segundos. El aviso ofrece ver los horarios y reintentar. Solo está en la pestaña Mapa, no en el mapa de cada ruta.
 - **Tarjeta con altura máxima del 42 %:** con letra al 130 % en 720×1280 tapaba el mapa y los filtros. El texto se desplaza por dentro y "Ver esta ruta" queda fija.
 - **Fluidez sin medir de forma fiable:** `gfxinfo` no incluye el dibujo del mapa, que va por OpenGL. Falta confirmarla en un teléfono real.

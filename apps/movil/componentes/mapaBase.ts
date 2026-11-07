@@ -20,7 +20,7 @@ export const ESTILO_MAPA = {
       id: 'osm',
       type: 'raster' as const,
       source: 'osm',
-      paint: { 'raster-brightness-min': 0.15, 'raster-contrast': -0.2, 'raster-saturation': -0.7 },
+      paint: { 'raster-brightness-min': 0.05, 'raster-contrast': -0.08, 'raster-saturation': -0.3 },
     },
   ],
 };
