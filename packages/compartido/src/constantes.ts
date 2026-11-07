@@ -33,6 +33,8 @@ export const AVISO_REPORTES_DEMOSTRACION = 'Es una demostración: los reportes n
 
 export const AVISO_SIN_MAPA = 'Sin conexión no se puede cargar el mapa base. Los horarios siguen disponibles.';
 
+export const AVISO_SILUETA = 'Formas ilustrativas: no indican el sentido ni el orden del recorrido.';
+
 export const AVISO_ILUSTRATIVO = 'Datos ilustrativos, pendientes de validación oficial.';
 
 export const AVISO_HORARIOS =
