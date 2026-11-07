@@ -33,7 +33,7 @@ export default function Pestanas() {
       />
       <Tabs.Screen
         name="mapa"
-        options={{ tabBarIcon: icono('map', 'map-outline'), title: 'Mapa' }}
+        options={{ headerShown: false, tabBarIcon: icono('map', 'map-outline'), title: 'Mapa' }}
       />
       <Tabs.Screen
         name="reportes"

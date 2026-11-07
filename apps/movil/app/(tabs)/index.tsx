@@ -155,7 +155,12 @@ export default function Inicio() {
                   subtitulo={`${RUTAS.length} rutas en dos turnos`}
                   titulo="Rutas"
                 />
-                <TarjetaAcceso icono="map" subtitulo="Próximamente" titulo="Mapa de la ciudad" />
+                <TarjetaAcceso
+                  icono="map"
+                  onPress={() => router.navigate('/mapa')}
+                  subtitulo="Todas las rutas juntas"
+                  titulo="Mapa de la ciudad"
+                />
               </View>
             </>
           )}
