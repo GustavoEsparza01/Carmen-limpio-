@@ -168,3 +168,17 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Bienvenida de 3 pasos, solo la primera vez y omitible.** "Omitir" va a la izquierda porque en el development build la rueda de desarrollo tapa la esquina derecha.
 - **Sin probar:** que los recordatorios sobrevivan a reiniciar el teléfono.
 - **Pruebas con `wm size`:** cambiar el tamaño puede tumbar el lanzador de Android (`Position exceeds the bound of this CellLayout`). No viene de la app.
+
+## 2026-11-06 · Presencia visual, etapa 6: reportes y avisos de demostración
+
+- **Sin Supabase, por decisión del usuario.** Se interpretó "no manejaremos frontend" como backend, porque esta etapa es de front con datos locales.
+- **Interfaces en `compartido`:** `ServicioSesion`, `ServicioReportes` y `ServicioAvisos`, con implementación local sobre un `Almacen`. Las pantallas solo usan `estado/demo.tsx`: para conectar el backend se cambia la implementación ahí.
+- **Acceso simulado sin datos personales:** un botón, sin nombre, correo ni contraseña. Antes se muestra el borrador del aviso de privacidad, señalado como pendiente de revisión legal; el responsable queda como pendiente de definir.
+- **Sin `expo-location`.** Un punto se marca tocando el mapa, y "ubicación" es un lugar del catálogo, así que no se pide permiso de ubicación.
+- **Tiradero exige foto; acumulación no.** Es lo que indica el prompt.
+- **Fotos con `expo-image-picker` y `expo-file-system`,** ambos nativos, lo que obligó a recompilar. Se copian a la carpeta privada de la app, no aparecen en la galería y se borran al borrar los datos. La cámara pide permiso al usarla.
+- **Seguimiento simulado:** como nadie atiende los reportes, unos botones "Solo para la demostración" avanzan los estados. Las notas dicen que son de ejemplo y que nadie recibió el reporte, sin mencionar al municipio ni a SOS. "Recibido" se explica como "Guardado en este teléfono".
+- **"Guardar reporte de demostración",** no "Enviar", para no sugerir que sale del teléfono.
+- **Avisos de ejemplo:** cada tarjeta lleva la etiqueta "Ejemplo" y dice que no es real. No requieren sesión.
+- **Probado en modo avión.** Sin conexión el mapa base muestra solo los mosaicos en caché; en esa prueba estaban todos, así que falta ver un teléfono sin caché.
+- **Sin probar:** elegir foto de la galería, porque el emulador no tiene fotos y el selector es del sistema.
