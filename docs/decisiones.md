@@ -6,7 +6,7 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 
 - **Empezamos por el front.** El usuario pidió arrancar con el front; el plan original pone la base de datos como Fase 1. Se hizo primero la Fase 0, que es común a ambos caminos. El orden de las fases siguientes está por confirmar.
 - **Raíz del repositorio:** `Documents/Carmen-limpio`. El contenido de `entrega-carmen-limpio/` se movió ahí y el prompt quedó en `docs/PROMPT-CARMEN-LIMPIO.md`.
-- **Git pendiente.** El prompt indica que el repositorio ya existe, pero la carpeta no tiene `.git`. El usuario decidió probar en local antes de conectar GitHub. Se borró el `.git` que `create-expo-app` generó en `apps/movil`.
+- **Git resuelto.** El repositorio se conectó a GitHub el 2026-11-05, tras probar primero en local. Se borró el `.git` que `create-expo-app` generó en `apps/movil`.
 - **Pruebas en emulador:** se usa el AVD `Pixel_8_Pro_API_33` con el controlador AEHD.
 - **`ANDROID_HOME` es obligatoria para compilar.** `apps/movil/android/local.properties` la sustituye en esta máquina, pero `android/` es generado: `expo prebuild --clean` borra ese archivo.
 - **Versiones instaladas:** Expo 58, React Native 0.88, React 19.3.0, Vite 8, React Leaflet 5, TypeScript 6.0.
@@ -96,3 +96,10 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Tratamiento:** se quitó el fondo gris, se agregó un borde blanco de calcomanía y se colocó sobre el azul petróleo. El globo solo aparece en la pantalla de carga: en el ícono no se leería.
 - **Android recorta en círculo:** el ícono visible es 683 de 1024 píxeles y el splash, 2/3 del lienzo. Por eso el dibujo mide 520 píxeles en ambos, y `imageWidth` es 288.
 - **Calidad:** la captura se amplió y se ve bien en el teléfono, pero conviene pedir el archivo original en alta resolución antes de publicar. El recorte base está en `apps/movil/assets/fuente/`.
+
+## 2026-11-06 · Camión simulado para la demostración
+
+- **Adelanto parcial de la Fase 5,** pedido por el usuario para presentar el prototipo. Es local: todavía no escribe en `posiciones_unidad` porque Supabase no está conectado.
+- **Usa el trazado `carteles` de la misma ruta,** nunca geometría de `propuesta`, porque corre en la app ciudadana.
+- **Siempre etiquetado:** arranca solo con el botón del mapa, lleva "Simulación" pegado al marcador y un aviso visible mientras corre.
+- **Velocidad acelerada:** 150 m/s, con duración de 20 segundos a 2 minutos por vuelta. No muestra hora ni tiempo de llegada, y al terminar vuelve a empezar.
