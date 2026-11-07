@@ -5,13 +5,17 @@ import {
   posicionEnRecorrido,
   type Coordenadas,
 } from '@carmen-limpio/compartido';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Marker } from '@maplibre/maplibre-react-native';
 import { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { FUENTE, RADIO, SOMBRA } from '../estilos/tema';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { RADIO, TEXTO } from '../estilos/tema';
 
 const INTERVALO_MS = 50;
+
+// La caja va lisa a propósito: sin el mural ni el lema de la empresa recolectora.
+const IMAGEN = require('../assets/camion-simulado.png');
+const ANCHO_CAMION = 92;
+const ALTO_CAMION = 42;
 
 // Va dentro de <Mapa>. Tiene su propio estado para no redibujar toda la pantalla en cada paso.
 export function CamionSimulado({ linea }: { linea: Coordenadas[] }) {
@@ -31,14 +35,11 @@ export function CamionSimulado({ linea }: { linea: Coordenadas[] }) {
   return (
     <Marker id="camion-simulado" lngLat={posicion.coordenadas}>
       <View accessibilityLabel="Camión simulado" style={estilos.camion}>
-        <View style={estilos.circulo}>
-          <MaterialCommunityIcons
-            color={COLORES.superficie}
-            name="truck"
-            size={24}
-            style={posicion.haciaElOeste ? undefined : estilos.volteado}
-          />
-        </View>
+        <Image
+          resizeMode="contain"
+          source={IMAGEN}
+          style={[estilos.imagen, !posicion.haciaElOeste && estilos.volteado]}
+        />
         <Text style={estilos.etiqueta}>Simulación</Text>
       </View>
     </Marker>
@@ -47,25 +48,14 @@ export function CamionSimulado({ linea }: { linea: Coordenadas[] }) {
 
 const estilos = StyleSheet.create({
   camion: { alignItems: 'center', gap: 2 },
-  circulo: {
-    ...SOMBRA,
-    alignItems: 'center',
-    backgroundColor: COLORES.acentoTexto,
-    borderColor: COLORES.superficie,
-    borderRadius: RADIO.completo,
-    borderWidth: 2,
-    elevation: 6,
-    height: 42,
-    justifyContent: 'center',
-    width: 42,
-  },
+  imagen: { height: ALTO_CAMION, width: ANCHO_CAMION },
+  // La imagen mira a la izquierda.
   volteado: { transform: [{ scaleX: -1 }] },
   etiqueta: {
+    ...TEXTO.pequeno,
     backgroundColor: COLORES.acentoSuave,
     borderRadius: RADIO.chico,
     color: COLORES.acentoTexto,
-    fontFamily: FUENTE,
-    fontSize: 12,
     fontWeight: '600',
     overflow: 'hidden',
     paddingHorizontal: 6,

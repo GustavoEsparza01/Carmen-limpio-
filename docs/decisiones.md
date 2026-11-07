@@ -192,3 +192,11 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Camión decorativo:** solo en los estados "Hoy" y "Ahora". Rebota en su lugar unos 1.3 segundos y se detiene: no recorre nada para no sugerir una posición real, y no consume CPU en reposo (4.7 % en inicio).
 - **Reducir animaciones:** `useReducirAnimacion` lee la preferencia del teléfono y quita las animaciones. Se comprobó que la app funciona con las animaciones desactivadas, no la ausencia visual de cada una.
 - **Capturas en `docs/capturas/`:** 13 pantallas a la mitad de resolución (2.9 MB). Son del development build, por eso aparece la rueda de desarrollo. Los datos son de prueba y la fecha es simulada.
+
+## 2026-11-06 · Imagen del camión simulado
+
+- **El usuario aportó una imagen de un camión de la empresa recolectora** para reemplazar el icono. La foto original lleva el logo de SOS de la Isla, un mural y el lema "Mantén la ciudad limpia". La versión vectorizada conserva mural, lema y restos del logo en la puerta.
+- **Se usa una versión neutra:** caja lisa en azul petróleo y puerta limpia, sin mural ni lema, porque el proyecto no puede usar la identidad de SOS de la Isla y la app no es oficial. Ni la foto ni la versión vectorizada entran al repositorio.
+- **Sigue pendiente:** el origen de la foto y sus derechos. Si no se confirman, conviene usar un dibujo propio antes de publicar.
+- **El mural muestra un personaje rosa muy parecido al camarón** que usa la app. Eso refuerza el pendiente de "Logo del camarón": podría ser identidad de SOS de la Isla. Hay que resolverlo antes de publicar.
+- **El marcador conserva la etiqueta "Simulación".** Consumo con el camión activo: unos 41 %, igual que con el icono anterior; 3.7 % en reposo.
