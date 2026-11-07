@@ -115,3 +115,14 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **"Mapa de la ciudad" aparece desactivado** con la leyenda "Próximamente" hasta la etapa 3.
 - **El camarón se usa solo mediante `componentes/Mascota.tsx`,** con la imagen ya recortada del ícono. Sus derechos siguen sin confirmar.
 - **Probar fechas en el emulador:** `adb shell settings put global auto_time 0` y `adb shell cmd alarm set-time <milisegundos>`. Al terminar hay que devolver `auto_time` a 1.
+
+## 2026-11-06 · Presencia visual, etapa 2: barra inferior
+
+- **`Tabs` de `expo-router`,** que en la versión 58 trae integradas las pestañas. Solo usa `react-native-screens` y `safe-area-context`, así que no agrega módulos nativos ni depende de `reanimated` o `gesture-handler`, y no hubo que recompilar.
+- **Grupo `(tabs)` dentro del `Stack` raíz.** `lugar/[id]`, `rutas` y `mapa/[rutaId]` quedan fuera del grupo para abrirse sobre la barra: así el mapa de ruta sigue a pantalla completa y la barra no tapa el panel.
+- **`/mapa` es la pestaña y `/mapa/[rutaId]` el mapa de una ruta.** No chocan, pero son pantallas distintas.
+- **Atrás:** desde cualquier pestaña vuelve a Inicio y, desde Inicio, sale de la app (`backBehavior="initialRoute"`).
+- **La barra se oculta con el teclado** para dejar espacio a los resultados de búsqueda.
+- **Mapa, Reportes y Avisos usan `PantallaVacia`** hasta sus etapas, sin datos de ejemplo. Reportes ya aclara que no se enviarán a nadie.
+- **La tarjeta "Mapa de la ciudad" del inicio sigue desactivada** hasta la etapa 3, porque hoy solo llevaría a la pantalla vacía.
+- **Advertencia de navegación:** "multiple navigation containers" aparece al forzar enlaces directos o cambiar el tamaño de pantalla con `adb`, porque se recrea la actividad. No apareció en el arranque normal.
