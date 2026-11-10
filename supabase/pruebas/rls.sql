@@ -42,6 +42,11 @@ declare
   b constant uuid := '00000000-0000-4000-8000-00000000000b';
   adm constant uuid := '00000000-0000-4000-8000-0000000000ad';
   hoy constant date := (now() at time zone 'America/Merida')::date;
+  -- San Manuel (M4) tiene recolección martes, jueves y sábado (isodow 2, 4 y 6).
+  dia_ok constant date := (select max(d)::date from generate_series(hoy - 6, hoy - 1, interval '1 day') d
+                           where extract(isodow from d) in (2, 4, 6));
+  dia_sin constant date := (select max(d)::date from generate_series(hoy - 7, hoy - 1, interval '1 day') d
+                            where extract(isodow from d) = 1);
   rep_a uuid;
   rep_b uuid;
   n int;
@@ -84,13 +89,15 @@ begin
   -- Ciudadano A ---------------------------------------------------------------
   perform pg_temp.como(a);
   perform pg_temp.afirmar(not public.es_admin(), 'A: no es administrador');
-  insert into public.reportes (tipo, lugar_id, fecha) values ('noPaso', 'san-manuel', hoy) returning id into rep_a;
+  insert into public.reportes (tipo, lugar_id, fecha) values ('noPaso', 'san-manuel', dia_ok) returning id into rep_a;
   select estado::text into t from public.reportes where id = rep_a;
   perform pg_temp.afirmar(t = 'recibido', 'A: el reporte nace Recibido');
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 1, 'A: historial inicial');
   perform pg_temp.afirmar((select nota from public.reportes where id = rep_a) <> '', 'A: nota visible desde el inicio');
-  perform pg_temp.falla(format('insert into public.reportes (tipo, lugar_id, fecha) values (''noPaso'', ''san-manuel'', %L)', hoy),
+  perform pg_temp.falla(format('insert into public.reportes (tipo, lugar_id, fecha) values (''noPaso'', ''san-manuel'', %L)', dia_ok),
     'A: no repite el mismo "no pasó"');
+  perform pg_temp.falla(format('insert into public.reportes (tipo, lugar_id, fecha) values (''noPaso'', ''san-manuel'', %L)', dia_sin),
+    'A: no reporta "no pasó" en un día sin recolección');
   perform pg_temp.falla(format('insert into public.reportes (autor, tipo, lugar_id, fecha) values (%L, ''noPaso'', ''obrera'', %L)', b, hoy),
     'A: no reporta a nombre de B');
   perform pg_temp.falla(format('insert into public.reportes (tipo, lugar_id, fecha) values (''noPaso'', ''obrera'', %L)', hoy + 1),
@@ -118,14 +125,14 @@ begin
   end loop;
   perform pg_temp.falla('insert into public.reportes (tipo, lugar_id, descripcion) values (''acumulacion'', ''obrera'', ''Uno más de la cuenta'')',
     'A: límite de 10 reportes en 24 horas');
-  pruebas := pruebas + 16;
+  pruebas := pruebas + 17;
 
   -- Ciudadano B -----------------------------------------------------------------
   perform pg_temp.como(b);
   perform pg_temp.afirmar((select count(*) from public.reportes) = 0, 'B: no ve reportes de A');
   perform pg_temp.afirmar((select count(*) from public.historial_reportes) = 0, 'B: no ve historial de A');
   perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'fotos-reportes') = 0, 'B: no ve la foto de A');
-  insert into public.reportes (tipo, lugar_id, fecha) values ('noPaso', 'san-manuel', hoy) returning id into rep_b;
+  insert into public.reportes (tipo, lugar_id, fecha) values ('noPaso', 'san-manuel', dia_ok) returning id into rep_b;
   perform pg_temp.afirmar((select count(*) from public.reportes) = 1, 'B: ve solo su reporte');
   pruebas := pruebas + 4;
 

@@ -1,5 +1,6 @@
 import { lugarPorId } from './catalogo.ts';
-import { DIAS_SEMANA, NOMBRE_DIA, ZONA_HORARIA } from './constantes.ts';
+import { DIAS_SEMANA, NOMBRE_DIA, VENTANAS, ZONA_HORARIA, type Dia } from './constantes.ts';
+import { momentoEnMerida } from './hoy.ts';
 import type { Coordenadas } from './trazado.ts';
 
 // Reportes de demostración: se quedan en el dispositivo y no llegan a nadie.
@@ -79,12 +80,37 @@ export function fechasRecientes(ahora: Date): string[] {
   );
 }
 
+// Día de la semana de una fecha AAAA-MM-DD, sin depender de la zona del teléfono.
+export function diaDeFecha(fecha: string): Dia {
+  const instante = new Date(`${fecha}T12:00:00Z`);
+  return DIAS_SEMANA[(instante.getUTCDay() + 6) % 7]!;
+}
+
+const minutosDe = (hora: string) => {
+  const [h = 0, m = 0] = hora.split(':').map(Number);
+  return h * 60 + m;
+};
+
+// Solo los días en que el cartel marca recolección en ese lugar. Hoy cuenta cuando ya terminó
+// alguna de sus ventanas: antes no se puede saber que el camión no pasó.
+export function fechasConRecoleccion(lugarId: string | undefined, ahora: Date): string[] {
+  const lugar = lugarId ? lugarPorId(lugarId) : undefined;
+  if (!lugar) return [];
+  const [hoy] = fechasRecientes(ahora);
+  const { minutos } = momentoEnMerida(ahora);
+  return fechasRecientes(ahora).filter((fecha) => {
+    const delDia = lugar.horarios.filter((h) => h.dias.includes(diaDeFecha(fecha)));
+    if (fecha !== hoy) return delDia.length > 0;
+    return delDia.some((h) => minutosDe(VENTANAS[h.turno].fin) <= minutos);
+  });
+}
+
 export function etiquetaFecha(fecha: string, ahora: Date): string {
   const [hoy, ayer] = fechasRecientes(ahora);
   if (fecha === hoy) return 'Hoy';
   if (fecha === ayer) return 'Ayer';
   const instante = new Date(`${fecha}T12:00:00Z`);
-  const dia = DIAS_SEMANA[(instante.getUTCDay() + 6) % 7]!;
+  const dia = diaDeFecha(fecha);
   return `${NOMBRE_DIA[dia].replace(/^./, (letra) => letra.toUpperCase())} ${instante.getUTCDate()}`;
 }
 
@@ -109,8 +135,12 @@ export function validarReporte(borrador: BorradorReporte, ahora: Date): Partial<
   if (pideLugar && !(borrador.lugarId && lugarPorId(borrador.lugarId))) {
     errores.lugarId = 'Elige un lugar de la lista.';
   }
-  if (borrador.tipo === 'noPaso' && !fechasRecientes(ahora).includes(borrador.fecha ?? '')) {
-    errores.fecha = 'Elige una fecha de los últimos 7 días.';
+  if (borrador.tipo === 'noPaso') {
+    if (!fechasRecientes(ahora).includes(borrador.fecha ?? '')) {
+      errores.fecha = 'Elige una fecha de los últimos 7 días.';
+    } else if (!errores.lugarId && !fechasConRecoleccion(borrador.lugarId, ahora).includes(borrador.fecha ?? '')) {
+      errores.fecha = 'Ese día no hay recolección en este lugar, según el cartel.';
+    }
   }
   if (borrador.tipo === 'tiradero' && !borrador.punto) {
     errores.punto = 'Toca el mapa para marcar el punto.';

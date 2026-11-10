@@ -3,6 +3,8 @@ import {
   AVISO_POR_CONFIRMAR,
   COLORES,
   estadoDeHoy,
+  listaDias,
+  type Dia,
   type Horario,
   type Lugar,
 } from '@carmen-limpio/compartido';
@@ -13,20 +15,30 @@ import { COLOR_ESTADO_HOY, FUENTE, RADIO, TARJETA, TEXTO } from '../estilos/tema
 import { CamionDecorativo } from './movimiento';
 import { Boton, DiasSemana, EtiquetaTurno } from './ui';
 
-function etiquetaRutas(horarios: readonly Horario[]) {
-  const numeros = horarios.map((h) => h.numero);
-  return numeros.length > 1 ? `Rutas ${numeros.join(' y ')}` : `Ruta ${numeros[0]}`;
+// Cada ruta con sus propios días: un lugar puede estar en dos rutas con días distintos (Bivalvo).
+function FilaRuta({ horario, hoy }: { horario: Horario; hoy: Dia }) {
+  return (
+    <View
+      accessibilityLabel={`Ruta ${horario.numero}, turno ${horario.turno}: ${listaDias(horario.dias)}`}
+      style={estilos.filaRuta}
+    >
+      <DiasSemana dias={horario.dias} hoy={hoy} />
+      <View style={estilos.ruta}>
+        <Text style={TEXTO.fila}>Ruta {horario.numero}</Text>
+        <EtiquetaTurno conHorario turno={horario.turno} />
+      </View>
+      {horario.porConfirmar && <Text style={estilos.porConfirmar}>{AVISO_POR_CONFIRMAR}</Text>}
+    </View>
+  );
 }
 
 export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
   const hoy = estadoDeHoy(lugar.horarios, ahora);
   if (!hoy) return null;
 
-  const { estado, mensaje, dia, horarios, porConfirmar } = hoy;
+  const { estado, mensaje, dia } = hoy;
   const { fondo, texto, icono, etiqueta } = COLOR_ESTADO_HOY[estado];
-  const [{ turno } = lugar.horarios[0]!] = horarios;
-  const conMapa = horarios.filter((h) => h.confianza !== 'ninguna');
-  const dias = [...new Set(lugar.horarios.flatMap((h) => h.dias))];
+  const conMapa = lugar.horarios.filter((h) => h.confianza !== 'ninguna');
 
   return (
     <View style={estilos.tarjeta}>
@@ -53,12 +65,9 @@ export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
       </Pressable>
 
       <View style={estilos.detalle}>
-        <DiasSemana dias={dias} hoy={dia} />
-        <View style={estilos.ruta}>
-          <Text style={TEXTO.fila}>{etiquetaRutas(horarios)}</Text>
-          <EtiquetaTurno conHorario turno={turno} />
-        </View>
-        {porConfirmar && <Text style={estilos.porConfirmar}>{AVISO_POR_CONFIRMAR}</Text>}
+        {lugar.horarios.map((h) => (
+          <FilaRuta hoy={dia} horario={h} key={h.rutaId} />
+        ))}
         {conMapa.map((h) => (
           <Boton
             icono="map"
@@ -85,6 +94,7 @@ const estilos = StyleSheet.create({
   etiquetaTexto: { fontFamily: FUENTE, fontSize: 15, fontWeight: '700', lineHeight: 21 },
   mensaje: { fontFamily: FUENTE, fontSize: 24, fontWeight: '800', lineHeight: 30 },
   detalle: { gap: 12, padding: 16 },
+  filaRuta: { gap: 10 },
   ruta: { alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between' },
   porConfirmar: {
     ...TEXTO.alerta,

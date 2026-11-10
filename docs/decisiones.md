@@ -228,3 +228,8 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Panel:** inicio de sesión con correo y contraseña. Tras entrar pide `es_admin()`; una cuenta ciudadana ve un mensaje y no carga datos. Rutas, resumen y unidades vienen de Supabase y las unidades muestran placas y estado.
 - **La propuesta ya no es un archivo público.** `apps/panel/public/datos/propuesta.geojson` se borró: cualquiera podía descargarlo al publicar el panel. Ahora el panel la pide con `trazado('propuesta')`, que la RLS reserva a administración. `escenarios.json` (solo cifras) sigue siendo estático.
 - **Reportes y sesión de la app siguen en modo demostración** hasta la Fase 4.
+
+## 2026-11-09 · Correcciones tras recorrer los flujos de la app
+
+- **Tarjeta de Inicio:** mostraba los días de todas las rutas del lugar bajo la etiqueta de una sola (Bivalvo: "Ruta 2" con martes, jueves y sábado). Ahora hay una fila por ruta con sus propios días y un botón de mapa por cada ruta ubicada.
+- **"El camión no pasó":** solo ofrece y acepta días con recolección en ese lugar según el cartel. Hoy cuenta cuando ya terminó alguna de sus ventanas. Las fechas aparecen después de elegir el lugar y se borran al cambiarlo. La base aplica la misma regla de días (`0009`), aunque no la de la ventana de hoy.

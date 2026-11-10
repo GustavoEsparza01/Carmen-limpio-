@@ -6,6 +6,7 @@ import {
   etiquetaFecha,
   fechaEnMerida,
   fechaHoraLegible,
+  fechasConRecoleccion,
   fechasRecientes,
   leerReportes,
   pasosDeLinea,
@@ -22,7 +23,8 @@ import {
 } from './servicios.ts';
 
 const AHORA = new Date('2026-11-10T16:00:00.000Z');
-const CASA: BorradorReporte = { tipo: 'noPaso', lugarId: 'bivalvo', fecha: '2026-11-10' };
+// Bivalvo: Ruta 2 los martes y Ruta 3 jueves y sábado, de 15:00 a 23:00. AHORA es martes 10:00 en Mérida.
+const CASA: BorradorReporte = { tipo: 'noPaso', lugarId: 'bivalvo', fecha: '2026-11-07' };
 const ACUMULACION: BorradorReporte = {
   tipo: 'acumulacion',
   lugarId: 'bivalvo',
@@ -78,6 +80,23 @@ test('"el camión no pasó" exige lugar y una fecha reciente', () => {
   assert.ok(validarReporte({ ...CASA, fecha: '2026-11-11' }, AHORA).fecha, 'no acepta el futuro');
   assert.ok(validarReporte({ ...CASA, fecha: '2026-10-01' }, AHORA).fecha, 'no acepta fechas viejas');
   assert.ok(validarReporte({ ...CASA, lugarId: 'no-existe' }, AHORA).lugarId);
+});
+
+test('"no pasó" solo ofrece días con recolección en ese lugar', () => {
+  // Del 3 al 10 de noviembre: martes 3, jueves 5, sábado 7 y hoy martes 10 (su ventana aún no termina).
+  assert.deepEqual(fechasConRecoleccion('bivalvo', AHORA), ['2026-11-07', '2026-11-05', '2026-11-03']);
+  assert.deepEqual(fechasConRecoleccion(undefined, AHORA), []);
+});
+
+test('"no pasó" hoy solo cuando ya terminó la ventana', () => {
+  const nocheDelMartes = new Date('2026-11-11T05:30:00.000Z'); // martes 23:30 en Mérida
+  assert.equal(fechasConRecoleccion('bivalvo', nocheDelMartes)[0], '2026-11-10');
+});
+
+test('"no pasó" rechaza un día sin recolección', () => {
+  assert.ok(validarReporte({ ...CASA, fecha: '2026-11-09' }, AHORA).fecha, 'lunes: no hay recolección');
+  assert.ok(validarReporte({ ...CASA, fecha: '2026-11-10' }, AHORA).fecha, 'hoy, antes de la ventana');
+  assert.equal(validarReporte({ ...CASA, fecha: '2026-11-05' }, AHORA).fecha, undefined);
 });
 
 test('en acumulación la foto es opcional y la descripción no', () => {

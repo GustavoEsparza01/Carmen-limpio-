@@ -2,7 +2,7 @@ import {
   AVISO_REPORTES_DEMOSTRACION,
   COLORES,
   etiquetaFecha,
-  fechasRecientes,
+  fechasConRecoleccion,
   LARGO_MAXIMO_DESCRIPCION,
   NOMBRE_TIPO_REPORTE,
   TEXTO_PRIVACIDAD_FOTOS,
@@ -35,6 +35,7 @@ export default function NuevoReporte() {
   const datos: BorradorReporte = { ...borrador, tipo };
   const errores = validarReporte(datos, ahora);
   const mostrados = revisar ? errores : {};
+  const fechas = fechasConRecoleccion(borrador.lugarId, ahora);
   const cambiar = (campos: Partial<BorradorReporte>) => setBorrador((actual) => ({ ...actual, ...campos }));
 
   const guardar = async () => {
@@ -54,7 +55,11 @@ export default function NuevoReporte() {
       {tipo !== 'tiradero' && (
         <View style={estilos.campo}>
           <Text style={TEXTO.fila}>{tipo === 'noPaso' ? 'Colonia o lugar' : 'Ubicación'}</Text>
-          <SelectorLugar lugarId={borrador.lugarId} onCambiar={(lugarId) => cambiar({ lugarId })} />
+          <SelectorLugar
+            lugarId={borrador.lugarId}
+            // Otro lugar tiene otros días: la fecha elegida deja de valer.
+            onCambiar={(lugarId) => cambiar(tipo === 'noPaso' ? { lugarId, fecha: undefined } : { lugarId })}
+          />
           <ErrorCampo texto={mostrados.lugarId} />
         </View>
       )}
@@ -62,16 +67,25 @@ export default function NuevoReporte() {
       {tipo === 'noPaso' && (
         <View style={estilos.campo}>
           <Text style={TEXTO.fila}>Fecha</Text>
-          <View style={estilos.fechas}>
-            {fechasRecientes(ahora).map((fecha) => (
-              <Pastilla
-                activa={borrador.fecha === fecha}
-                key={fecha}
-                onPress={() => cambiar({ fecha })}
-                texto={etiquetaFecha(fecha, ahora)}
-              />
-            ))}
-          </View>
+          {!borrador.lugarId ? (
+            <Text style={TEXTO.apoyo}>Elige primero el lugar para ver sus días de recolección.</Text>
+          ) : fechas.length === 0 ? (
+            <Text style={TEXTO.apoyo}>En los últimos 7 días no hubo recolección en este lugar, según el cartel.</Text>
+          ) : (
+            <>
+              <View style={estilos.fechas}>
+                {fechas.map((fecha) => (
+                  <Pastilla
+                    activa={borrador.fecha === fecha}
+                    key={fecha}
+                    onPress={() => cambiar({ fecha })}
+                    texto={etiquetaFecha(fecha, ahora)}
+                  />
+                ))}
+              </View>
+              <Text style={TEXTO.apoyo}>Solo aparecen los días con recolección en este lugar.</Text>
+            </>
+          )}
           <ErrorCampo texto={mostrados.fecha} />
         </View>
       )}
