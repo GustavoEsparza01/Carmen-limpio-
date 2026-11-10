@@ -3,6 +3,7 @@ import type { Feature, FeatureCollection } from 'geojson';
 import { geoJSON, latLngBounds, type LatLngBounds, type LatLngTuple } from 'leaflet';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { CircleMarker, GeoJSON, MapContainer, Polyline, TileLayer, useMap } from 'react-leaflet';
+import { supabase } from '../supabase';
 
 interface FilaEscenario {
   id: string;
@@ -73,7 +74,15 @@ export function Escenarios() {
         if (!r.ok) throw new Error(archivo);
         return r.json();
       });
-    Promise.all([cargar('escenarios.json'), cargar('propuesta.geojson')])
+    // La geometría de la propuesta viene de Supabase: la RLS solo se la entrega a administración.
+    const propuesta = async (): Promise<FeatureCollection> => {
+      if (!supabase) throw new Error('Sin Supabase');
+      const { data, error } = await supabase.rpc('trazado', { p_escenario: 'propuesta' });
+      if (error) throw error;
+      const coleccion = data as FeatureCollection;
+      return { ...coleccion, features: coleccion.features.filter((f) => f.properties?.tramo === 'servicio') };
+    };
+    Promise.all([cargar('escenarios.json'), propuesta()])
       .then(([resumen, geometria]) => {
         setDatos(resumen);
         setZonas(geometria);

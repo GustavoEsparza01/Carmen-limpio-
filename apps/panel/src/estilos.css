@@ -277,3 +277,93 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+/* Acceso y cuenta */
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cuenta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.acceso {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.acceso-tarjeta {
+  width: 100%;
+  max-width: 400px;
+}
+
+.acceso-tarjeta h1 {
+  margin: 0;
+  color: var(--primario);
+  font-size: 22px;
+}
+
+.acceso-tarjeta h2 {
+  margin: 4px 0 16px;
+  font-size: 18px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.formulario input {
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 400;
+}
+
+.boton {
+  padding: 10px 16px;
+  border: 1px solid var(--primario);
+  border-radius: 6px;
+  background: var(--primario);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.boton-secundario {
+  padding: 6px 12px;
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+}
+
+.encabezado > div:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}

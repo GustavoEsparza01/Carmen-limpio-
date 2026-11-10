@@ -7,14 +7,15 @@ import {
   notaExcepcion,
   RUTAS,
   textoHorario,
-  UNIDADES,
 } from '@carmen-limpio/compartido';
 import { useState } from 'react';
+import { useDatosPanel } from '../Acceso';
 
 export function Rutas() {
   const [rutaId, setRutaId] = useState('M1');
   const ruta = RUTAS.find((r) => r.id === rutaId) ?? RUTAS[0]!;
-  const unidad = UNIDADES.find((u) => u.matutina === ruta.id || u.vespertina === ruta.id);
+  const { unidades } = useDatosPanel();
+  const unidad = unidades.find((u) => u.matutina === ruta.id || u.vespertina === ruta.id);
 
   return (
     <div className="pila">
@@ -43,7 +44,7 @@ export function Rutas() {
             {ruta.id} · {etiquetaRuta(ruta)}
           </h3>
           <p className="suave">
-            {textoHorario(DIAS_CARTEL, ruta.turno)} · Unidad {unidad?.numero} (supuesto)
+            {textoHorario(DIAS_CARTEL, ruta.turno)} · {unidad ? `Unidad ${unidad.numero} (supuesto)` : 'Sin unidad asignada'}
           </p>
           <table>
             <thead>

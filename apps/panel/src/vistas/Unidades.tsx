@@ -1,6 +1,9 @@
-import { UNIDADES } from '@carmen-limpio/compartido';
+import { useDatosPanel } from '../Acceso';
+
+const ESTADO: Record<string, string> = { activa: 'Activa', taller: 'En taller', baja: 'Baja' };
 
 export function Unidades() {
+  const { unidades } = useDatosPanel();
   return (
     <div className="pila">
       <h2>Unidades y asignaciones</h2>
@@ -16,15 +19,17 @@ export function Unidades() {
               <th scope="col">Turno matutino</th>
               <th scope="col">Turno vespertino</th>
               <th scope="col">Placas</th>
+              <th scope="col">Estado</th>
             </tr>
           </thead>
           <tbody>
-            {UNIDADES.map((u) => (
+            {unidades.map((u) => (
               <tr key={u.numero}>
                 <td>Unidad {u.numero}</td>
                 <td>{u.matutina ?? 'Sin ruta'}</td>
                 <td>{u.vespertina ?? 'Sin ruta'}</td>
-                <td>Pendiente</td>
+                <td>{u.placas ?? 'Pendiente'}</td>
+                <td>{ESTADO[u.estado] ?? u.estado}</td>
               </tr>
             ))}
           </tbody>

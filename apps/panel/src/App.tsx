@@ -1,5 +1,6 @@
 import { AVISO_NO_OFICIAL } from '@carmen-limpio/compartido';
 import { useEffect, useState, type ComponentType } from 'react';
+import { Acceso, useDatosPanel } from './Acceso';
 import { Escenarios } from './vistas/Escenarios';
 import { Resumen } from './vistas/Resumen';
 import { Rutas } from './vistas/Rutas';
@@ -15,6 +16,15 @@ const VISTAS: { id: string; nombre: string; Vista: ComponentType }[] = [
 const vistaDeHash = () => window.location.hash.slice(1) || 'resumen';
 
 export function App() {
+  return (
+    <Acceso>
+      <Panel />
+    </Acceso>
+  );
+}
+
+function Panel() {
+  const { correo, salir } = useDatosPanel();
   const [actual, setActual] = useState(vistaDeHash);
 
   useEffect(() => {
@@ -28,8 +38,16 @@ export function App() {
   return (
     <div className="pagina">
       <header className="encabezado">
-        <h1>Carmen Limpio</h1>
-        <p>Panel administrativo</p>
+        <div>
+          <h1>Carmen Limpio</h1>
+          <p>Panel administrativo</p>
+        </div>
+        <div className="cuenta">
+          <span>{correo}</span>
+          <button className="boton boton-secundario" onClick={salir} type="button">
+            Salir
+          </button>
+        </div>
       </header>
       <nav className="navegacion" aria-label="Secciones del panel">
         {VISTAS.map(({ id, nombre }) => (
@@ -39,7 +57,7 @@ export function App() {
         ))}
       </nav>
       <p className="vista-previa">
-        Vista previa con datos locales. Todavía no tiene inicio de sesión ni guarda cambios.
+        Datos de Supabase, solo lectura. La edición de catálogos, avisos y reportes llega en la siguiente etapa.
       </p>
       <main className="contenido">
         <Vista />

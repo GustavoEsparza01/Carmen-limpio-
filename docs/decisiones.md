@@ -216,3 +216,15 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Dispositivos:** por ahora exigen cuenta. Falta decidir si los avisos push funcionan sin cuenta (sesión anónima de Supabase) antes de la Fase 5.
 - **Pendiente de rendimiento sin impacto real:** el revisor sugiere separar las políticas de administración por acción para no evaluar dos políticas en cada lectura. Con tablas de cientos de filas no se nota.
 - **No probado:** `supabase db reset --linked` (borra la base remota). La base se creó con `db push --include-seed` sobre un proyecto vacío.
+
+## 2026-11-09 · Conexión de la app y el panel a Supabase
+
+- **Un solo `.env` en la raíz.** El panel lo lee con `envDir: '../..'`. Expo solo lee el `.env` de `apps/movil`, así que `npm run movil` y `npm run android` arrancan el CLI de Expo con `node --env-file-if-exists=../../.env`.
+- **Traducción en `compartido/remoto.ts`,** sin depender de supabase-js. Una prueba comprueba que las filas de Supabase reproducen exactamente el catálogo incluido en la app.
+- **Catálogo de la app:** arranca con el último catálogo descargado o, si no hay, con el incluido, y nunca espera a la red. El nuevo se descarga en segundo plano y se aplica en el siguiente arranque, para que una pantalla abierta no vea cambiar sus lugares. Un catálogo vacío o dañado se descarta.
+- **`reemplazarCatalogo` cambia `LUGARES` y `RUTAS` en el mismo arreglo.** Así las pantallas no cambian. Es estado global a propósito; si crece, conviene pasarlo a un contexto.
+- **El trazado (geometría) de la app sigue incluido en la app.** Es igual al de Supabase y pesa; se conecta cuando haya edición de trazos.
+- **Avisos:** la app muestra los publicados y vigentes, con estado vacío y sin conexión, y dice que los publica el equipo del proyecto, no una autoridad. Se consultan al entrar a la pestaña. Sin Supabase configurado vuelven los de ejemplo.
+- **Panel:** inicio de sesión con correo y contraseña. Tras entrar pide `es_admin()`; una cuenta ciudadana ve un mensaje y no carga datos. Rutas, resumen y unidades vienen de Supabase y las unidades muestran placas y estado.
+- **La propuesta ya no es un archivo público.** `apps/panel/public/datos/propuesta.geojson` se borró: cualquiera podía descargarlo al publicar el panel. Ahora el panel la pide con `trazado('propuesta')`, que la RLS reserva a administración. `escenarios.json` (solo cifras) sigue siendo estático.
+- **Reportes y sesión de la app siguen en modo demostración** hasta la Fase 4.

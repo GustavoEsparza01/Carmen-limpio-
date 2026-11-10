@@ -4,9 +4,9 @@ import {
   ETIQUETA_CONFIANZA,
   LUGARES,
   RUTAS,
-  UNIDADES,
   type Confianza,
 } from '@carmen-limpio/compartido';
+import { useDatosPanel } from '../Acceso';
 
 const NIVELES: Confianza[] = ['alta', 'media', 'baja', 'ninguna'];
 
@@ -19,6 +19,7 @@ const PENDIENTES = [
 ];
 
 export function Resumen() {
+  const { unidades } = useDatosPanel();
   const conteo = contarConfianza();
   const entradas = NIVELES.reduce((total, nivel) => total + conteo[nivel], 0);
   const matutinas = RUTAS.filter((r) => r.turno === 'matutino').length;
@@ -30,7 +31,7 @@ export function Resumen() {
     },
     { valor: LUGARES.length, etiqueta: 'Lugares', detalle: `${entradas} entradas en los carteles` },
     { valor: conteo.ninguna, etiqueta: 'Entradas sin ubicar', detalle: 'Tienen horario, pero no mapa' },
-    { valor: UNIDADES.length, etiqueta: 'Unidades', detalle: 'Supuesto sin confirmar' },
+    { valor: unidades.length, etiqueta: 'Unidades', detalle: 'Supuesto sin confirmar' },
   ];
 
   return (
