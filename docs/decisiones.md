@@ -233,3 +233,14 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 
 - **Tarjeta de Inicio:** mostraba los días de todas las rutas del lugar bajo la etiqueta de una sola (Bivalvo: "Ruta 2" con martes, jueves y sábado). Ahora hay una fila por ruta con sus propios días y un botón de mapa por cada ruta ubicada.
 - **"El camión no pasó":** solo ofrece y acepta días con recolección en ese lugar según el cartel. Hoy cuenta cuando ya terminó alguna de sus ventanas. Las fechas aparecen después de elegir el lugar y se borran al cambiarlo. La base aplica la misma regla de días (`0009`), aunque no la de la ventana de hoy.
+
+## 2026-11-09 · Avisos desde el panel, con imagen
+
+- **Pedido del usuario:** publicar imágenes junto con los avisos. Se agregó como parte de la gestión de avisos.
+- **Bucket privado `avisos-imagenes` (0010).** La imagen de un aviso publicado la puede leer cualquiera; la de un borrador, solo administración. Así un aviso sin publicar no se filtra por su imagen. Solo administración sube, cambia o borra. Límite de 5 MB; JPG, PNG o WebP.
+- **Descripción obligatoria** para cada imagen, en la base y en el formulario. Al cambiar de imagen se vacía, para no dejar la descripción de la anterior.
+- **La app muestra la imagen completa,** con su proporción original (los avisos suelen ser carteles verticales), y pide URLs firmadas por una hora. Si fallan, el aviso se muestra sin imagen.
+- **Lugares afectados:** el panel los elige con búsqueda; sin lugares, el aviso es para toda la ciudad. La app los muestra bajo cada aviso.
+- **Fechas del panel en hora de Mérida,** sin importar la zona de la computadora (probado con la zona de Tokio).
+- **Eliminar pide confirmación en la misma tarjeta,** sin ventanas emergentes del navegador. Al eliminar o reemplazar, la imagen anterior se borra después de guardar, y una imagen subida para un aviso que no se pudo guardar también se borra.
+- **Corrección:** Supabase repite el evento de inicio de sesión al volver a la pestaña, y el panel recargaba todo, perdiendo un aviso a medio escribir. Ahora solo recarga si cambia la persona.

@@ -36,7 +36,14 @@ export interface AvisoCiudad {
   tipo: TipoAviso;
   titulo: string;
   texto: string;
+  // Nombres de los lugares afectados; vacío si es para toda la ciudad.
+  lugares?: string[];
+  // Ruta dentro del bucket avisos-imagenes; la app pide una URL firmada para mostrarla.
+  imagen?: { ruta: string; descripcion: string } | null;
 }
+
+// En Supabase: bucket privado con imágenes de avisos publicados (ver supabase/migrations/0010).
+export const BUCKET_IMAGENES_AVISOS = 'avisos-imagenes';
 
 export interface ServicioAvisos {
   listar(): Promise<AvisoCiudad[]>;

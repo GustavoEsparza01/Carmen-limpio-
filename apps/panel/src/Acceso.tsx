@@ -60,7 +60,13 @@ export function Acceso({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!supabase) return;
+    // Supabase repite SIGNED_IN al volver a la pestaña. Recargar ahí borraría un aviso a medio escribir,
+    // así que solo se recarga cuando cambia la persona.
+    let usuarioActual: string | null | undefined;
     const alCambiar = (sesion: Session | null) => {
+      const usuario = sesion?.user.id ?? null;
+      if (usuario === usuarioActual) return;
+      usuarioActual = usuario;
       if (!sesion) return setEstado({ tipo: 'sinSesion' });
       setEstado({ tipo: 'revisando' });
       cargar(sesion)

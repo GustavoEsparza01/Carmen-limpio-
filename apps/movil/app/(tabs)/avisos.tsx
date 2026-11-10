@@ -4,15 +4,14 @@ import {
   AVISOS_SIN_CONEXION,
   AVISOS_VACIO,
   COLORES,
-  type AvisoCiudad,
   type TipoAviso,
 } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Aviso, BarraEstado, Boton, PantallaVacia } from '../../componentes/ui';
-import { avisosReales, listarAvisos } from '../../estado/avisos';
+import { avisosReales, listarAvisos, type AvisoConImagen } from '../../estado/avisos';
 import { CONTENIDO, FUENTE, RADIO, TARJETA, TEXTO } from '../../estilos/tema';
 
 const ICONO: Record<TipoAviso, 'time' | 'pause-circle' | 'leaf'> = {
@@ -21,7 +20,7 @@ const ICONO: Record<TipoAviso, 'time' | 'pause-circle' | 'leaf'> = {
   servicio: 'pause-circle',
 };
 
-type Estado = { tipo: 'cargando' } | { tipo: 'listo'; avisos: AvisoCiudad[] } | { tipo: 'error' };
+type Estado = { tipo: 'cargando' } | { tipo: 'listo'; avisos: AvisoConImagen[] } | { tipo: 'error' };
 
 export default function Avisos() {
   const [estado, setEstado] = useState<Estado>({ tipo: 'cargando' });
@@ -59,7 +58,7 @@ export default function Avisos() {
       <BarraEstado estilo="dark" />
       <Aviso>{avisosReales ? AVISO_AVISOS_EQUIPO : AVISO_AVISOS_EJEMPLO}</Aviso>
       {estado.tipo === 'listo' &&
-        estado.avisos.map(({ id, tipo, titulo, texto }) => (
+        estado.avisos.map(({ id, tipo, titulo, texto, lugares, imagen, imagenUrl }) => (
           <View key={id} style={estilos.tarjeta}>
             <View style={estilos.encabezado}>
               <Ionicons color={COLORES.primario} name={ICONO[tipo]} size={22} />
@@ -70,10 +69,36 @@ export default function Avisos() {
               )}
             </View>
             <Text style={TEXTO.fila}>{titulo}</Text>
+            {imagen && imagenUrl && <ImagenAviso descripcion={imagen.descripcion} url={imagenUrl} />}
             <Text style={TEXTO.cuerpo}>{texto}</Text>
+            {avisosReales && (
+              <View style={estilos.lugares}>
+                <Ionicons color={COLORES.textoSuave} name="location-outline" size={16} />
+                <Text style={[TEXTO.apoyo, estilos.lugaresTexto]}>
+                  {lugares && lugares.length > 0 ? lugares.join(', ') : 'Toda la ciudad'}
+                </Text>
+              </View>
+            )}
           </View>
         ))}
     </ScrollView>
+  );
+}
+
+// Completa y sin recortar: los avisos suelen ser carteles verticales.
+function ImagenAviso({ url, descripcion }: { url: string; descripcion: string }) {
+  const [proporcion, setProporcion] = useState(4 / 3);
+  return (
+    <Image
+      accessibilityLabel={descripcion}
+      accessible
+      onLoad={({ nativeEvent: { source } }) => {
+        if (source.width > 0 && source.height > 0) setProporcion(Math.max(source.width / source.height, 0.6));
+      }}
+      resizeMode="contain"
+      source={{ uri: url }}
+      style={[estilos.imagen, { aspectRatio: proporcion }]}
+    />
   );
 }
 
@@ -81,6 +106,9 @@ const estilos = StyleSheet.create({
   contenido: CONTENIDO,
   tarjeta: { ...TARJETA, gap: 8, padding: 16 },
   encabezado: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  imagen: { backgroundColor: COLORES.fondo, borderRadius: RADIO.medio, width: '100%' },
+  lugares: { alignItems: 'flex-start', flexDirection: 'row', gap: 6 },
+  lugaresTexto: { flex: 1 },
   etiqueta: {
     backgroundColor: COLORES.acentoSuave,
     borderRadius: RADIO.completo,

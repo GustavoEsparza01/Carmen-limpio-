@@ -1,4 +1,4 @@
-import type { Confianza, Horario, Lugar, TipoLugar } from './catalogo.ts';
+import { lugarPorId, type Confianza, type Horario, type Lugar, type TipoLugar } from './catalogo.ts';
 import { DIAS_SEMANA, type Dia, type Turno } from './constantes.ts';
 import type { AvisoCiudad, TipoAviso } from './servicios.ts';
 import type { Unidad } from './unidades.ts';
@@ -11,7 +11,7 @@ export const CONSULTA_LUGARES =
 
 export const CONSULTA_UNIDADES = 'numero, placas, estado, asignaciones (ruta_id, desde, hasta, rutas (turno))';
 
-export const CONSULTA_AVISOS = 'id, tipo, titulo, texto, desde, hasta';
+export const CONSULTA_AVISOS = 'id, tipo, titulo, texto, desde, hasta, imagen, imagen_alt, avisos_lugares (lugar_id)';
 
 export interface FilaLugar {
   id: string;
@@ -40,6 +40,9 @@ export interface FilaAviso {
   texto: string;
   desde: string;
   hasta: string | null;
+  imagen: string | null;
+  imagen_alt: string | null;
+  avisos_lugares: { lugar_id: string }[];
 }
 
 export class CatalogoInvalido extends Error {}
@@ -100,5 +103,16 @@ export function avisosDesdeFilas(filas: readonly FilaAviso[], ahora: Date): Avis
   return filas
     .filter((a) => Date.parse(a.desde) <= t && (a.hasta === null || Date.parse(a.hasta) > t))
     .sort((a, b) => Date.parse(b.desde) - Date.parse(a.desde))
-    .map((a) => ({ id: String(a.id), tipo: a.tipo, titulo: a.titulo, texto: a.texto }));
+    .map((a) => ({
+      id: String(a.id),
+      tipo: a.tipo,
+      titulo: a.titulo,
+      texto: a.texto,
+      // Sin lugares, el aviso es para toda la ciudad. Un lugar que ya no está en el catálogo se omite.
+      lugares: (a.avisos_lugares ?? [])
+        .map((l) => lugarPorId(l.lugar_id)?.nombre)
+        .filter((nombre): nombre is string => Boolean(nombre))
+        .sort((x, y) => x.localeCompare(y, 'es')),
+      imagen: a.imagen ? { ruta: a.imagen, descripcion: a.imagen_alt ?? '' } : null,
+    }));
 }

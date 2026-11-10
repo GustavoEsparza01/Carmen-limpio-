@@ -1,6 +1,7 @@
 import { AVISO_NO_OFICIAL } from '@carmen-limpio/compartido';
 import { useEffect, useState, type ComponentType } from 'react';
 import { Acceso, useDatosPanel } from './Acceso';
+import { Avisos } from './vistas/Avisos';
 import { Escenarios } from './vistas/Escenarios';
 import { Resumen } from './vistas/Resumen';
 import { Rutas } from './vistas/Rutas';
@@ -10,6 +11,7 @@ const VISTAS: { id: string; nombre: string; Vista: ComponentType }[] = [
   { id: 'resumen', nombre: 'Resumen', Vista: Resumen },
   { id: 'rutas', nombre: 'Rutas', Vista: Rutas },
   { id: 'unidades', nombre: 'Unidades', Vista: Unidades },
+  { id: 'avisos', nombre: 'Avisos', Vista: Avisos },
   { id: 'escenarios', nombre: 'Comparar escenarios', Vista: Escenarios },
 ];
 
@@ -57,7 +59,7 @@ function Panel() {
         ))}
       </nav>
       <p className="vista-previa">
-        Datos de Supabase, solo lectura. La edición de catálogos, avisos y reportes llega en la siguiente etapa.
+        Datos de Supabase. Los avisos ya se pueden publicar; catálogos y reportes siguen en solo lectura.
       </p>
       <main className="contenido">
         <Vista />

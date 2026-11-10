@@ -71,7 +71,7 @@ test('las unidades solo toman asignaciones vigentes', () => {
 });
 
 test('solo se muestran avisos vigentes, el más reciente primero', () => {
-  const base = { tipo: 'general' as const, titulo: 't', texto: 'x' };
+  const base = { tipo: 'general' as const, titulo: 't', texto: 'x', imagen: null, imagen_alt: null, avisos_lugares: [] };
   const ahora = new Date('2026-11-09T18:00:00Z');
   const avisos = avisosDesdeFilas(
     [
@@ -83,4 +83,25 @@ test('solo se muestran avisos vigentes, el más reciente primero', () => {
     ahora,
   );
   assert.deepEqual(avisos.map((a) => a.id), ['2', '1']);
+});
+
+test('el aviso trae sus lugares por nombre y su imagen con descripción', () => {
+  const [aviso] = avisosDesdeFilas(
+    [
+      {
+        id: 7,
+        tipo: 'servicio',
+        titulo: 'Sin servicio',
+        texto: 'Texto',
+        desde: '2026-11-01T00:00:00Z',
+        hasta: null,
+        imagen: 'cartel.jpg',
+        imagen_alt: 'Cartel con el aviso',
+        avisos_lugares: [{ lugar_id: 'san-manuel' }, { lugar_id: 'bivalvo' }, { lugar_id: 'ya-no-existe' }],
+      },
+    ],
+    new Date('2026-11-09T18:00:00Z'),
+  );
+  assert.deepEqual(aviso?.lugares, ['Bivalvo', 'San Manuel']);
+  assert.deepEqual(aviso?.imagen, { ruta: 'cartel.jpg', descripcion: 'Cartel con el aviso' });
 });

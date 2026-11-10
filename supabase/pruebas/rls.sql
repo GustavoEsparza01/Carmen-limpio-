@@ -63,9 +63,13 @@ begin
     'toda cuenta nueva nace ciudadana');
   update public.perfiles set rol = 'administrador' where id = adm;
 
-  insert into public.avisos (titulo, texto, publicado, creado_por) values
-    ('Aviso publicado', 'Texto de prueba publicado', true, adm),
-    ('Borrador', 'Texto de prueba sin publicar', false, adm);
+  insert into public.avisos (titulo, texto, publicado, creado_por, imagen, imagen_alt) values
+    ('Aviso publicado', 'Texto de prueba publicado', true, adm, 'prueba/publicada.jpg', 'Cartel de prueba'),
+    ('Borrador', 'Texto de prueba sin publicar', false, adm, 'prueba/borrador.jpg', 'Cartel de prueba');
+  insert into storage.objects (bucket_id, name) values
+    ('avisos-imagenes', 'prueba/publicada.jpg'), ('avisos-imagenes', 'prueba/borrador.jpg');
+  perform pg_temp.falla('insert into public.avisos (titulo, texto, imagen) values (''Sin descripción'', ''Texto'', ''x.jpg'')',
+    'una imagen de aviso exige descripción');
 
   -- Público sin cuenta ------------------------------------------------------
   perform pg_temp.como(null);
@@ -79,12 +83,14 @@ begin
   perform pg_temp.afirmar(jsonb_array_length(public.trazado('carteles') -> 'features') = 30, 'público: trazado carteles en GeoJSON');
   perform pg_temp.falla('select public.trazado(''propuesta'')', 'público: pedir la propuesta debe fallar');
   perform pg_temp.afirmar((select count(*) from public.avisos) = 1, 'público: solo avisos publicados');
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes') = 1,
+    'público: solo ve la imagen del aviso publicado');
   perform pg_temp.afirmar((select count(*) from public.unidades) = 0, 'público: no ve unidades');
   perform pg_temp.afirmar((select count(*) from public.reportes) = 0, 'público: no ve reportes');
   perform pg_temp.falla(format('insert into public.reportes (autor, tipo, lugar_id, fecha) values (%L, ''noPaso'', ''san-manuel'', %L)', a, hoy),
     'público: no puede reportar');
   perform pg_temp.falla('insert into public.avisos (titulo, texto) values (''x'', ''xxxx'')', 'público: no puede crear avisos');
-  pruebas := pruebas + 14;
+  pruebas := pruebas + 16;
 
   -- Ciudadano A ---------------------------------------------------------------
   perform pg_temp.como(a);
@@ -118,6 +124,10 @@ begin
   insert into storage.objects (bucket_id, name, owner) values ('fotos-reportes', a || '/foto.jpg', a);
   perform pg_temp.falla(format('insert into storage.objects (bucket_id, name, owner) values (''fotos-reportes'', %L, %L)', b || '/intruso.jpg', a),
     'A: no sube a la carpeta de B');
+  perform pg_temp.falla('insert into storage.objects (bucket_id, name) values (''avisos-imagenes'', ''falsa.jpg'')',
+    'A: no sube imágenes de avisos');
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes') = 1,
+    'A: no ve la imagen del borrador');
 
   -- Límite de envíos: ya tiene 1; 9 más llegan al límite de 10 y el siguiente falla.
   for i in 1..9 loop
@@ -125,7 +135,7 @@ begin
   end loop;
   perform pg_temp.falla('insert into public.reportes (tipo, lugar_id, descripcion) values (''acumulacion'', ''obrera'', ''Uno más de la cuenta'')',
     'A: límite de 10 reportes en 24 horas');
-  pruebas := pruebas + 17;
+  pruebas := pruebas + 19;
 
   -- Ciudadano B -----------------------------------------------------------------
   perform pg_temp.como(b);
@@ -149,6 +159,9 @@ begin
   perform pg_temp.afirmar((select count(*) from public.unidades) = 8, 'admin: 8 unidades');
   perform pg_temp.afirmar((select count(*) from public.asignaciones) = 15, 'admin: 15 asignaciones');
   perform pg_temp.afirmar((select count(*) from public.avisos) = 2, 'admin: ve borradores');
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes') = 2,
+    'admin: ve las imágenes de los borradores');
+  insert into storage.objects (bucket_id, name) values ('avisos-imagenes', 'prueba/nueva.jpg');
   perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'fotos-reportes') = 1, 'admin: ve la foto');
   perform pg_temp.falla(format('update public.reportes set estado = ''atendido'', nota = ''Saltando pasos'' where id = %L', rep_a),
     'admin: no salta de Recibido a Atendido');
@@ -161,7 +174,7 @@ begin
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 3, 'admin: cada cambio queda en el historial');
   perform pg_temp.falla(format('insert into public.asignaciones (unidad, ruta_id, desde) values (8, ''M1'', %L)', hoy),
     'admin: una ruta no tiene dos unidades a la vez');
-  pruebas := pruebas + 15;
+  pruebas := pruebas + 16;
 
   -- A ve el nuevo estado y la nota ------------------------------------------------
   perform pg_temp.como(a);
