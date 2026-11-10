@@ -1,30 +1,8 @@
-// Genera el mapa de cobertura y el seed de Supabase: node scripts/generar-cobertura.ts
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// Genera el mapa de la propuesta de cobertura: node scripts/generar-cobertura.ts. El seed lo escribe generar-seed.ts.
+import { readFileSync, writeFileSync } from 'node:fs';
 const cobertura = JSON.parse(readFileSync('salida/cobertura.geojson', 'utf8'));
 const recorridos = JSON.parse(readFileSync('salida/recorridos.geojson', 'utf8'));
 const R = JSON.parse(readFileSync('salida/resumen-cobertura.json', 'utf8'));
-
-const q = (s: string) => `'${String(s).replace(/'/g, "''")}'`;
-const sql = ['-- Propuesta propia de cobertura (no es el recorrido oficial). Usar en lugar de seed.sql.', 'begin;'];
-for (const r of R.rutas) sql.push(`insert into rutas (id, turno, numero, validada) values (${q(r.ruta)}, ${q(r.turno)}, ${+r.ruta.slice(1)}, false);`);
-for (const f of cobertura.features) {
-  const p = f.properties;
-  sql.push(`insert into tramos_ruta (ruta_id, tramo, km, geom) values (${q(p.ruta)}, ${q(p.tramo)}, ${p.km}, ST_SetSRID(ST_GeomFromGeoJSON(${q(JSON.stringify(f.geometry))}), 4326));`);
-}
-for (const f of recorridos.features) sql.push(`insert into recorridos_ruta (ruta_id, geom) values (${q(f.properties.ruta)}, ST_SetSRID(ST_GeomFromGeoJSON(${q(JSON.stringify(f.geometry))}), 4326));`);
-sql.push('commit;');
-mkdirSync('supabase/migrations', { recursive: true });
-writeFileSync('supabase/seed-cobertura.sql', sql.join('\n') + '\n');
-writeFileSync('supabase/migrations/0002_cobertura.sql', `alter table tramos_ruta drop constraint tramos_ruta_tramo_check;
-alter table tramos_ruta add constraint tramos_ruta_tramo_check
-  check (tramo in ('servicio', 'traslado', 'repaso', 'acceso'));
-
--- Orden completo del camión: sirve para el simulador y la futura comparación con GPS.
-create table recorridos_ruta (
-  ruta_id text primary key references rutas (id) on delete cascade,
-  geom geometry(LineString, 4326) not null
-);
-`);
 
 const datos = JSON.stringify({ cobertura, R }).replace(/</g, '\\u003c');
 const html = `<!DOCTYPE html>
@@ -76,4 +54,4 @@ document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.que
  document.querySelectorAll('label.fila').forEach(l=>{const on=b.dataset.t==='todas'||l.dataset.turno===b.dataset.t;l.style.display=on?'':'none';const c=l.querySelector('input');c.checked=on;c.dispatchEvent(new Event('change'))})});
 </script></body></html>`;
 writeFileSync('salida/mapa-cobertura.html', html);
-console.log('ok', (html.length / 1024).toFixed(0) + ' KB', sql.length, 'lineas sql');
+console.log('ok', (html.length / 1024).toFixed(0) + ' KB');
