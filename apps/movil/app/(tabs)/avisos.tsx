@@ -1,9 +1,18 @@
-import { AVISO_AVISOS_EJEMPLO, COLORES, type AvisoCiudad, type TipoAviso } from '@carmen-limpio/compartido';
+import {
+  AVISO_AVISOS_EJEMPLO,
+  AVISO_AVISOS_EQUIPO,
+  AVISOS_SIN_CONEXION,
+  AVISOS_VACIO,
+  COLORES,
+  type AvisoCiudad,
+  type TipoAviso,
+} from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Aviso, BarraEstado } from '../../componentes/ui';
-import { avisos as servicioAvisos } from '../../estado/demo';
+import { Aviso, BarraEstado, Boton, PantallaVacia } from '../../componentes/ui';
+import { avisosReales, listarAvisos } from '../../estado/avisos';
 import { CONTENIDO, FUENTE, RADIO, TARJETA, TEXTO } from '../../estilos/tema';
 
 const ICONO: Record<TipoAviso, 'time' | 'pause-circle' | 'leaf'> = {
@@ -12,29 +21,58 @@ const ICONO: Record<TipoAviso, 'time' | 'pause-circle' | 'leaf'> = {
   servicio: 'pause-circle',
 };
 
-export default function Avisos() {
-  const [avisos, setAvisos] = useState<AvisoCiudad[]>([]);
+type Estado = { tipo: 'cargando' } | { tipo: 'listo'; avisos: AvisoCiudad[] } | { tipo: 'error' };
 
-  useEffect(() => {
-    servicioAvisos.listar().then(setAvisos).catch(() => {});
+export default function Avisos() {
+  const [estado, setEstado] = useState<Estado>({ tipo: 'cargando' });
+
+  const cargar = useCallback(() => {
+    listarAvisos()
+      .then((avisos) => setEstado({ tipo: 'listo', avisos }))
+      .catch(() => setEstado({ tipo: 'error' }));
   }, []);
+
+  // Al volver a la pestaña se consulta de nuevo: un aviso nuevo aparece sin reiniciar la app.
+  useFocusEffect(cargar);
+
+  if (estado.tipo === 'error') {
+    return (
+      <PantallaVacia icono="cloud-offline" titulo={AVISOS_SIN_CONEXION.titulo} texto={AVISOS_SIN_CONEXION.texto}>
+        <Boton
+          onPress={() => {
+            setEstado({ tipo: 'cargando' });
+            cargar();
+          }}
+          icono="refresh"
+          texto="Reintentar"
+        />
+      </PantallaVacia>
+    );
+  }
+
+  if (estado.tipo === 'listo' && estado.avisos.length === 0) {
+    return <PantallaVacia icono="megaphone-outline" titulo={AVISOS_VACIO.titulo} texto={AVISOS_VACIO.texto} />;
+  }
 
   return (
     <ScrollView contentContainerStyle={estilos.contenido}>
       <BarraEstado estilo="dark" />
-      <Aviso>{AVISO_AVISOS_EJEMPLO}</Aviso>
-      {avisos.map(({ id, tipo, titulo, texto }) => (
-        <View key={id} style={estilos.tarjeta}>
-          <View style={estilos.encabezado}>
-            <Ionicons color={COLORES.primario} name={ICONO[tipo]} size={22} />
-            <View style={estilos.etiqueta}>
-              <Text style={estilos.etiquetaTexto}>Ejemplo</Text>
+      <Aviso>{avisosReales ? AVISO_AVISOS_EQUIPO : AVISO_AVISOS_EJEMPLO}</Aviso>
+      {estado.tipo === 'listo' &&
+        estado.avisos.map(({ id, tipo, titulo, texto }) => (
+          <View key={id} style={estilos.tarjeta}>
+            <View style={estilos.encabezado}>
+              <Ionicons color={COLORES.primario} name={ICONO[tipo]} size={22} />
+              {!avisosReales && (
+                <View style={estilos.etiqueta}>
+                  <Text style={estilos.etiquetaTexto}>Ejemplo</Text>
+                </View>
+              )}
             </View>
+            <Text style={TEXTO.fila}>{titulo}</Text>
+            <Text style={TEXTO.cuerpo}>{texto}</Text>
           </View>
-          <Text style={TEXTO.fila}>{titulo}</Text>
-          <Text style={TEXTO.cuerpo}>{texto}</Text>
-        </View>
-      ))}
+        ))}
     </ScrollView>
   );
 }

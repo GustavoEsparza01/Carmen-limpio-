@@ -6,6 +6,7 @@ export * from './guardados.ts';
 export * from './horario.ts';
 export * from './hoy.ts';
 export * from './recordatorios.ts';
+export * from './remoto.ts';
 export * from './reportes.ts';
 export * from './servicios.ts';
 export * from './simulacion.ts';

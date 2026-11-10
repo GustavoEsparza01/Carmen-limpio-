@@ -1,5 +1,4 @@
 import {
-  crearServicioAvisos,
   crearServicioReportes,
   crearServicioSesion,
   type Almacen,
@@ -18,10 +17,9 @@ const almacen: Almacen = {
   leer: (clave) => AsyncStorage.getItem(clave),
 };
 
-// Para conectar el backend se reemplazan estas tres implementaciones; las pantallas no cambian.
+// Reportes y sesión siguen en modo demostración hasta la Fase 4. Los avisos ya vienen de Supabase (estado/avisos.ts).
 const sesiones = crearServicioSesion(almacen);
 const reportesLocales = crearServicioReportes(almacen);
-export const avisos = crearServicioAvisos();
 
 interface EstadoDemo {
   cargado: boolean;

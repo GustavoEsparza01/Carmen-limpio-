@@ -51,9 +51,9 @@ export const ETIQUETA_TIPO: Record<TipoLugar, string | null> = {
 
 export { LUGARES };
 
-function agruparRutas(): Ruta[] {
+export function agruparRutas(lugares: readonly Lugar[] = LUGARES): Ruta[] {
   const rutas = new Map<string, Ruta>();
-  for (const lugar of LUGARES) {
+  for (const lugar of lugares) {
     for (const horario of lugar.horarios) {
       const { rutaId: id, numero, turno } = horario;
       if (!rutas.has(id)) rutas.set(id, { id, numero, turno, paradas: [] });
@@ -65,6 +65,13 @@ function agruparRutas(): Ruta[] {
 
 // M1 y V1 son recorridos distintos: una ruta se identifica por turno y número.
 export const RUTAS = agruparRutas();
+
+// El catálogo incluido en la app es el respaldo sin conexión. Al llegar el de Supabase se reemplaza
+// en el mismo arreglo, para que todo lo que ya importó LUGARES y RUTAS vea los datos nuevos.
+export function reemplazarCatalogo(lugares: readonly Lugar[]): void {
+  LUGARES.splice(0, LUGARES.length, ...lugares);
+  RUTAS.splice(0, RUTAS.length, ...agruparRutas(LUGARES));
+}
 
 export function rutaPorId(id: string): Ruta | undefined {
   return RUTAS.find((r) => r.id === id);

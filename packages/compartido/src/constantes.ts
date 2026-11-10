@@ -42,6 +42,16 @@ export const AVISO_SIN_PERMISO_CAMARA = 'Sin permiso de cámara puedes elegir un
 
 export const AVISO_AVISOS_EJEMPLO = 'Avisos de ejemplo para mostrar cómo se vería esta sección. Ninguno es real.';
 
+// Los publica el equipo del proyecto; no son comunicados del municipio ni de la empresa recolectora.
+export const AVISO_AVISOS_EQUIPO = 'Avisos publicados por el equipo de Carmen Limpio. No son comunicados oficiales.';
+
+export const AVISOS_VACIO = { titulo: 'Sin avisos por ahora', texto: 'Cuando haya un cambio en la recolección lo verás aquí.' };
+
+export const AVISOS_SIN_CONEXION = {
+  titulo: 'No pudimos cargar los avisos',
+  texto: 'Revisa tu conexión e inténtalo de nuevo. Los horarios siguen disponibles.',
+};
+
 export const TEXTO_PRIVACIDAD_FOTOS = 'La foto se queda en este teléfono y no se publica ni se envía.';
 
 export const AVISO_PRIVACIDAD_BORRADOR = 'Borrador pendiente de revisión legal. Aplica solo a esta demostración.';
