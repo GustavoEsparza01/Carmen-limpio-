@@ -15,6 +15,9 @@
     "movil": "npm run start -w @carmen-limpio/movil",
     "android": "npm run android -w @carmen-limpio/movil",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test -w @carmen-limpio/compartido"
+    "test": "npm run test -w @carmen-limpio/compartido",
+    "db:seed": "cd herramientas/rutas && node --no-warnings scripts/generar-seed.ts",
+    "db:aplicar": "supabase db push --remote --include-seed",
+    "db:pruebas": "supabase db query --remote -f supabase/pruebas/rls.sql"
   }
 }

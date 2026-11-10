@@ -201,3 +201,18 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Al ir hacia el este la imagen se voltea,** así que el texto del camión queda en espejo. A su tamaño en el mapa casi no se lee. Corregirlo exige una segunda imagen.
 - **La app sigue diciendo que no es oficial** y el marcador conserva la etiqueta "Simulación".
 - **Consumo con el camión activo:** 41-57 % en emulador, dentro del rango del icono anterior; 4 % en reposo.
+
+## 2026-11-09 · Fase 1: base de datos
+
+- **Supabase en la nube, plan gratis.** No hay Docker y el disco está al 91 %. Las migraciones se aplican con `npx supabase db push --remote`; el CLI se vinculó con `supabase link` en una terminal aparte, sin guardar la contraseña en el repositorio.
+- **Las migraciones originales se reescribieron** (nunca se habían ejecutado): `0001` a `0004` crean el esquema completo. `0005` a `0007` son correcciones encontradas al aplicar y probar.
+- **Escenarios:** `tramos_ruta`, `paradas_ruta` y `recorridos_ruta` tienen columna `escenario`. `rutas` existe una sola vez y ambos escenarios cuelgan de ella. La RLS solo deja ver `propuesta` a administración, y `trazado('propuesta')` falla para el público en vez de devolver una lista vacía.
+- **Seed único:** `herramientas/rutas/scripts/generar-seed.ts` escribe `supabase/seed.sql` desde los carteles, el catálogo de `compartido` y `salida/*.geojson`. `generar-salidas.ts` y `generar-cobertura.ts` ya no escriben SQL (lo hacían en una carpeta equivocada).
+- **Ubicación de lugares:** la del punto con mejor confianza. Siete lugares comparten referencia OSM con otro de su ruta (Los Arcos 2, Libertad 2, Héroe de Nacozari 1, Esperanza 2, Priv. San Joaquín, Santa Rita 2 y 3) y el trazado les dejó un solo punto: comparten ese punto, no se inventó otro.
+- **Confianza:** `horarios.confianza` guarda la de cada ruta; `lugares.confianza` la mejor de todas.
+- **Valores de enums iguales a la app** (`noPaso`, `enRevision`), para no traducir entre capas.
+- **Reportes:** un disparador fija estado inicial y nota, rechaza fechas futuras o de más de 30 días, fotos fuera de la carpeta del autor, reportes a nombre de otra persona y más de 10 reportes en 24 horas. Agrupa los "no pasó" iguales en `incidencias`. Solo administración cambia estado (Recibido → En revisión → Atendido o Rechazado), siempre con nota nueva, y cada cambio queda en `historial_reportes`.
+- **Roles:** toda cuenta nace `ciudadano`. El primer administrador se asigna desde la base. `es_admin()` es `security definer` y queda expuesta por RPC: el revisor de Supabase lo marca, pero solo responde sobre quien pregunta y las políticas la necesitan.
+- **Dispositivos:** por ahora exigen cuenta. Falta decidir si los avisos push funcionan sin cuenta (sesión anónima de Supabase) antes de la Fase 5.
+- **Pendiente de rendimiento sin impacto real:** el revisor sugiere separar las políticas de administración por acción para no evaluar dos políticas en cada lectura. Con tablas de cientos de filas no se nota.
+- **No probado:** `supabase db reset --linked` (borra la base remota). La base se creó con `db push --include-seed` sobre un proyecto vacío.
