@@ -1,0 +1,38 @@
+# El plan gratis de Supabase pausa el proyecto tras 7 días con poca actividad.
+# Esta tarea hace una consulta real a la base cada 3 días para mantenerlo activo.
+# Usa la clave anon (solo lee lo público) guardada en los secretos del repositorio.
+# GitHub desactiva las tareas programadas de un repositorio público tras 60 días sin actividad:
+# si eso pasa, reactívala en la pestaña Actions.
+name: Mantener Supabase activo
+
+on:
+  schedule:
+    - cron: '0 15 */3 * *' # cada 3 días a las 15:00 UTC (9:00 en Ciudad del Carmen)
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  consultar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Consultar una ruta en Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "Faltan los secretos SUPABASE_URL o SUPABASE_ANON_KEY (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          respuesta=$(curl -sS --fail-with-body --retry 3 --retry-delay 15 \
+            "${SUPABASE_URL%/}/rest/v1/rutas?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+          if ! echo "$respuesta" | grep -q '"id"'; then
+            echo "Supabase respondió algo inesperado: $respuesta"
+            exit 1
+          fi
+          echo "Supabase activo. Respuesta: $respuesta"
