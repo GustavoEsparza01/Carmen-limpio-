@@ -244,3 +244,4 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Fechas del panel en hora de Mérida,** sin importar la zona de la computadora (probado con la zona de Tokio).
 - **Eliminar pide confirmación en la misma tarjeta,** sin ventanas emergentes del navegador. Al eliminar o reemplazar, la imagen anterior se borra después de guardar, y una imagen subida para un aviso que no se pudo guardar también se borra.
 - **Corrección:** Supabase repite el evento de inicio de sesión al volver a la pestaña, y el panel recargaba todo, perdiendo un aviso a medio escribir. Ahora solo recarga si cambia la persona.
+- **Imágenes de SOS de la Isla en avisos: autorizadas.** El usuario indicó que tienen autorización para usarlas. Es la segunda excepción a la regla de identidad visual de `CLAUDE.md`, junto con el camión simulado. La app sigue diciendo que no es oficial y que los avisos los publica el equipo del proyecto.
