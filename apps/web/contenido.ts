@@ -33,7 +33,7 @@ function botonDescarga(clase: string): string {
 
 function estadoDescarga(): string {
   if (!APK) {
-    return '<p class="mono descarga-estado">Próximamente · APK para Android</p>';
+    return '<p class="mono descarga-estado">Próximamente · APK gratuita para Android</p>';
   }
   return `<p class="mono descarga-estado">Disponible · versión ${escapar(APK.version)}</p>`;
 }
