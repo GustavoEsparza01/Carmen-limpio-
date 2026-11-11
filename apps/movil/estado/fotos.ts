@@ -6,7 +6,7 @@ export type ResultadoFoto = { uri: string } | { error: 'sinPermiso' | 'cancelado
 
 const OPCIONES: Selector.ImagePickerOptions = { mediaTypes: ['images'], quality: 0.6 };
 
-// La carpeta privada de la app: la foto no sale del teléfono ni aparece en la galería.
+// Copia en la carpeta privada de la app hasta enviar el reporte; no aparece en la galería.
 function carpeta() {
   const destino = new Directory(Paths.document, 'reportes');
   if (!destino.exists) destino.create({ idempotent: true, intermediates: true });

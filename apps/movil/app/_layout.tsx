@@ -1,7 +1,7 @@
 import { COLORES } from '@carmen-limpio/compartido';
 import { Stack } from 'expo-router';
 import { ProveedorCatalogo } from '../estado/catalogo';
-import { ProveedorDemo } from '../estado/demo';
+import { ProveedorCuenta } from '../estado/cuenta';
 import { ProveedorGuardados } from '../estado/guardados';
 import { useReducirAnimacion } from '../estado/animacion';
 import { ENCABEZADO } from '../estilos/tema';
@@ -12,7 +12,7 @@ export default function Raiz() {
   return (
     <ProveedorCatalogo>
       <ProveedorGuardados>
-        <ProveedorDemo>
+        <ProveedorCuenta>
           <Stack
             screenOptions={{
               ...ENCABEZADO,
@@ -26,10 +26,11 @@ export default function Raiz() {
             <Stack.Screen name="rutas/index" options={{ title: 'Rutas' }} />
             <Stack.Screen name="mapa/[rutaId]" options={{ headerShown: false }} />
             <Stack.Screen name="reportes/privacidad" options={{ title: 'Aviso de privacidad' }} />
+            <Stack.Screen name="reportes/cuenta" options={{ title: 'Tu cuenta' }} />
             <Stack.Screen name="reportes/nuevo" options={{ title: 'Nuevo reporte' }} />
             <Stack.Screen name="reportes/[id]" options={{ title: 'Reporte' }} />
           </Stack>
-        </ProveedorDemo>
+        </ProveedorCuenta>
       </ProveedorGuardados>
     </ProveedorCatalogo>
   );

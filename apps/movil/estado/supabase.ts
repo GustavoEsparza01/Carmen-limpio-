@@ -1,6 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { AppState } from 'react-native';
 
 // Solo la clave anon (pública). La service_role jamás llega a la app.
 const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -13,6 +14,15 @@ export const supabase: SupabaseClient | null =
         auth: { storage: AsyncStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: false },
       })
     : null;
+
+// La sesión se renueva solo con la app en primer plano, como recomienda Supabase para React Native.
+if (supabase) {
+  const cliente = supabase;
+  AppState.addEventListener('change', (estado) => {
+    if (estado === 'active') cliente.auth.startAutoRefresh();
+    else cliente.auth.stopAutoRefresh();
+  });
+}
 
 const LIMITE_MS = 8_000;
 

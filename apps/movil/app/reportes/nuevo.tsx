@@ -1,5 +1,5 @@
 import {
-  AVISO_REPORTES_DEMOSTRACION,
+  AVISO_REPORTES,
   COLORES,
   etiquetaFecha,
   fechasConRecoleccion,
@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ErrorCampo, SelectorFoto, SelectorLugar, SelectorPunto } from '../../componentes/formularioReporte';
 import { Aviso, BarraEstado, Boton, Pastilla } from '../../componentes/ui';
-import { useDemo } from '../../estado/demo';
+import { textoError, useCuenta } from '../../estado/cuenta';
 import { CONTENIDO, RADIO, TEXTO } from '../../estilos/tema';
 
 function esTipo(valor: string | undefined): valor is TipoReporte {
@@ -24,11 +24,12 @@ function esTipo(valor: string | undefined): valor is TipoReporte {
 
 export default function NuevoReporte() {
   const { tipo } = useLocalSearchParams<{ tipo?: string }>();
-  const { crear } = useDemo();
+  const { crear } = useCuenta();
   const [ahora] = useState(() => new Date());
   const [borrador, setBorrador] = useState<Partial<BorradorReporte>>({});
   const [revisar, setRevisar] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  const [error, setError] = useState<string>();
 
   if (!esTipo(tipo)) return <Text style={[TEXTO.cuerpo, estilos.contenido]}>No reconocemos este tipo de reporte.</Text>;
 
@@ -42,15 +43,21 @@ export default function NuevoReporte() {
     setRevisar(true);
     if (Object.keys(errores).length > 0 || guardando) return;
     setGuardando(true);
-    const reporte = await crear(datos);
-    router.replace(`/reportes/${reporte.id}`);
+    setError(undefined);
+    try {
+      const id = await crear(datos);
+      router.replace(`/reportes/${id}`);
+    } catch (e) {
+      setError(textoError(e));
+      setGuardando(false);
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={estilos.contenido} keyboardShouldPersistTaps="handled">
       <BarraEstado estilo="dark" />
       <Stack.Screen options={{ title: NOMBRE_TIPO_REPORTE[tipo] }} />
-      <Aviso>{AVISO_REPORTES_DEMOSTRACION}</Aviso>
+      <Aviso>{AVISO_REPORTES}</Aviso>
 
       {tipo !== 'tiradero' && (
         <View style={estilos.campo}>
@@ -125,7 +132,8 @@ export default function NuevoReporte() {
         </>
       )}
 
-      <Boton icono="save" onPress={guardar} texto="Guardar reporte de demostración" />
+      <ErrorCampo texto={error} />
+      <Boton icono="send" onPress={guardar} texto={guardando ? 'Enviando…' : 'Enviar reporte'} />
     </ScrollView>
   );
 }

@@ -2,6 +2,8 @@ import { lugarPorId, type Confianza, type Horario, type Lugar, type TipoLugar } 
 import { DIAS_SEMANA, type Dia, type Turno } from './constantes.ts';
 import type { AvisoCiudad, TipoAviso } from './servicios.ts';
 import type { Unidad } from './unidades.ts';
+import type { BorradorReporte, EstadoReporte, Reporte, TipoReporte } from './reportes.ts';
+import type { Coordenadas } from './trazado.ts';
 
 // Traduce las filas de Supabase a los tipos que ya usan las pantallas. No depende de supabase-js:
 // cada app hace la consulta con su cliente y pasa aquí el resultado.
@@ -115,4 +117,71 @@ export function avisosDesdeFilas(filas: readonly FilaAviso[], ahora: Date): Avis
         .sort((x, y) => x.localeCompare(y, 'es')),
       imagen: a.imagen ? { ruta: a.imagen, descripcion: a.imagen_alt ?? '' } : null,
     }));
+}
+
+// Reportes ------------------------------------------------------------------
+
+// La vista reportes_detalle da longitud y latitud; la RLS limita a los propios (o todos, para administración).
+export const CONSULTA_REPORTES =
+  'id, tipo, lugar_id, fecha, lng, lat, descripcion, foto, estado, nota, creado, historial_reportes (estado, nota, fecha)';
+
+export interface FilaReporte {
+  id: string;
+  tipo: TipoReporte;
+  lugar_id: string | null;
+  fecha: string | null;
+  lng: number | null;
+  lat: number | null;
+  descripcion: string | null;
+  foto: string | null;
+  estado: EstadoReporte;
+  nota: string;
+  creado: string;
+  historial_reportes: { estado: EstadoReporte; nota: string; fecha: string }[] | null;
+}
+
+// Más recientes primero; el historial, en orden de ocurrencia.
+export function reportesDesdeFilas(filas: readonly FilaReporte[]): Reporte[] {
+  return [...filas]
+    .sort((a, b) => Date.parse(b.creado) - Date.parse(a.creado))
+    .map((f) => ({
+      id: f.id,
+      tipo: f.tipo,
+      ...(f.lugar_id ? { lugarId: f.lugar_id } : {}),
+      ...(f.fecha ? { fecha: f.fecha } : {}),
+      ...(f.lng !== null && f.lat !== null ? { punto: [f.lng, f.lat] as Coordenadas } : {}),
+      ...(f.descripcion ? { descripcion: f.descripcion } : {}),
+      ...(f.foto ? { foto: f.foto } : {}),
+      creado: f.creado,
+      estado: f.estado,
+      nota: f.nota,
+      historial: [...(f.historial_reportes ?? [])]
+        .sort((a, b) => Date.parse(a.fecha) - Date.parse(b.fecha))
+        .map(({ estado, nota, fecha }) => ({ estado, nota, fecha })),
+    }));
+}
+
+export interface FilaNuevoReporte {
+  tipo: TipoReporte;
+  lugar_id: string | null;
+  fecha: string | null;
+  // EWKT: PostGIS lo convierte a geometry al insertar.
+  ubicacion: string | null;
+  descripcion: string | null;
+  foto: string | null;
+}
+
+// Solo los campos que pide cada tipo. Estado, nota, autor e incidencia los pone la base.
+export function filaNuevoReporte(borrador: BorradorReporte, foto: string | null): FilaNuevoReporte {
+  const descripcion = borrador.descripcion?.trim();
+  const usaDescripcion = borrador.tipo !== 'noPaso';
+  return {
+    tipo: borrador.tipo,
+    lugar_id: borrador.tipo !== 'tiradero' ? (borrador.lugarId ?? null) : null,
+    fecha: borrador.tipo === 'noPaso' ? (borrador.fecha ?? null) : null,
+    ubicacion:
+      borrador.tipo === 'tiradero' && borrador.punto ? `SRID=4326;POINT(${borrador.punto[0]} ${borrador.punto[1]})` : null,
+    descripcion: usaDescripcion && descripcion ? descripcion : null,
+    foto: usaDescripcion ? foto : null,
+  };
 }

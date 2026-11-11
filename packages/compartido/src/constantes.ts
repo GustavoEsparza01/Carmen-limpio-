@@ -29,7 +29,9 @@ export const AVISO_NO_OFICIAL =
 
 export const AVISO_NO_OFICIAL_CORTO = 'App independiente, no oficial.';
 
-export const AVISO_REPORTES_DEMOSTRACION = 'Es una demostración: los reportes no se enviarán a nadie.';
+// Los reportes son reales, pero no llegan a ninguna autoridad: los revisa el equipo del proyecto.
+export const AVISO_REPORTES =
+  'Tus reportes los revisa el equipo de Carmen Limpio como demostración. No llegan al municipio ni a la empresa recolectora.';
 
 export const AVISO_SIN_MAPA = 'Sin conexión no se puede cargar el mapa base. Los horarios siguen disponibles.';
 
@@ -52,21 +54,44 @@ export const AVISOS_SIN_CONEXION = {
   texto: 'Revisa tu conexión e inténtalo de nuevo. Los horarios siguen disponibles.',
 };
 
-export const TEXTO_PRIVACIDAD_FOTOS = 'La foto se queda en este teléfono y no se publica ni se envía.';
+export const TEXTO_PRIVACIDAD_FOTOS = 'La foto solo la ven tú y el equipo del proyecto. No se publica.';
 
-export const AVISO_PRIVACIDAD_BORRADOR = 'Borrador pendiente de revisión legal. Aplica solo a esta demostración.';
+export const AVISO_PRIVACIDAD_BORRADOR = 'Borrador pendiente de revisión legal. Lo marcado como pendiente aún no se define.';
+
+// Cambia la versión cuando cambie el texto: la app pedirá aceptar la nueva.
+export const VERSION_AVISO_PRIVACIDAD = '2026-11-10-borrador';
 
 // Borrador con la estructura de la LFPDPPP. Lo marcado como pendiente no se ha definido.
-export const BORRADOR_PRIVACIDAD: readonly { titulo: string; texto: string }[] = [
-  { titulo: 'Responsable', texto: 'Pendiente de definir. Carmen Limpio es un proyecto independiente, no oficial.' },
+export const AVISO_PRIVACIDAD: readonly { titulo: string; texto: string }[] = [
+  {
+    titulo: 'Responsable',
+    texto: 'Pendiente de definir, con su domicilio y contacto. Carmen Limpio es un proyecto independiente, no oficial.',
+  },
   {
     titulo: 'Datos que se usan',
-    texto: 'Lugar, fecha, punto en el mapa, descripción y foto del reporte. No pedimos tu nombre, correo ni teléfono.',
+    texto:
+      'Tu correo y una contraseña, para tu cuenta. En cada reporte: el lugar, la fecha, el punto que marques en el mapa, la descripción y la foto, según el tipo. No pedimos tu nombre ni tu teléfono, ni usamos el GPS del teléfono.',
   },
-  { titulo: 'Finalidad', texto: 'Mostrar cómo funcionarían los reportes. No se atiende ningún reporte.' },
-  { titulo: 'Dónde se guardan', texto: 'Solo en este teléfono. No se envían a nadie ni se transfieren a terceros.' },
-  { titulo: 'Tus derechos', texto: 'Puedes borrar tus reportes y sus fotos cuando quieras desde la sección Reportes.' },
-  { titulo: 'Cambios', texto: 'Este texto cambiará antes de usar datos reales, y se pedirá aceptar la nueva versión.' },
+  {
+    titulo: 'Finalidad',
+    texto:
+      'Crear tu cuenta, recibir tus reportes y mostrarte su seguimiento. Los revisa el equipo del proyecto como demostración: no se envían al municipio ni a la empresa recolectora.',
+  },
+  {
+    titulo: 'Quién los ve',
+    texto: 'Tú y el equipo del proyecto. Las fotos no son públicas. Las estadísticas no muestran quién reportó.',
+  },
+  {
+    titulo: 'Dónde se guardan',
+    texto:
+      'En Supabase, un servicio de base de datos en la nube que los guarda por cuenta del proyecto. No se venden ni se comparten con terceros.',
+  },
+  {
+    titulo: 'Tus derechos',
+    texto:
+      'Puedes ver tus reportes en la app y eliminar tu cuenta, con tus reportes y fotos, desde la sección Reportes. Para otras solicitudes: contacto pendiente de definir.',
+  },
+  { titulo: 'Cambios', texto: 'Si este aviso cambia, la app te pedirá aceptar la nueva versión antes de reportar.' },
 ];
 
 export const AVISO_ILUSTRATIVO = 'Datos ilustrativos, pendientes de validación oficial.';

@@ -1,26 +1,22 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { AVISO_PRIVACIDAD, AVISO_REPORTES } from './constantes.ts';
+import { filaNuevoReporte, reportesDesdeFilas, type FilaReporte } from './remoto.ts';
 import {
-  avanzarReporte,
-  crearReporte,
   etiquetaFecha,
   fechaEnMerida,
   fechaHoraLegible,
   fechasConRecoleccion,
   fechasRecientes,
-  leerReportes,
+  mensajeError,
   pasosDeLinea,
   siguientesEstados,
+  validarCambioEstado,
+  validarCuenta,
   validarReporte,
   type BorradorReporte,
 } from './reportes.ts';
-import {
-  AVISOS_EJEMPLO,
-  crearServicioAvisos,
-  crearServicioReportes,
-  crearServicioSesion,
-  type Almacen,
-} from './servicios.ts';
+import { AVISOS_EJEMPLO, crearServicioAvisos } from './servicios.ts';
 
 const AHORA = new Date('2026-11-10T16:00:00.000Z');
 // Bivalvo: Ruta 2 los martes y Ruta 3 jueves y sábado, de 15:00 a 23:00. AHORA es martes 10:00 en Mérida.
@@ -36,16 +32,6 @@ const TIRADERO: BorradorReporte = {
   descripcion: 'Escombro junto al terreno baldío',
   fotoUri: 'file:///foto.jpg',
 };
-
-function almacenEnMemoria(): Almacen & { datos: Map<string, string> } {
-  const datos = new Map<string, string>();
-  return {
-    datos,
-    leer: async (clave) => datos.get(clave) ?? null,
-    escribir: async (clave, valor) => void datos.set(clave, valor),
-    borrar: async (clave) => void datos.delete(clave),
-  };
-}
 
 test('la fecha sale de la hora de Mérida, no de UTC', () => {
   assert.equal(fechaEnMerida(new Date('2026-11-11T02:00:00.000Z')), '2026-11-10');
@@ -111,29 +97,19 @@ test('el tiradero exige punto, descripción y foto', () => {
   assert.equal(errores.lugarId, undefined);
 });
 
-test('un reporte nuevo queda recibido, con su primer evento', () => {
-  const reporte = crearReporte({ ...ACUMULACION, descripcion: '  Con espacios de más  ' }, 'r1', AHORA);
-  assert.equal(reporte.estado, 'recibido');
-  assert.equal(reporte.descripcion, 'Con espacios de más');
-  assert.equal(reporte.historial.length, 1);
-  assert.equal(reporte.creado, AHORA.toISOString());
-});
-
-test('avanza por recibido, en revisión y atendido o rechazado', () => {
-  const recibido = crearReporte(CASA, 'r1', AHORA);
-  const revision = avanzarReporte(recibido, 'enRevision', AHORA);
+test('el estado avanza por recibido, en revisión y atendido o rechazado', () => {
+  assert.deepEqual(siguientesEstados('recibido'), ['enRevision']);
   assert.deepEqual(siguientesEstados('enRevision'), ['atendido', 'rechazado']);
-  const atendido = avanzarReporte(revision, 'atendido', AHORA);
-  assert.deepEqual(atendido.historial.map((e) => e.estado), ['recibido', 'enRevision', 'atendido']);
   assert.deepEqual(siguientesEstados('atendido'), []);
-  assert.equal(avanzarReporte(revision, 'rechazado', AHORA).estado, 'rechazado');
+  assert.deepEqual(siguientesEstados('rechazado'), []);
 });
 
-test('no permite saltarse pasos ni reabrir un reporte', () => {
-  const recibido = crearReporte(CASA, 'r1', AHORA);
-  assert.throws(() => avanzarReporte(recibido, 'atendido', AHORA));
-  const atendido = avanzarReporte(avanzarReporte(recibido, 'enRevision', AHORA), 'atendido', AHORA);
-  assert.throws(() => avanzarReporte(atendido, 'enRevision', AHORA));
+test('cada cambio de estado lleva una nota y no se salta pasos', () => {
+  assert.equal(validarCambioEstado('recibido', 'enRevision', 'Lo estamos revisando.'), null);
+  assert.ok(validarCambioEstado('recibido', 'atendido', 'Saltando pasos'));
+  assert.ok(validarCambioEstado('atendido', 'enRevision', 'Reabrir'));
+  assert.ok(validarCambioEstado('recibido', 'enRevision', '  '));
+  assert.ok(validarCambioEstado('recibido', 'enRevision', 'x'.repeat(501)));
 });
 
 test('la línea de tiempo muestra la rama que tomó el reporte', () => {
@@ -141,59 +117,70 @@ test('la línea de tiempo muestra la rama que tomó el reporte', () => {
   assert.deepEqual(pasosDeLinea({ estado: 'rechazado' }), ['recibido', 'enRevision', 'rechazado']);
 });
 
-test('las notas son de ejemplo y no sugieren que llegue a una autoridad', () => {
-  const atendido = avanzarReporte(avanzarReporte(crearReporte(CASA, 'r1', AHORA), 'enRevision', AHORA), 'atendido', AHORA);
-  for (const { nota } of atendido.historial) assert.doesNotMatch(nota, /municipio|ayuntamiento|SOS/i);
-  assert.match(atendido.historial.at(-1)!.nota, /ejemplo/i);
-  assert.match(atendido.historial.at(-1)!.nota, /Nadie recibió/);
+test('la cuenta pide un correo válido y una contraseña de 8 caracteres', () => {
+  assert.deepEqual(validarCuenta('vecina@correo.mx', '12345678'), {});
+  assert.ok(validarCuenta('vecina@correo', '12345678').correo);
+  assert.ok(validarCuenta(' ', '12345678').correo);
+  assert.ok(validarCuenta('vecina@correo.mx', '1234567').clave);
 });
 
-test('datos dañados no rompen la lista', () => {
-  assert.deepEqual(leerReportes(null), []);
-  assert.deepEqual(leerReportes('{no es json'), []);
-  assert.deepEqual(leerReportes('[{"id":1}]'), []);
+test('los errores de Supabase se explican sin tecnicismos', () => {
+  assert.match(mensajeError({ message: 'Llegaste al límite de 10 reportes en 24 horas' }), /límite de 10/);
+  assert.match(mensajeError({ code: '23505', message: 'duplicate key value' }), /Ya habías reportado/);
+  assert.match(mensajeError({ message: 'Ese día no hay recolección en este lugar' }), /cartel/);
+  assert.match(mensajeError({ message: 'new row violates row-level security policy' }), /aviso de privacidad/);
+  assert.match(mensajeError({ message: 'Invalid login credentials' }), /no coinciden/);
+  assert.match(mensajeError({ message: 'User already registered' }), /Ya existe una cuenta/);
+  assert.match(mensajeError({ message: 'Network request failed' }), /conexión/);
+  assert.match(mensajeError(null), /Vuelve a intentar/);
 });
 
-test('los reportes se guardan, se leen y persisten en el almacén', async () => {
-  const almacen = almacenEnMemoria();
-  const servicio = crearServicioReportes(almacen, () => AHORA);
-  const uno = await servicio.crear(CASA);
-  const dos = await servicio.crear(TIRADERO);
-  assert.notEqual(uno.id, dos.id);
-  const otraSesion = crearServicioReportes(almacen);
-  assert.deepEqual((await otraSesion.listar()).map((r) => r.id), [dos.id, uno.id]);
-  assert.equal((await otraSesion.obtener(uno.id))?.tipo, 'noPaso');
-  assert.equal(await otraSesion.obtener('nada'), null);
+test('los textos no sugieren que el reporte llegue a una autoridad', () => {
+  assert.match(AVISO_REPORTES, /No llegan al municipio/);
+  const finalidad = AVISO_PRIVACIDAD.find((s) => s.titulo === 'Finalidad')!.texto;
+  assert.match(finalidad, /no se envían al municipio/);
+  assert.doesNotMatch(AVISO_REPORTES + finalidad, /SOS/);
 });
 
-test('cambiar el estado actualiza solo ese reporte', async () => {
-  const servicio = crearServicioReportes(almacenEnMemoria(), () => AHORA);
-  const uno = await servicio.crear(CASA);
-  const dos = await servicio.crear(ACUMULACION);
-  await servicio.cambiarEstado(uno.id, 'enRevision');
-  assert.equal((await servicio.obtener(uno.id))?.estado, 'enRevision');
-  assert.equal((await servicio.obtener(dos.id))?.estado, 'recibido');
-  await assert.rejects(servicio.cambiarEstado('nada', 'enRevision'));
+test('las filas de Supabase se vuelven reportes con su historial en orden', () => {
+  const fila: FilaReporte = {
+    id: 'r1',
+    tipo: 'tiradero',
+    lugar_id: null,
+    fecha: null,
+    lng: -91.8,
+    lat: 18.65,
+    descripcion: 'Escombro junto al terreno baldío',
+    foto: 'u1/foto.jpg',
+    estado: 'enRevision',
+    nota: 'Lo estamos revisando.',
+    creado: '2026-11-10T16:00:00Z',
+    historial_reportes: [
+      { estado: 'enRevision', nota: 'Lo estamos revisando.', fecha: '2026-11-10T18:00:00Z' },
+      { estado: 'recibido', nota: 'Recibido.', fecha: '2026-11-10T16:00:00Z' },
+    ],
+  };
+  const otra: FilaReporte = { ...fila, id: 'r2', creado: '2026-11-11T16:00:00Z', lng: null, lat: null, foto: null };
+  const [primero, segundo] = reportesDesdeFilas([fila, otra]);
+  assert.equal(primero!.id, 'r2', 'los más recientes primero');
+  assert.equal(primero!.punto, undefined);
+  assert.deepEqual(segundo!.punto, [-91.8, 18.65]);
+  assert.equal(segundo!.foto, 'u1/foto.jpg');
+  assert.deepEqual(segundo!.historial.map((e) => e.estado), ['recibido', 'enRevision']);
+  assert.equal(segundo!.lugarId, undefined);
 });
 
-test('borrar todo devuelve los reportes para poder quitar sus fotos', async () => {
-  const servicio = crearServicioReportes(almacenEnMemoria(), () => AHORA);
-  await servicio.crear(TIRADERO);
-  const borrados = await servicio.borrarTodo();
-  assert.equal(borrados[0]?.fotoUri, 'file:///foto.jpg');
-  assert.deepEqual(await servicio.listar(), []);
-});
-
-test('la sesión es de demostración, sin contraseña ni datos personales', async () => {
-  const almacen = almacenEnMemoria();
-  const sesion = crearServicioSesion(almacen, () => AHORA);
-  assert.equal(await sesion.actual(), null);
-  const entrada = await sesion.entrar();
-  assert.equal(entrada.demostracion, true);
-  assert.deepEqual(Object.keys(entrada).sort(), ['demostracion', 'nombre', 'privacidadAceptada']);
-  assert.deepEqual(await sesion.actual(), entrada);
-  await sesion.salir();
-  assert.equal(await sesion.actual(), null);
+test('la fila nueva lleva solo los campos de cada tipo', () => {
+  assert.deepEqual(filaNuevoReporte({ ...CASA, descripcion: 'sobra' }, 'u1/x.jpg'), {
+    tipo: 'noPaso', lugar_id: 'bivalvo', fecha: '2026-11-07', ubicacion: null, descripcion: null, foto: null,
+  });
+  assert.deepEqual(filaNuevoReporte({ ...ACUMULACION, descripcion: '  Bolsas en la esquina  ' }, null), {
+    tipo: 'acumulacion', lugar_id: 'bivalvo', fecha: null, ubicacion: null, descripcion: 'Bolsas en la esquina', foto: null,
+  });
+  assert.deepEqual(filaNuevoReporte({ ...TIRADERO, lugarId: 'bivalvo' }, 'u1/foto.jpg'), {
+    tipo: 'tiradero', lugar_id: null, fecha: null, ubicacion: 'SRID=4326;POINT(-91.8 18.65)',
+    descripcion: 'Escombro junto al terreno baldío', foto: 'u1/foto.jpg',
+  });
 });
 
 test('todos los avisos están marcados como ejemplo', async () => {
