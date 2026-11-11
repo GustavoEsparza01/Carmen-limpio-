@@ -46,3 +46,8 @@ export function fechaLegible(iso: string): string {
     hourCycle: 'h23',
   }).format(new Date(iso));
 }
+
+// 'AAAA-MM-DD' → 'DD/MM/AAAA'. La fecha ya está en hora de Mérida: no se convierte.
+export function fechaCorta(fecha: string): string {
+  return fecha.split('-').reverse().join('/');
+}

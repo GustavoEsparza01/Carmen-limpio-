@@ -16,6 +16,8 @@ interface DatosPanel {
   correo: string;
   unidades: UnidadRemota[];
   salir: () => void;
+  // Vuelve a leer catálogo y unidades después de editarlos, sin perder la vista actual.
+  recargar: () => Promise<void>;
 }
 
 const Contexto = createContext<DatosPanel | null>(null);
@@ -82,6 +84,12 @@ export function Acceso({ children }: { children: ReactNode }) {
     return () => data.subscription.unsubscribe();
   }, []);
 
+  const recargar = async () => {
+    if (!supabase) return;
+    const { data } = await supabase.auth.getSession();
+    if (data.session) setEstado(await cargar(data.session));
+  };
+
   const salir = () => {
     supabase?.auth.signOut();
   };
@@ -125,7 +133,7 @@ export function Acceso({ children }: { children: ReactNode }) {
       );
     case 'listo':
       return (
-        <Contexto.Provider value={{ correo: estado.correo, unidades: estado.unidades, salir }}>
+        <Contexto.Provider value={{ correo: estado.correo, unidades: estado.unidades, salir, recargar }}>
           {children}
         </Contexto.Provider>
       );

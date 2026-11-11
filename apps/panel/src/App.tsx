@@ -61,7 +61,7 @@ function Panel() {
         ))}
       </nav>
       <p className="vista-previa">
-        Datos de Supabase. Avisos y reportes ya se gestionan aquí; rutas, horarios y unidades siguen en solo lectura.
+        Datos de Supabase. Los cambios a horarios y avisos llegan a la app la siguiente vez que se abre con conexión.
       </p>
       <main className="contenido">
         <Vista />

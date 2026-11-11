@@ -4,7 +4,9 @@ import { agruparRutas, LUGARES, type Lugar } from './catalogo.ts';
 import {
   avisosDesdeFilas,
   CatalogoInvalido,
+  diaAnterior,
   lugaresDesdeFilas,
+  planAsignacion,
   unidadesDesdeFilas,
   type FilaLugar,
   type FilaUnidad,
@@ -104,4 +106,28 @@ test('el aviso trae sus lugares por nombre y su imagen con descripción', () => 
   );
   assert.deepEqual(aviso?.lugares, ['Bivalvo', 'San Manuel']);
   assert.deepEqual(aviso?.imagen, { ruta: 'cartel.jpg', descripcion: 'Cartel con el aviso' });
+});
+
+test('un lugar sin horario se omite sin descartar el catálogo', () => {
+  const [primera, segunda] = aFilas(LUGARES);
+  const lugares = lugaresDesdeFilas([{ ...primera!, horarios: [] }, segunda!]);
+  assert.deepEqual(lugares.map((l) => l.id), [segunda!.id]);
+});
+
+test('el día anterior cruza meses y años', () => {
+  assert.equal(diaAnterior('2026-11-10'), '2026-11-09');
+  assert.equal(diaAnterior('2026-03-01'), '2026-02-28');
+  assert.equal(diaAnterior('2027-01-01'), '2026-12-31');
+});
+
+test('cambiar la unidad de una ruta conserva el historial', () => {
+  const hoy = '2026-11-10';
+  assert.deepEqual(planAsignacion({ id: 4, unidad: 3, desde: '2026-11-01' }, 3, hoy), { tipo: 'igual' });
+  assert.deepEqual(planAsignacion({ id: 4, unidad: 3, desde: '2026-11-01' }, 5, hoy), {
+    tipo: 'relevar',
+    cerrarId: 4,
+    hasta: '2026-11-09',
+  });
+  assert.deepEqual(planAsignacion({ id: 4, unidad: 3, desde: hoy }, 5, hoy), { tipo: 'corregir', id: 4 });
+  assert.deepEqual(planAsignacion(null, 5, hoy), { tipo: 'relevar', cerrarId: null, hasta: null });
 });

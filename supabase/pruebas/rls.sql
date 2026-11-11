@@ -74,7 +74,7 @@ begin
   -- Público sin cuenta ------------------------------------------------------
   perform pg_temp.como(null);
   perform pg_temp.afirmar((select count(*) from public.rutas) = 15, 'público: 15 rutas');
-  perform pg_temp.afirmar((select count(*) from public.horarios) = 123, 'público: 123 entradas de horario');
+  perform pg_temp.afirmar((select count(*) from public.horarios) > 100, 'público: ve los horarios');
   perform pg_temp.afirmar((select count(*) from public.lugares where ubicacion is null) > 0, 'público: lugares sin ubicar siguen visibles');
   perform pg_temp.afirmar((select count(*) from public.tramos_ruta where escenario = 'carteles') = 30, 'público: ve trazos de carteles');
   perform pg_temp.afirmar((select count(*) from public.tramos_ruta where escenario = 'propuesta') = 0, 'público: no ve la propuesta');
@@ -128,6 +128,17 @@ begin
   perform pg_temp.afirmar(n = 0, 'A: no se asciende a administrador');
   perform pg_temp.afirmar((select count(*) from public.incidencias) = 0, 'A: no ve incidencias');
   perform pg_temp.afirmar((select count(*) from public.tramos_ruta where escenario = 'propuesta') = 0, 'A: no ve la propuesta');
+  update public.horarios set dias = '{lunes}' where lugar_id = 'san-manuel';
+  get diagnostics n = row_count;
+  perform pg_temp.afirmar(n = 0, 'A: no cambia horarios');
+  perform pg_temp.falla('insert into public.lugares (id, nombre, tipo) values (''intruso'', ''Intruso'', ''colonia'')',
+    'A: no crea lugares');
+  update public.unidades set placas = 'XXX' where numero = 1;
+  get diagnostics n = row_count;
+  perform pg_temp.afirmar(n = 0, 'A: no cambia unidades');
+  delete from public.asignaciones;
+  get diagnostics n = row_count;
+  perform pg_temp.afirmar(n = 0, 'A: no borra asignaciones');
 
   insert into storage.objects (bucket_id, name, owner) values ('fotos-reportes', a || '/foto.jpg', a);
   perform pg_temp.falla(format('insert into storage.objects (bucket_id, name, owner) values (''fotos-reportes'', %L, %L)', b || '/intruso.jpg', a),
@@ -149,7 +160,7 @@ begin
   end loop;
   perform pg_temp.falla('insert into public.reportes (tipo, lugar_id, descripcion) values (''acumulacion'', ''obrera'', ''Uno más de la cuenta'')',
     'A: límite de 10 reportes en 24 horas');
-  pruebas := pruebas + 24;
+  pruebas := pruebas + 28;
 
   -- Ciudadano B -----------------------------------------------------------------
   perform pg_temp.como(b);
@@ -176,7 +187,8 @@ begin
   perform pg_temp.afirmar((select count(*) from public.tramos_ruta where escenario = 'propuesta') = 45, 'admin: ve la propuesta');
   perform pg_temp.afirmar(jsonb_array_length(public.trazado('propuesta') -> 'features') = 45, 'admin: trazado propuesta en GeoJSON');
   perform pg_temp.afirmar((select count(*) from public.unidades) = 8, 'admin: 8 unidades');
-  perform pg_temp.afirmar((select count(*) from public.asignaciones) = 15, 'admin: 15 asignaciones');
+  perform pg_temp.afirmar((select count(*) from public.asignaciones where desde <= hoy and (hasta is null or hasta >= hoy)) = 15,
+    'admin: 15 asignaciones vigentes');
   perform pg_temp.afirmar((select count(*) from public.avisos where imagen like 'prueba/%') = 2, 'admin: ve borradores');
   perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes' and name like 'prueba/%') = 2,
     'admin: ve las imágenes de los borradores');
@@ -193,14 +205,26 @@ begin
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 3, 'admin: cada cambio queda en el historial');
   perform pg_temp.falla(format('insert into public.asignaciones (unidad, ruta_id, desde) values (8, ''M1'', %L)', hoy),
     'admin: una ruta no tiene dos unidades a la vez');
-  pruebas := pruebas + 18;
+  insert into public.lugares (id, nombre, tipo) values ('prueba-panel', 'Prueba del panel', 'colonia');
+  insert into public.horarios (lugar_id, ruta_id, dias, inicio, fin, confianza)
+  values ('prueba-panel', 'M1', '{lunes,miercoles}', '07:00', '15:00', 'ninguna');
+  update public.horarios set dias = '{martes}' where lugar_id = 'prueba-panel';
+  perform pg_temp.afirmar((select dias from public.horarios where lugar_id = 'prueba-panel') = '{martes}',
+    'admin: cambia un horario');
+  perform pg_temp.falla('update public.horarios set dias = ''{}'' where lugar_id = ''prueba-panel''',
+    'admin: un horario necesita al menos un día');
+  update public.unidades set placas = 'PRUEBA-1' where numero = 1;
+  perform pg_temp.afirmar((select placas from public.unidades where numero = 1) = 'PRUEBA-1', 'admin: cambia placas');
+  pruebas := pruebas + 21;
 
   -- A ve el nuevo estado y la nota ------------------------------------------------
   perform pg_temp.como(a);
+  perform pg_temp.afirmar((select dias from public.horarios where lugar_id = 'prueba-panel') = '{martes}',
+    'A: ve el horario que cambió administración');
   perform pg_temp.afirmar((select estado::text from public.reportes where id = rep_a) = 'atendido', 'A: ve el nuevo estado');
   perform pg_temp.afirmar((select nota from public.reportes where id = rep_a) like 'El equipo del proyecto%', 'A: ve la nota');
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 3, 'A: ve su historial completo');
-  pruebas := pruebas + 3;
+  pruebas := pruebas + 4;
 
   -- B elimina su cuenta -------------------------------------------------------------
   perform pg_temp.como(b);

@@ -580,3 +580,74 @@ select {
   margin: 0;
   padding-left: 20px;
 }
+
+/* Edición de rutas y unidades */
+
+.solo-lector {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.dias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dia {
+  position: relative;
+  display: inline-flex;
+}
+
+.dia input {
+  position: absolute;
+  opacity: 0;
+}
+
+.dia span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--superficie);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dia input:checked + span {
+  border-color: var(--primario);
+  background: var(--primario);
+  color: var(--superficie);
+}
+
+.dia input:focus-visible + span {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+.editor-horario,
+.tarjeta-interna {
+  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--fondo);
+}
+
+.campo-tabla {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font: inherit;
+}

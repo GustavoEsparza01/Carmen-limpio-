@@ -16,7 +16,7 @@ import {
 } from '@carmen-limpio/compartido';
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
-import { fechaLegible } from '../fechas';
+import { fechaCorta, fechaLegible } from '../fechas';
 import { supabase } from '../supabase';
 
 // Reportes de vecinos. Los atiende el equipo del proyecto como demostración: no llegan a ninguna autoridad.
@@ -39,7 +39,6 @@ const CLASE_ESTADO: Record<EstadoReporte, string> = {
 };
 
 const nombreLugar = (id?: string) => (id ? (lugarPorId(id)?.nombre ?? id) : 'Punto en el mapa');
-const fechaCorta = (fecha: string) => fecha.split('-').reverse().join('/');
 // Sin correo: basta un identificador corto para ver si una misma persona reporta varias veces.
 const persona = (autor: string) => `Persona ${autor.slice(0, 8)}`;
 

@@ -54,15 +54,16 @@ const CONFIANZAS: readonly Confianza[] = ['alta', 'media', 'baja', 'ninguna'];
 const ordenDia = (d: Dia) => DIAS_SEMANA.indexOf(d);
 
 // Rechaza un catálogo dudoso en lugar de mostrarlo: la app sigue con el que ya tiene.
+// Un lugar sin horario no es un error: el panel puede quitarlo de su última ruta, y sin días no hay nada que consultar.
 export function lugaresDesdeFilas(filas: readonly FilaLugar[]): Lugar[] {
-  if (!filas?.length) throw new CatalogoInvalido('Catálogo vacío');
+  const conHorario = (filas ?? []).filter((fila) => fila.horarios?.length);
+  if (!conHorario.length) throw new CatalogoInvalido('Catálogo vacío');
 
-  return filas
+  return conHorario
     .map((fila): Lugar => {
       if (!fila.id || !fila.nombre || !TIPOS_LUGAR.includes(fila.tipo)) {
         throw new CatalogoInvalido(`Lugar inválido: ${fila.id}`);
       }
-      if (!fila.horarios?.length) throw new CatalogoInvalido(`Lugar sin horario: ${fila.nombre}`);
       const horarios = fila.horarios
         .map((h): Horario => {
           if (!h.rutas || !h.dias?.length || !h.dias.every((d) => DIAS_SEMANA.includes(d)) || !CONFIANZAS.includes(h.confianza)) {
@@ -184,4 +185,30 @@ export function filaNuevoReporte(borrador: BorradorReporte, foto: string | null)
     descripcion: usaDescripcion && descripcion ? descripcion : null,
     foto: usaDescripcion ? foto : null,
   };
+}
+
+// Asignaciones -----------------------------------------------------------------
+
+// Fecha AAAA-MM-DD del día anterior, sin depender de la zona horaria.
+export function diaAnterior(fecha: string): string {
+  const instante = new Date(`${fecha}T12:00:00Z`);
+  instante.setUTCDate(instante.getUTCDate() - 1);
+  return instante.toISOString().slice(0, 10);
+}
+
+export type PlanAsignacion =
+  | { tipo: 'igual' }
+  // La asignación vigente empezó hoy: se corrige en su lugar, no hay historial que guardar.
+  | { tipo: 'corregir'; id: number }
+  // Se cierra la vigente ayer y la nueva empieza hoy, para conservar quién cubrió la ruta antes.
+  | { tipo: 'relevar'; cerrarId: number | null; hasta: string | null };
+
+export function planAsignacion(
+  vigente: { id: number; unidad: number; desde: string } | null,
+  nuevaUnidad: number,
+  hoy: string,
+): PlanAsignacion {
+  if (vigente?.unidad === nuevaUnidad) return { tipo: 'igual' };
+  if (vigente && vigente.desde >= hoy) return { tipo: 'corregir', id: vigente.id };
+  return { tipo: 'relevar', cerrarId: vigente?.id ?? null, hasta: vigente ? diaAnterior(hoy) : null };
 }
