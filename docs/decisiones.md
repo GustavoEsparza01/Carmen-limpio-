@@ -261,3 +261,14 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Probado en el emulador:** registro, confirmación, inicio de sesión, aceptación del aviso, acumulación con foto, cambio de estado desde el panel y que el vecino ve el nuevo estado y la nota.
 - **No probado con datos reales:** dos "no pasó" de distintas personas formando una incidencia, otro usuario sin acceso a la foto, y eliminar la cuenta. Las tres reglas sí están cubiertas por las pruebas de RLS.
 - **Pendiente:** "Olvidé mi contraseña" (requiere editar la plantilla de correo de Supabase).
+
+## 2026-11-10 · Fase 3: edición en el panel
+
+- **Horarios:** el panel edita los días y "por confirmar" de cada lugar en una ruta, quita un lugar de una ruta y agrega lugares existentes o nuevos. La ventana (inicio y fin) es la del turno y no se edita por lugar: la app muestra ventanas por turno.
+- **Lugares nuevos:** se crean sin ubicación (`confianza = 'ninguna'`), con el id de `idLugar(nombre)`. Si el horario no se guarda, el lugar se borra. El horario de un lugar agregado a otra ruta también nace con `confianza = 'ninguna'`, porque no está en el trazado de esa ruta.
+- **Un lugar sin horario se omite del catálogo de la app.** Antes invalidaba el catálogo descargado completo, y la app seguía con el anterior sin avisar. El panel advierte cuando se quita la última ruta de un lugar.
+- **Unidades:** se editan placas, estado y nota. Siguen siendo ilustrativas.
+- **Asignaciones:** cambiar la unidad de una ruta cierra la asignación vigente ayer y crea una que empieza hoy (`planAsignacion`). Si la vigente empezó hoy, se corrige en su lugar. El panel no deja que una unidad cubra dos rutas del mismo turno, y la base no deja que una ruta tenga dos unidades a la vez.
+- **La app aplica el catálogo nuevo en el siguiente arranque,** no al instante, para que una pantalla abierta no cambie de golpe.
+- **Pruebas de RLS:** ya no cuentan horarios ni asignaciones fijos (cambian al editar). Se agregaron comprobaciones de que un ciudadano no escribe en horarios, lugares, unidades ni asignaciones, y de que administración sí. Son 82 en total.
+- **Probado en el emulador:** el usuario agregó el viernes a Bivalvo en V2 desde el panel, y la tarjeta de Inicio lo mostró tras reiniciar la app.
