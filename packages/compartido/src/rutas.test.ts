@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { paradasDelDia, RUTAS, rutaPorId } from './catalogo.ts';
+import { diasDeRuta, paradasDelDia, RUTAS, rutaPorId, type Ruta } from './catalogo.ts';
 import { notaExcepcion } from './horario.ts';
 
 function ruta(id: string) {
@@ -67,4 +67,15 @@ test('el filtro por día respeta las excepciones de cada lugar', () => {
   assert.ok(nombres('sabado').includes('Renovación VII'));
   assert.ok(!paradasDelDia(ruta('V2'), 'jueves').some((p) => p.lugar.nombre === 'Bivalvo'));
   assert.ok(paradasDelDia(ruta('V3'), 'jueves').some((p) => p.lugar.nombre === 'Bivalvo'));
+});
+
+test('los filtros de día salen de los días reales de la ruta', () => {
+  for (const ruta of RUTAS) assert.ok(diasDeRuta(ruta).length > 0, ruta.id);
+  const conViernes: Ruta = {
+    ...rutaPorId('V2')!,
+    paradas: rutaPorId('V2')!.paradas.map((p, i) =>
+      i === 0 ? { ...p, horario: { ...p.horario, dias: ['martes', 'viernes'] } } : p,
+    ),
+  };
+  assert.ok(diasDeRuta(conViernes).includes('viernes'));
 });

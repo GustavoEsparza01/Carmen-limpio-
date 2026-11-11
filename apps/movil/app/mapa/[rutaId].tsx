@@ -6,6 +6,7 @@ import {
   AVISO_TRAZADO,
   COLORES,
   DIAS_CARTEL,
+  diasDeRuta,
   etiquetaRuta,
   limitesDe,
   lugaresUbicados,
@@ -16,8 +17,10 @@ import {
   rutaPorId,
   textoHorario,
   trazadoDeRuta,
+  VENTANAS,
   type Dia,
   type ParadaDeRuta,
+  type Turno,
 } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { Camera, GeoJSONSource, Layer, Map as Mapa, type CameraRef } from '@maplibre/maplibre-react-native';
@@ -47,11 +50,28 @@ import {
   Pastilla,
   Pestanas,
 } from '../../componentes/ui';
-import { CamionSimulado } from '../../componentes/CamionSimulado';
+import { CamionRemoto, CamionSimulado } from '../../componentes/CamionSimulado';
 import { ESTILO_MAPA } from '../../componentes/mapaBase';
+import { useCamionSimulado, type EstadoCamion } from '../../estado/camion';
 import { ALTURA_TACTIL, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
 
 type Pestana = 'lugares' | 'horario';
+
+// Qué decir mientras el camión simulado está activo. Nunca sugiere una hora de llegada.
+function textoSimulacion(camion: EstadoCamion, turno: Turno | undefined): string {
+  switch (camion.tipo) {
+    case 'buscando':
+      return 'Buscando el camión simulado…';
+    case 'sinConexion':
+      return 'Sin conexión no se puede mostrar el camión simulado.';
+    case 'fueraDeServicio': {
+      const ventana = turno ? ` (${VENTANAS[turno].inicio} a ${VENTANAS[turno].fin})` : '';
+      return `El camión simulado solo recorre esta ruta en su ventana${ventana} los días con recolección. ${AVISO_SIMULACION}`;
+    }
+    default:
+      return AVISO_SIMULACION;
+  }
+}
 
 const PESTANAS: { id: Pestana; texto: string }[] = [
   { id: 'lugares', texto: 'Lugares' },
@@ -105,6 +125,7 @@ export default function MapaRuta() {
   const [pestana, setPestana] = useState<Pestana>('lugares');
   const [dia, setDia] = useState<Dia | null>(null);
   const [simulando, setSimulando] = useState(false);
+  const camion = useCamionSimulado(rutaId, simulando);
   const ruta = rutaPorId(rutaId);
   const trazado = trazadoDeRuta(rutaId);
   const camara = useRef<CameraRef>(null);
@@ -232,7 +253,8 @@ export default function MapaRuta() {
             type="circle"
           />
         </GeoJSONSource>
-        {simulando && <CamionSimulado linea={trazado.linea} />}
+        {simulando && camion.tipo === 'local' && <CamionSimulado linea={trazado.linea} />}
+        {simulando && camion.tipo === 'enServicio' && <CamionRemoto punto={camion.punto} />}
       </Mapa>
 
       <View pointerEvents="box-none" style={[estilos.superior, { top: top + 8 }]}>
@@ -257,7 +279,7 @@ export default function MapaRuta() {
       {simulando && (
         <View style={[estilos.simulacion, { top: top + 96 }]}>
           <Ionicons color={COLORES.acentoTexto} name="information-circle" size={16} />
-          <Text style={estilos.simulacionTexto}>{AVISO_SIMULACION}</Text>
+          <Text style={estilos.simulacionTexto}>{textoSimulacion(camion, ruta?.turno)}</Text>
         </View>
       )}
 
@@ -304,7 +326,7 @@ export default function MapaRuta() {
             ListHeaderComponent={
               <ScrollView contentContainerStyle={estilos.dias} horizontal showsHorizontalScrollIndicator={false}>
                 <Pastilla activa={dia === null} onPress={() => setDia(null)} texto="Todos" />
-                {DIAS_CARTEL.map((d) => (
+                {diasDeRuta(ruta).map((d) => (
                   <Pastilla activa={dia === d} key={d} onPress={() => setDia(d)} texto={NOMBRE_DIA[d].replace(/^./, (letra) => letra.toUpperCase())} />
                 ))}
               </ScrollView>

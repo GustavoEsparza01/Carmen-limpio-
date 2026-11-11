@@ -1,6 +1,6 @@
 import { coincide } from './busqueda.ts';
 import { LUGARES } from './catalogo.generado.ts';
-import type { Dia, Turno } from './constantes.ts';
+import { DIAS_SEMANA, type Dia, type Turno } from './constantes.ts';
 
 export type TipoLugar = 'colonia' | 'fraccionamiento' | 'avenida' | 'calle' | 'privada' | 'otro';
 export type Confianza = 'alta' | 'media' | 'baja' | 'ninguna';
@@ -80,6 +80,11 @@ export function rutaPorId(id: string): Ruta | undefined {
 // Sin día devuelve toda la ruta. Las excepciones por lugar quedan fuera de los días que no cubren.
 export function paradasDelDia(ruta: Ruta, dia: Dia | null): ParadaDeRuta[] {
   return dia ? ruta.paradas.filter((p) => p.horario.dias.includes(dia)) : ruta.paradas;
+}
+
+// Días en que pasa algún lugar de la ruta, en orden de la semana. Sirven para filtrar el mapa.
+export function diasDeRuta(ruta: Ruta): Dia[] {
+  return DIAS_SEMANA.filter((d) => ruta.paradas.some((p) => p.horario.dias.includes(d)));
 }
 
 export function buscarLugares(consulta: string): Lugar[] {

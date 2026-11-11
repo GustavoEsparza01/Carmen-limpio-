@@ -67,3 +67,35 @@ export function posicionEnRecorrido({ linea, acumulado, longitud }: Recorrido, d
     haciaElOeste: fin[0] < inicio[0],
   };
 }
+
+// Supabase entrega geometry como EWKB en hexadecimal. Un punto con SRID ocupa 25 bytes:
+// orden de bytes (1), tipo con bandera de SRID (4), SRID (4), longitud (8) y latitud (8).
+export function puntoDesdeEwkb(hex: string): Coordenadas | null {
+  if (!/^[0-9a-fA-F]+$/.test(hex) || hex.length < 42) return null;
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  const vista = new DataView(bytes.buffer);
+  const pequeno = bytes[0] === 1;
+  const tipo = vista.getUint32(1, pequeno);
+  if ((tipo & 0xff) !== 1) return null; // no es un punto
+  const conSrid = (tipo & 0x20000000) !== 0;
+  const inicio = conSrid ? 9 : 5;
+  if (bytes.length < inicio + 16) return null;
+  return [vista.getFloat64(inicio, pequeno), vista.getFloat64(inicio + 8, pequeno)];
+}
+
+// Entre dos posiciones del servidor (cada 10 s) el camión avanza en línea recta, para que no salte.
+export function interpolar(desde: Coordenadas, hasta: Coordenadas, t: number): Coordenadas {
+  const f = Math.max(0, Math.min(1, t));
+  return [desde[0] + (hasta[0] - desde[0]) * f, desde[1] + (hasta[1] - desde[1]) * f];
+}
+
+// La API REST entrega geometry como GeoJSON; el tiempo real, como EWKB en hexadecimal. Acepta ambos.
+export function puntoDesdeGeometria(valor: unknown): Coordenadas | null {
+  if (typeof valor === 'string') return puntoDesdeEwkb(valor);
+  if (typeof valor !== 'object' || valor === null) return null;
+  const { type, coordinates } = valor as { type?: unknown; coordinates?: unknown };
+  if (type !== 'Point' || !Array.isArray(coordinates) || coordinates.length < 2) return null;
+  const [lng, lat] = coordinates;
+  return typeof lng === 'number' && typeof lat === 'number' ? [lng, lat] : null;
+}

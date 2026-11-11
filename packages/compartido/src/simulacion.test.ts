@@ -3,8 +3,11 @@ import { test } from 'node:test';
 import {
   distanciaEnMetros,
   duracionSimulacion,
+  interpolar,
   medirRecorrido,
   posicionEnRecorrido,
+  puntoDesdeEwkb,
+  puntoDesdeGeometria,
 } from './simulacion.ts';
 import { TRAZADOS, type Coordenadas } from './trazado.ts';
 
@@ -62,4 +65,26 @@ test('en todas las rutas avanza sin saltos mayores al paso', () => {
       anterior = actual;
     }
   }
+});
+
+test('lee el punto que entrega Supabase en EWKB', () => {
+  // SRID=4326;POINT(-91.8 18.65), tal como lo devuelve PostgREST.
+  const hex = '0101000020E61000003333333333F356C06666666666A63240';
+  const punto = puntoDesdeEwkb(hex)!;
+  assert.ok(Math.abs(punto[0] + 91.8) < 1e-9 && Math.abs(punto[1] - 18.65) < 1e-9);
+  assert.equal(puntoDesdeEwkb('no es hex'), null);
+  assert.equal(puntoDesdeEwkb('0102000020E6100000'), null);
+});
+
+test('entre dos posiciones avanza en línea recta', () => {
+  assert.deepEqual(interpolar([0, 0], [10, 20], 0.5), [5, 10]);
+  assert.deepEqual(interpolar([0, 0], [10, 20], 2), [10, 20]);
+});
+
+test('lee el punto en GeoJSON (REST) o en EWKB (tiempo real)', () => {
+  const geojson = { type: 'Point', crs: { type: 'name' }, coordinates: [-91.77, 18.65] };
+  assert.deepEqual(puntoDesdeGeometria(geojson), [-91.77, 18.65]);
+  assert.ok(puntoDesdeGeometria('0101000020E61000003333333333F356C06666666666A63240'));
+  assert.equal(puntoDesdeGeometria({ type: 'LineString', coordinates: [] }), null);
+  assert.equal(puntoDesdeGeometria(null), null);
 });
