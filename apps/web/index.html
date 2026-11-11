@@ -12,162 +12,177 @@
     <meta property="og:description" content="¿Qué días pasa el camión por tu colonia? Consulta tu colonia en Ciudad del Carmen." />
     <meta property="og:image" content="/img/icono.png" />
     <meta property="og:locale" content="es_MX" />
-    <meta name="theme-color" content="#0B4F6C" />
+    <meta name="theme-color" content="#F4F3F0" />
     <link rel="icon" href="/favicon.png" />
     <link rel="stylesheet" href="/src/estilos.css" />
+    <script type="module" src="/src/principal.ts"></script>
   </head>
-  <body>
+  <body class="inicio">
     <a class="saltar" href="#contenido">Saltar al contenido</a>
 
     <header class="cabecera">
-      <div class="envoltura cabecera-fila">
-        <a class="marca" href="/">
-          <img alt="" height="40" src="/img/camaron.png" width="33" />
-          <span>Carmen Limpio</span>
-        </a>
-        <nav aria-label="Secciones">
-          <a href="#como-funciona">Cómo funciona</a>
-          <a href="#preguntas">Preguntas</a>
-          <a href="/privacidad.html">Privacidad</a>
-          <a href="#contacto">Contacto</a>
-        </nav>
-      </div>
+      <a class="marca" href="/" aria-label="Carmen Limpio, inicio">CARMEN LIMPIO</a>
+      <span class="sello">App no oficial</span>
     </header>
 
     <main id="contenido">
-      <section class="portada">
-        <div class="envoltura portada-rejilla">
-          <div class="portada-texto">
-            <p class="etiqueta">Ciudad del Carmen, Campeche</p>
-            <h1>¿Qué días pasa el camión por tu colonia?</h1>
-            <p class="entrada">
-              Busca tu colonia y mira los días y la ventana de recolección. Guárdala para verla al abrir la app y recibe
-              un recordatorio antes de que pase el camión.
-            </p>
-            <div class="acciones">
-              <span aria-disabled="true" class="boton boton-proximamente" role="link">
-                <svg aria-hidden="true" height="22" viewBox="0 0 24 24" width="22">
-                  <path
-                    d="M17.6 9.48l1.84-3.18a.38.38 0 00-.66-.38l-1.86 3.22a11.4 11.4 0 00-9.84 0L5.22 5.92a.38.38 0 00-.66.38L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Próximamente en Android
-              </span>
-              <a class="boton boton-secundario" href="#como-funciona">Cómo funciona</a>
-            </div>
-            <p class="no-oficial">{{AVISO_NO_OFICIAL}}</p>
-          </div>
-          <figure class="telefono portada-telefono">
-            <img
-              alt="Pantalla de inicio de la app: la colonia guardada con la ventana de recolección abierta y los días de cada ruta."
-              height="1496"
-              src="/capturas/04-inicio-hoy.png"
-              width="672"
-            />
-          </figure>
-        </div>
-      </section>
+      <!-- El teléfono se queda fijo y su pantalla recorre la app mientras se baja. -->
+      <section class="escenario" id="como-funciona" aria-label="Cómo funciona la app">
+        <div class="escena">
+          <h1 class="rotulo" aria-label="Carmen Limpio">
+            <span class="rotulo-a" aria-hidden="true">CARMEN</span>
+            <span class="rotulo-b" aria-hidden="true">LIMPIO</span>
+          </h1>
 
-      <section class="seccion" id="como-funciona">
-        <div class="envoltura">
-          <h2>Cómo funciona</h2>
-          <ol class="pasos">
-            <li>
-              <span class="paso-numero">1</span>
-              <h3>Busca tu colonia</h3>
-              <p>Escribe el nombre de tu colonia, fraccionamiento o avenida. Consultar no pide cuenta ni datos.</p>
-            </li>
-            <li>
-              <span class="paso-numero">2</span>
-              <h3>Mira tus días y tu ventana</h3>
-              <p>
-                Verás los días de recolección y la ventana del turno: matutino de {{VENTANA_MATUTINA}} y vespertino de
-                {{VENTANA_VESPERTINA}}. Es una ventana, no una hora exacta de llegada.
-              </p>
-            </li>
-            <li>
-              <span class="paso-numero">3</span>
-              <h3>Guárdala y recibe un recordatorio</h3>
-              <p>Elige si quieres el aviso la noche anterior o una hora antes de que abra la ventana.</p>
-            </li>
-          </ol>
-        </div>
-      </section>
+          <div class="telefono" data-paso="0">
+            <div class="telefono-boton telefono-boton-a" aria-hidden="true"></div>
+            <div class="telefono-boton telefono-boton-b" aria-hidden="true"></div>
+            <div class="pantalla">
+              <span class="camara" aria-hidden="true"></span>
 
-      <section class="seccion seccion-alterna">
-        <div class="envoltura funciones">
-          <article class="funcion">
-            <figure class="telefono">
+              <div class="vista vista-bloqueo" data-vista="0">
+                <p class="bloqueo-fecha" data-fecha>Ciudad del Carmen</p>
+                <p class="bloqueo-hora" data-hora>15:00</p>
+                <div class="notificacion">
+                  <div class="notificacion-cabeza">
+                    <img alt="" height="20" src="/img/camaron.png" width="16" />
+                    <span>Carmen Limpio · ahora</span>
+                  </div>
+                  <p class="notificacion-titulo">Mañana es día de recolección en tu colonia</p>
+                  <p class="notificacion-texto">Ventana de {{VENTANA_VESPERTINA}}. {{AVISO_FUENTE_HOY}}</p>
+                </div>
+                <p class="bloqueo-ejemplo">Ejemplo de recordatorio</p>
+                <a class="bloqueo-deslizar" href="#paso-1">Desliza para conocer la app ↓</a>
+              </div>
+
+              <img
+                alt="Pantalla de inicio: la colonia guardada con la ventana de recolección abierta."
+                class="vista"
+                data-vista="1"
+                height="1496"
+                src="/capturas/04-inicio-hoy.png"
+                width="672"
+              />
               <img
                 alt="Horario de un lugar con sus días de recolección por ruta y el turno."
+                class="vista"
+                data-vista="2"
                 height="1496"
                 loading="lazy"
                 src="/capturas/03-horario.png"
                 width="672"
               />
-            </figure>
-            <div>
-              <h2>Tu horario, claro</h2>
-              <p>
-                Si tu colonia está en dos rutas con días distintos, verás cada una por separado. Lo marcado como
-                “por confirmar” es una deducción del cartel, no un dato leído.
-              </p>
-              <p class="nota">{{AVISO_HORARIOS}}</p>
-            </div>
-          </article>
-
-          <article class="funcion funcion-invertida">
-            <figure class="telefono">
               <img
                 alt="Mapa de la ciudad con las rutas de colores y la tarjeta de la Ruta 5 con sus días y su ventana."
+                class="vista"
+                data-vista="3"
                 height="1496"
                 loading="lazy"
                 src="/capturas/07-mapa-ruta-elegida.png"
                 width="672"
               />
-            </figure>
-            <div>
+            </div>
+          </div>
+
+          <div class="leyendas">
+            <article class="leyenda" data-leyenda="0">
+              <p class="mono">Ciudad del Carmen, Campeche</p>
+              <p class="leyenda-entrada">¿Qué días pasa el camión por tu colonia?</p>
+              <span aria-disabled="true" class="boton boton-oscuro" role="link">Próximamente en Android</span>
+            </article>
+            <article class="leyenda" data-leyenda="1" id="paso-1">
+              <p class="mono">01 / 03</p>
+              <h2>Tu colonia, al abrir la app</h2>
+              <p>
+                Busca tu colonia, fraccionamiento o avenida y guárdala. Al abrir la app verás si hoy hay recolección y
+                en qué ventana. Consultar no pide cuenta ni datos.
+              </p>
+            </article>
+            <article class="leyenda" data-leyenda="2">
+              <p class="mono">02 / 03</p>
+              <h2>Días y ventana, sin adivinar</h2>
+              <p>
+                Matutino de {{VENTANA_MATUTINA}}, vespertino de {{VENTANA_VESPERTINA}}. Es una ventana, nunca una hora
+                exacta de llegada. Recibe un recordatorio la noche anterior o una hora antes.
+              </p>
+              <p class="nota">{{AVISO_HORARIOS}}</p>
+            </article>
+            <article class="leyenda" data-leyenda="3">
+              <p class="mono">03 / 03</p>
               <h2>La ruta en el mapa</h2>
-              <p>
-                Ubica tu colonia dentro de su ruta y filtra los lugares por día. El mapa necesita conexión; los horarios
-                se consultan aun sin internet.
-              </p>
+              <p>Ubica tu colonia dentro de su ruta. El mapa necesita conexión; los horarios se consultan sin internet.</p>
               <p class="nota">{{AVISO_TRAZADO}}</p>
-            </div>
-          </article>
-
-          <article class="funcion funcion-sin-imagen">
-            <div>
-              <h2>Reporta y da seguimiento</h2>
-              <p>
-                Avisa si el camión no pasó, si hay basura acumulada o un tiradero clandestino. Con una cuenta de correo
-                ves el estado de tu reporte y la nota del equipo. Las fotos no son públicas.
-              </p>
-              <p class="nota">{{AVISO_REPORTES}}</p>
-            </div>
-          </article>
-
-          <article class="funcion funcion-sin-imagen">
-            <div>
-              <h2>Avisos</h2>
-              <p>
-                Cuando haya un cambio en la recolección, como un día festivo o una ruta suspendida, lo verás en la
-                sección de avisos. Los publica el equipo del proyecto; no son comunicados oficiales.
-              </p>
-            </div>
-          </article>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="seccion" id="preguntas">
+      <section class="cifras" aria-labelledby="titulo-cifras">
+        <div class="envoltura">
+          <h2 class="mono" id="titulo-cifras">El catálogo, en números</h2>
+          <dl class="cifras-rejilla">
+            <div>
+              <dt class="mono">Rutas en los carteles</dt>
+              <dd>{{NUM_RUTAS}}</dd>
+            </div>
+            <div>
+              <dt class="mono">Lugares con horario</dt>
+              <dd>{{NUM_LUGARES}}</dd>
+            </div>
+            <div>
+              <dt class="mono">Ubicados en el mapa</dt>
+              <dd>{{NUM_EN_MAPA}}</dd>
+            </div>
+            <div>
+              <dt class="mono">Turnos</dt>
+              <dd>2</dd>
+            </div>
+          </dl>
+          <p class="cifras-nota">Datos de carteles públicos, sin validación oficial.</p>
+        </div>
+      </section>
+
+      <section class="seccion" aria-labelledby="titulo-funciones">
+        <div class="envoltura">
+          <h2 class="titular" id="titulo-funciones">Lo que puedes hacer</h2>
+          <div class="mosaicos">
+            <article class="mosaico mosaico-azul">
+              <span class="mosaico-numero" aria-hidden="true">01</span>
+              <h3>Consultar sin cuenta</h3>
+              <p>Busca tu colonia y mira sus días. Si está en dos rutas con días distintos, verás cada una por separado.</p>
+            </article>
+            <article class="mosaico mosaico-arena">
+              <span class="mosaico-numero" aria-hidden="true">02</span>
+              <h3>Recordatorios</h3>
+              <p>La noche anterior o una hora antes de que abra la ventana. Se programan en tu teléfono.</p>
+            </article>
+            <article class="mosaico mosaico-oscuro">
+              <span class="mosaico-numero" aria-hidden="true">03</span>
+              <h3>Reportes con seguimiento</h3>
+              <p>
+                Avisa si el camión no pasó, si hay basura acumulada o un tiradero clandestino, y mira el estado de tu
+                reporte. Las fotos no son públicas.
+              </p>
+              <p class="mosaico-nota">{{AVISO_REPORTES}}</p>
+            </article>
+            <article class="mosaico mosaico-claro">
+              <span class="mosaico-numero" aria-hidden="true">04</span>
+              <h3>Avisos</h3>
+              <p>
+                Cambios en la recolección, como un día festivo o una ruta suspendida. Los publica el equipo del
+                proyecto; no son comunicados oficiales.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="seccion" id="preguntas" aria-labelledby="titulo-preguntas">
         <div class="envoltura angosta">
-          <h2>Preguntas frecuentes</h2>
+          <h2 class="titular" id="titulo-preguntas">Preguntas</h2>
           <details>
             <summary>¿Es una app oficial?</summary>
-            <p>
-              No. {{AVISO_NO_OFICIAL}} Si en algún momento existe un convenio, lo diremos aquí y en la app.
-            </p>
+            <p>No. {{AVISO_NO_OFICIAL}} Si en algún momento existe un convenio, lo diremos aquí y en la app.</p>
           </details>
           <details>
             <summary>¿De dónde salen los horarios?</summary>
@@ -212,15 +227,23 @@
         </div>
       </section>
 
-      <section class="seccion seccion-alterna" id="contacto">
+      <section class="seccion seccion-contacto" id="contacto" aria-labelledby="titulo-contacto">
         <div class="envoltura angosta">
-          <h2>Equipo y contacto</h2>
+          <h2 class="titular" id="titulo-contacto">Equipo y contacto</h2>
           <p>Carmen Limpio es un proyecto independiente para los vecinos de Ciudad del Carmen.</p>
           {{EQUIPO}}
           {{CONTACTO}}
         </div>
       </section>
     </main>
+
+    <nav class="pildora" aria-label="Secciones">
+      <a href="#contenido">Inicio</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#preguntas">Preguntas</a>
+      <a href="/privacidad.html">Privacidad</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
 
     <footer class="pie">
       <div class="envoltura pie-fila">
