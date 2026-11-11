@@ -1,6 +1,7 @@
 export * from './busqueda.ts';
 export * from './catalogo.ts';
 export * from './ciudad.ts';
+export * from './estadisticas.ts';
 export * from './constantes.ts';
 export * from './guardados.ts';
 export * from './horario.ts';

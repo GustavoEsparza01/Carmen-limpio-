@@ -3,6 +3,7 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { Acceso, useDatosPanel } from './Acceso';
 import { Avisos } from './vistas/Avisos';
 import { Escenarios } from './vistas/Escenarios';
+import { Estadisticas } from './vistas/Estadisticas';
 import { Reportes } from './vistas/Reportes';
 import { Resumen } from './vistas/Resumen';
 import { Rutas } from './vistas/Rutas';
@@ -11,6 +12,7 @@ import { Unidades } from './vistas/Unidades';
 const VISTAS: { id: string; nombre: string; Vista: ComponentType }[] = [
   { id: 'resumen', nombre: 'Resumen', Vista: Resumen },
   { id: 'reportes', nombre: 'Reportes', Vista: Reportes },
+  { id: 'estadisticas', nombre: 'Estadísticas', Vista: Estadisticas },
   { id: 'rutas', nombre: 'Rutas', Vista: Rutas },
   { id: 'unidades', nombre: 'Unidades', Vista: Unidades },
   { id: 'avisos', nombre: 'Avisos', Vista: Avisos },

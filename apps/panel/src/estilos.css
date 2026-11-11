@@ -651,3 +651,46 @@ select {
   border-radius: 6px;
   font: inherit;
 }
+
+/* Estadísticas */
+
+.barras {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  height: 180px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.barra-columna {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.barra-area {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+}
+
+.barra {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: var(--primario);
+}
+
+.barra-columna:hover .barra {
+  opacity: 0.8;
+}
+
+.barra-etiqueta {
+  color: var(--texto-suave);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
