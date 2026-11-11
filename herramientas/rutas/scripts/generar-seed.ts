@@ -3,6 +3,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { idLugar } from '../../../packages/compartido/src/busqueda.ts';
 import { LUGARES } from '../../../packages/compartido/src/catalogo.generado.ts';
+import { TRAZADOS } from '../../../packages/compartido/src/trazado.generado.ts';
 
 const leer = (ruta: string) => JSON.parse(readFileSync(ruta, 'utf8'));
 const cat = leer('data/rutas.json');
@@ -94,6 +95,13 @@ for (const f of paradasGeo.features) {
   const p = f.properties;
   sql.push(
     `insert into public.paradas_ruta (escenario, ruta_id, orden, lugar_id, confianza, geom) values ('carteles', ${q(p.ruta)}, ${p.orden}, ${q(idLugar(p.lugar))}, ${q(p.confianza)}, ${geo(f.geometry)});`,
+  );
+}
+
+// La misma línea que dibuja la app: el camión simulado de Supabase avanza sobre ella (ver 0012).
+for (const [ruta, trazado] of Object.entries(TRAZADOS)) {
+  sql.push(
+    `insert into public.recorridos_ruta (escenario, ruta_id, geom) values ('carteles', ${q(ruta)}, ${geo({ type: 'LineString', coordinates: trazado.linea })});`,
   );
 }
 

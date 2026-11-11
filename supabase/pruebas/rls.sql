@@ -78,7 +78,9 @@ begin
   perform pg_temp.afirmar((select count(*) from public.lugares where ubicacion is null) > 0, 'público: lugares sin ubicar siguen visibles');
   perform pg_temp.afirmar((select count(*) from public.tramos_ruta where escenario = 'carteles') = 30, 'público: ve trazos de carteles');
   perform pg_temp.afirmar((select count(*) from public.tramos_ruta where escenario = 'propuesta') = 0, 'público: no ve la propuesta');
-  perform pg_temp.afirmar((select count(*) from public.recorridos_ruta) = 0, 'público: no ve recorridos de la propuesta');
+  perform pg_temp.afirmar((select count(*) from public.recorridos_ruta where escenario = 'propuesta') = 0, 'público: no ve recorridos de la propuesta');
+  perform pg_temp.afirmar((select count(*) from public.recorridos_ruta where escenario = 'carteles') = 15, 'público: ve las líneas de carteles');
+  perform pg_temp.falla('select public.simular_camiones()', 'público: no mueve camiones');
   perform pg_temp.afirmar((select count(*) from public.tramos_geojson where escenario = 'propuesta') = 0, 'público: la vista no filtra la propuesta');
   perform pg_temp.afirmar(jsonb_array_length(public.trazado('carteles') -> 'features') = 30, 'público: trazado carteles en GeoJSON');
   perform pg_temp.falla('select public.trazado(''propuesta'')', 'público: pedir la propuesta debe fallar');
@@ -93,7 +95,7 @@ begin
   perform pg_temp.falla('select 1 from public.reportes_detalle', 'público: no lee la vista de reportes');
   perform pg_temp.falla('select public.aceptar_privacidad(''v1'')', 'público: no acepta el aviso sin cuenta');
   perform pg_temp.falla('select public.eliminar_mi_cuenta()', 'público: no elimina cuentas');
-  pruebas := pruebas + 19;
+  pruebas := pruebas + 21;
 
   -- Ciudadano A ---------------------------------------------------------------
   perform pg_temp.como(a);
@@ -225,6 +227,19 @@ begin
   perform pg_temp.afirmar((select nota from public.reportes where id = rep_a) like 'El equipo del proyecto%', 'A: ve la nota');
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 3, 'A: ve su historial completo');
   pruebas := pruebas + 4;
+
+  -- Simulación ---------------------------------------------------------------------
+  execute 'reset role';
+  perform public.simular_camiones();
+  perform pg_temp.como(null);
+  perform pg_temp.afirmar(not exists (
+    select 1 from public.posiciones_unidad p
+    where p.origen = 'simulacion' and p.ruta_id is not null
+      and not exists (select 1 from public.recorridos_ruta rr where rr.ruta_id = p.ruta_id and rr.escenario = 'carteles'
+                      and extensions.st_dwithin(rr.geom, p.punto, 0.00001))
+  ), 'simulación: cada posición está sobre la línea de carteles');
+  perform pg_temp.afirmar(not exists (select 1 from public.posiciones_unidad where origen = 'gps'), 'público: no ve posiciones de GPS');
+  pruebas := pruebas + 2;
 
   -- B elimina su cuenta -------------------------------------------------------------
   perform pg_temp.como(b);
