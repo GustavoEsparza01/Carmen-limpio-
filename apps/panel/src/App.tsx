@@ -3,12 +3,14 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { Acceso, useDatosPanel } from './Acceso';
 import { Avisos } from './vistas/Avisos';
 import { Escenarios } from './vistas/Escenarios';
+import { Reportes } from './vistas/Reportes';
 import { Resumen } from './vistas/Resumen';
 import { Rutas } from './vistas/Rutas';
 import { Unidades } from './vistas/Unidades';
 
 const VISTAS: { id: string; nombre: string; Vista: ComponentType }[] = [
   { id: 'resumen', nombre: 'Resumen', Vista: Resumen },
+  { id: 'reportes', nombre: 'Reportes', Vista: Reportes },
   { id: 'rutas', nombre: 'Rutas', Vista: Rutas },
   { id: 'unidades', nombre: 'Unidades', Vista: Unidades },
   { id: 'avisos', nombre: 'Avisos', Vista: Avisos },
@@ -59,7 +61,7 @@ function Panel() {
         ))}
       </nav>
       <p className="vista-previa">
-        Datos de Supabase. Los avisos ya se pueden publicar; catálogos y reportes siguen en solo lectura.
+        Datos de Supabase. Avisos y reportes ya se gestionan aquí; rutas, horarios y unidades siguen en solo lectura.
       </p>
       <main className="contenido">
         <Vista />
