@@ -272,3 +272,16 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **La app aplica el catálogo nuevo en el siguiente arranque,** no al instante, para que una pantalla abierta no cambie de golpe.
 - **Pruebas de RLS:** ya no cuentan horarios ni asignaciones fijos (cambian al editar). Se agregaron comprobaciones de que un ciudadano no escribe en horarios, lugares, unidades ni asignaciones, y de que administración sí. Son 82 en total.
 - **Probado en el emulador:** el usuario agregó el viernes a Bivalvo en V2 desde el panel, y la tarjeta de Inicio lo mostró tras reiniciar la app.
+
+## 2026-11-10 · Fase 5: simulación y estadísticas
+
+- **Sin avisos push** (decisión del usuario): no se usa Firebase. Quedan fuera los avisos push por lugar y la aceptación "un aviso llega solo a quienes siguen ese lugar". Los avisos se consultan en la pestaña Avisos, y los recordatorios locales de la app siguen igual, porque no necesitan Firebase. Las tablas `dispositivos` y `dispositivos_lugares` quedan sin usar.
+- **El camión simulado avanza sobre el trazado de carteles**, no sobre la propuesta (decisión del usuario). El prompt pedía `recorridos_ruta` de la propuesta, pero el vecino ve el camión y la propuesta nunca se le muestra como su ruta. La línea es la misma de `trazado.generado.ts`, cargada en `recorridos_ruta` con escenario `carteles` desde el seed.
+- **Lo mueve una función programada en Supabase** (decisión del usuario): `simular_camiones()` corre con `pg_cron` cada 10 segundos. Escribe una posición por unidad activa con asignación vigente, solo dentro de la ventana de su horario y en días con recolección según `horarios`. Da una vuelta completa a la ruta cada 30 minutos: es una velocidad de demostración y no sirve para estimar llegadas.
+- **Límites de crecimiento:** las posiciones simuladas se borran a las 2 horas, y una segunda tarea borra cada día el historial de `pg_cron` de más de un día.
+- **Tiempo real:** `posiciones_unidad` está en la publicación `supabase_realtime`. La app carga la última posición (de menos de 30 s) y escucha las nuevas; entre una y otra mueve el camión en línea recta. Si dejan de llegar posiciones, avisa que la simulación solo corre en la ventana de la ruta. Sin Supabase configurado sigue la simulación local.
+- **Formato del punto:** la API REST entrega `geometry` como GeoJSON y el tiempo real como EWKB hexadecimal; `puntoDesdeGeometria` acepta ambos.
+- **Los filtros de día del mapa** salen de los días reales de la ruta (`diasDeRuta`), no de la regla general del cartel. Se descubrió al agregar el viernes a Bivalvo desde el panel.
+- **Estadísticas:** el cálculo vive en `compartido` (`calcularEstadisticas`), con pruebas, y usa los mismos reportes que la sección Reportes (hasta 1000). El tiempo de cierre es la mediana del envío a atendido o rechazado.
+- **Mapa de calor:** `leaflet.heat` fijo en 0.2.0, porque la 1.0.0 se publicó una semana antes. Usa una sola gama de color. Cada reporte cuenta en su punto marcado o en la ubicación ilustrativa de su lugar; los de lugares sin ubicar se cuentan aparte.
+- **Probado en el emulador:** el camión de V2 apareció y avanzó con posiciones de Supabase. **No probado en pantalla:** la página de Estadísticas (requiere la sesión del administrador). El panel compila con Vite.
