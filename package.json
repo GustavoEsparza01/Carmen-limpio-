@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "panel": "npm run dev -w @carmen-limpio/panel",
+    "web": "npm run dev -w @carmen-limpio/web",
     "movil": "npm run start -w @carmen-limpio/movil",
     "android": "npm run android -w @carmen-limpio/movil",
     "typecheck": "npm run typecheck --workspaces",

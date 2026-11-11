@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carmen Limpio · Días de recolección en Ciudad del Carmen</title>
+    <meta
+      name="description"
+      content="Consulta qué días y en qué ventana pasa el camión de la basura por tu colonia en Ciudad del Carmen, Campeche. App independiente y no oficial."
+    />
+    <meta property="og:title" content="Carmen Limpio" />
+    <meta property="og:description" content="¿Qué días pasa el camión por tu colonia? Consulta tu colonia en Ciudad del Carmen." />
+    <meta property="og:image" content="/img/icono.png" />
+    <meta property="og:locale" content="es_MX" />
+    <meta name="theme-color" content="#0B4F6C" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/estilos.css" />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="cabecera">
+      <div class="envoltura cabecera-fila">
+        <a class="marca" href="/">
+          <img alt="" height="40" src="/img/camaron.png" width="33" />
+          <span>Carmen Limpio</span>
+        </a>
+        <nav aria-label="Secciones">
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#preguntas">Preguntas</a>
+          <a href="/privacidad.html">Privacidad</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="portada">
+        <div class="envoltura portada-rejilla">
+          <div class="portada-texto">
+            <p class="etiqueta">Ciudad del Carmen, Campeche</p>
+            <h1>¿Qué días pasa el camión por tu colonia?</h1>
+            <p class="entrada">
+              Busca tu colonia y mira los días y la ventana de recolección. Guárdala para verla al abrir la app y recibe
+              un recordatorio antes de que pase el camión.
+            </p>
+            <div class="acciones">
+              <span aria-disabled="true" class="boton boton-proximamente" role="link">
+                <svg aria-hidden="true" height="22" viewBox="0 0 24 24" width="22">
+                  <path
+                    d="M17.6 9.48l1.84-3.18a.38.38 0 00-.66-.38l-1.86 3.22a11.4 11.4 0 00-9.84 0L5.22 5.92a.38.38 0 00-.66.38L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Próximamente en Android
+              </span>
+              <a class="boton boton-secundario" href="#como-funciona">Cómo funciona</a>
+            </div>
+            <p class="no-oficial">{{AVISO_NO_OFICIAL}}</p>
+          </div>
+          <figure class="telefono portada-telefono">
+            <img
+              alt="Pantalla de inicio de la app: la colonia guardada con la ventana de recolección abierta y los días de cada ruta."
+              height="1496"
+              src="/capturas/04-inicio-hoy.png"
+              width="672"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section class="seccion" id="como-funciona">
+        <div class="envoltura">
+          <h2>Cómo funciona</h2>
+          <ol class="pasos">
+            <li>
+              <span class="paso-numero">1</span>
+              <h3>Busca tu colonia</h3>
+              <p>Escribe el nombre de tu colonia, fraccionamiento o avenida. Consultar no pide cuenta ni datos.</p>
+            </li>
+            <li>
+              <span class="paso-numero">2</span>
+              <h3>Mira tus días y tu ventana</h3>
+              <p>
+                Verás los días de recolección y la ventana del turno: matutino de {{VENTANA_MATUTINA}} y vespertino de
+                {{VENTANA_VESPERTINA}}. Es una ventana, no una hora exacta de llegada.
+              </p>
+            </li>
+            <li>
+              <span class="paso-numero">3</span>
+              <h3>Guárdala y recibe un recordatorio</h3>
+              <p>Elige si quieres el aviso la noche anterior o una hora antes de que abra la ventana.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="seccion seccion-alterna">
+        <div class="envoltura funciones">
+          <article class="funcion">
+            <figure class="telefono">
+              <img
+                alt="Horario de un lugar con sus días de recolección por ruta y el turno."
+                height="1496"
+                loading="lazy"
+                src="/capturas/03-horario.png"
+                width="672"
+              />
+            </figure>
+            <div>
+              <h2>Tu horario, claro</h2>
+              <p>
+                Si tu colonia está en dos rutas con días distintos, verás cada una por separado. Lo marcado como
+                “por confirmar” es una deducción del cartel, no un dato leído.
+              </p>
+              <p class="nota">{{AVISO_HORARIOS}}</p>
+            </div>
+          </article>
+
+          <article class="funcion funcion-invertida">
+            <figure class="telefono">
+              <img
+                alt="Mapa de la ciudad con las rutas de colores y la tarjeta de la Ruta 5 con sus días y su ventana."
+                height="1496"
+                loading="lazy"
+                src="/capturas/07-mapa-ruta-elegida.png"
+                width="672"
+              />
+            </figure>
+            <div>
+              <h2>La ruta en el mapa</h2>
+              <p>
+                Ubica tu colonia dentro de su ruta y filtra los lugares por día. El mapa necesita conexión; los horarios
+                se consultan aun sin internet.
+              </p>
+              <p class="nota">{{AVISO_TRAZADO}}</p>
+            </div>
+          </article>
+
+          <article class="funcion funcion-sin-imagen">
+            <div>
+              <h2>Reporta y da seguimiento</h2>
+              <p>
+                Avisa si el camión no pasó, si hay basura acumulada o un tiradero clandestino. Con una cuenta de correo
+                ves el estado de tu reporte y la nota del equipo. Las fotos no son públicas.
+              </p>
+              <p class="nota">{{AVISO_REPORTES}}</p>
+            </div>
+          </article>
+
+          <article class="funcion funcion-sin-imagen">
+            <div>
+              <h2>Avisos</h2>
+              <p>
+                Cuando haya un cambio en la recolección, como un día festivo o una ruta suspendida, lo verás en la
+                sección de avisos. Los publica el equipo del proyecto; no son comunicados oficiales.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="seccion" id="preguntas">
+        <div class="envoltura angosta">
+          <h2>Preguntas frecuentes</h2>
+          <details>
+            <summary>¿Es una app oficial?</summary>
+            <p>
+              No. {{AVISO_NO_OFICIAL}} Si en algún momento existe un convenio, lo diremos aquí y en la app.
+            </p>
+          </details>
+          <details>
+            <summary>¿De dónde salen los horarios?</summary>
+            <p>
+              De los carteles públicos “Ubica tu ruta” de Ciudad del Carmen. No tienen validación oficial y el servicio
+              puede variar.
+            </p>
+          </details>
+          <details>
+            <summary>¿Por qué no dice la hora exacta en que pasa el camión?</summary>
+            <p>
+              Porque nadie la sabe con certeza: los carteles indican una ventana por turno. Por eso la app muestra la
+              ventana completa y nunca una hora de llegada.
+            </p>
+          </details>
+          <details>
+            <summary>¿El mapa muestra el recorrido real del camión?</summary>
+            <p>
+              No. {{AVISO_TRAZADO}} Algunas colonias aún no están ubicadas en el mapa, pero su horario sí aparece en la
+              búsqueda.
+            </p>
+          </details>
+          <details>
+            <summary>¿A dónde llegan mis reportes?</summary>
+            <p>{{AVISO_REPORTES}}</p>
+          </details>
+          <details>
+            <summary>¿Necesito crear una cuenta?</summary>
+            <p>
+              Para consultar horarios, no. Para reportar y dar seguimiento, sí: solo pedimos un correo y una contraseña.
+              Puedes eliminar tu cuenta, con tus reportes y fotos, desde la app.
+            </p>
+          </details>
+          <details>
+            <summary>¿Funciona en iPhone?</summary>
+            <p>Por ahora solo en Android.</p>
+          </details>
+          <details>
+            <summary>¿Cuándo podré descargarla?</summary>
+            <p>Estamos terminando las pruebas. Cuando esté lista, el botón de esta página te llevará a la descarga.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="seccion seccion-alterna" id="contacto">
+        <div class="envoltura angosta">
+          <h2>Equipo y contacto</h2>
+          <p>Carmen Limpio es un proyecto independiente para los vecinos de Ciudad del Carmen.</p>
+          {{EQUIPO}}
+          {{CONTACTO}}
+        </div>
+      </section>
+    </main>
+
+    <footer class="pie">
+      <div class="envoltura pie-fila">
+        <p>{{AVISO_NO_OFICIAL}}</p>
+        <p>
+          <a href="/privacidad.html">Aviso de privacidad</a> · Mapas de las capturas ©
+          <a href="https://www.openstreetmap.org/copyright">colaboradores de OpenStreetMap</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
