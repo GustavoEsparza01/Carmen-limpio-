@@ -82,19 +82,27 @@ begin
   perform pg_temp.afirmar((select count(*) from public.tramos_geojson where escenario = 'propuesta') = 0, 'público: la vista no filtra la propuesta');
   perform pg_temp.afirmar(jsonb_array_length(public.trazado('carteles') -> 'features') = 30, 'público: trazado carteles en GeoJSON');
   perform pg_temp.falla('select public.trazado(''propuesta'')', 'público: pedir la propuesta debe fallar');
-  perform pg_temp.afirmar((select count(*) from public.avisos) = 1, 'público: solo avisos publicados');
-  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes') = 1,
+  perform pg_temp.afirmar((select count(*) from public.avisos where imagen like 'prueba/%') = 1, 'público: solo avisos publicados');
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes' and name like 'prueba/%') = 1,
     'público: solo ve la imagen del aviso publicado');
   perform pg_temp.afirmar((select count(*) from public.unidades) = 0, 'público: no ve unidades');
   perform pg_temp.afirmar((select count(*) from public.reportes) = 0, 'público: no ve reportes');
   perform pg_temp.falla(format('insert into public.reportes (autor, tipo, lugar_id, fecha) values (%L, ''noPaso'', ''san-manuel'', %L)', a, hoy),
     'público: no puede reportar');
   perform pg_temp.falla('insert into public.avisos (titulo, texto) values (''x'', ''xxxx'')', 'público: no puede crear avisos');
-  pruebas := pruebas + 16;
+  perform pg_temp.falla('select 1 from public.reportes_detalle', 'público: no lee la vista de reportes');
+  perform pg_temp.falla('select public.aceptar_privacidad(''v1'')', 'público: no acepta el aviso sin cuenta');
+  perform pg_temp.falla('select public.eliminar_mi_cuenta()', 'público: no elimina cuentas');
+  pruebas := pruebas + 19;
 
   -- Ciudadano A ---------------------------------------------------------------
   perform pg_temp.como(a);
   perform pg_temp.afirmar(not public.es_admin(), 'A: no es administrador');
+  perform pg_temp.falla(format('insert into public.reportes (tipo, lugar_id, fecha) values (''noPaso'', ''san-manuel'', %L)', dia_ok),
+    'A: no reporta sin aceptar el aviso de privacidad');
+  perform public.aceptar_privacidad('prueba-v1');
+  perform pg_temp.afirmar((select privacidad_version from public.perfiles where id = a) = 'prueba-v1', 'A: queda la versión aceptada');
+  perform pg_temp.afirmar((select privacidad_aceptada from public.perfiles where id = a) is not null, 'A: queda la fecha de aceptación');
   insert into public.reportes (tipo, lugar_id, fecha) values ('noPaso', 'san-manuel', dia_ok) returning id into rep_a;
   select estado::text into t from public.reportes where id = rep_a;
   perform pg_temp.afirmar(t = 'recibido', 'A: el reporte nace Recibido');
@@ -126,30 +134,41 @@ begin
     'A: no sube a la carpeta de B');
   perform pg_temp.falla('insert into storage.objects (bucket_id, name) values (''avisos-imagenes'', ''falsa.jpg'')',
     'A: no sube imágenes de avisos');
-  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes') = 1,
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes' and name like 'prueba/%') = 1,
     'A: no ve la imagen del borrador');
 
-  -- Límite de envíos: ya tiene 1; 9 más llegan al límite de 10 y el siguiente falla.
-  for i in 1..9 loop
+  insert into public.reportes (tipo, ubicacion, descripcion, foto)
+  values ('tiradero', extensions.st_setsrid(extensions.st_point(-91.8, 18.65), 4326), 'Bolsas en el terreno baldío', a || '/foto.jpg');
+  perform pg_temp.afirmar((select round(lng::numeric, 4) = -91.8 and round(lat::numeric, 4) = 18.65
+                           from public.reportes_detalle where tipo = 'tiradero'), 'A: la vista da longitud y latitud');
+  perform pg_temp.afirmar((select count(*) from public.reportes_detalle) = 2, 'A: la vista muestra sus reportes');
+
+  -- Límite de envíos: ya tiene 2; 8 más llegan al límite de 10 y el siguiente falla.
+  for i in 1..8 loop
     insert into public.reportes (tipo, lugar_id, descripcion) values ('acumulacion', 'obrera', 'Basura acumulada en la esquina ' || i);
   end loop;
   perform pg_temp.falla('insert into public.reportes (tipo, lugar_id, descripcion) values (''acumulacion'', ''obrera'', ''Uno más de la cuenta'')',
     'A: límite de 10 reportes en 24 horas');
-  pruebas := pruebas + 19;
+  pruebas := pruebas + 24;
 
   -- Ciudadano B -----------------------------------------------------------------
   perform pg_temp.como(b);
   perform pg_temp.afirmar((select count(*) from public.reportes) = 0, 'B: no ve reportes de A');
   perform pg_temp.afirmar((select count(*) from public.historial_reportes) = 0, 'B: no ve historial de A');
   perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'fotos-reportes') = 0, 'B: no ve la foto de A');
+  perform pg_temp.afirmar((select count(*) from public.reportes_detalle) = 0, 'B: la vista no muestra reportes de A');
+  perform public.aceptar_privacidad('prueba-v1');
   insert into public.reportes (tipo, lugar_id, fecha) values ('noPaso', 'san-manuel', dia_ok) returning id into rep_b;
   perform pg_temp.afirmar((select count(*) from public.reportes) = 1, 'B: ve solo su reporte');
-  pruebas := pruebas + 4;
+  perform pg_temp.afirmar((select privacidad_version from public.perfiles where id = a) is null, 'B: no ve el perfil de A');
+  pruebas := pruebas + 6;
 
   -- Administración --------------------------------------------------------------
   perform pg_temp.como(adm);
   perform pg_temp.afirmar(public.es_admin(), 'admin: es administrador');
-  perform pg_temp.afirmar((select count(*) from public.reportes) = 11, 'admin: ve todos los reportes');
+  perform pg_temp.afirmar((select count(*) from public.reportes where autor in (a, b)) = 11, 'admin: ve todos los reportes');
+  perform pg_temp.afirmar((select count(*) from public.reportes_detalle where autor in (a, b)) = 11, 'admin: la vista muestra todos los reportes');
+  perform pg_temp.falla('select public.eliminar_mi_cuenta()', 'admin: no elimina su cuenta desde la app');
   perform pg_temp.afirmar((select count(distinct incidencia_id) from public.reportes where id in (rep_a, rep_b)) = 1,
     'admin: dos "no pasó" iguales forman una incidencia');
   perform pg_temp.afirmar((select count(*) from public.reportes where id in (rep_a, rep_b) and incidencia_id is not null) = 2,
@@ -158,11 +177,11 @@ begin
   perform pg_temp.afirmar(jsonb_array_length(public.trazado('propuesta') -> 'features') = 45, 'admin: trazado propuesta en GeoJSON');
   perform pg_temp.afirmar((select count(*) from public.unidades) = 8, 'admin: 8 unidades');
   perform pg_temp.afirmar((select count(*) from public.asignaciones) = 15, 'admin: 15 asignaciones');
-  perform pg_temp.afirmar((select count(*) from public.avisos) = 2, 'admin: ve borradores');
-  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes') = 2,
+  perform pg_temp.afirmar((select count(*) from public.avisos where imagen like 'prueba/%') = 2, 'admin: ve borradores');
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'avisos-imagenes' and name like 'prueba/%') = 2,
     'admin: ve las imágenes de los borradores');
   insert into storage.objects (bucket_id, name) values ('avisos-imagenes', 'prueba/nueva.jpg');
-  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'fotos-reportes') = 1, 'admin: ve la foto');
+  perform pg_temp.afirmar((select count(*) from storage.objects where bucket_id = 'fotos-reportes' and name = a || '/foto.jpg') = 1, 'admin: ve la foto');
   perform pg_temp.falla(format('update public.reportes set estado = ''atendido'', nota = ''Saltando pasos'' where id = %L', rep_a),
     'admin: no salta de Recibido a Atendido');
   perform pg_temp.falla(format('update public.reportes set estado = ''enRevision'' where id = %L', rep_a),
@@ -174,7 +193,7 @@ begin
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 3, 'admin: cada cambio queda en el historial');
   perform pg_temp.falla(format('insert into public.asignaciones (unidad, ruta_id, desde) values (8, ''M1'', %L)', hoy),
     'admin: una ruta no tiene dos unidades a la vez');
-  pruebas := pruebas + 16;
+  pruebas := pruebas + 18;
 
   -- A ve el nuevo estado y la nota ------------------------------------------------
   perform pg_temp.como(a);
@@ -182,6 +201,16 @@ begin
   perform pg_temp.afirmar((select nota from public.reportes where id = rep_a) like 'El equipo del proyecto%', 'A: ve la nota');
   perform pg_temp.afirmar((select count(*) from public.historial_reportes where reporte_id = rep_a) = 3, 'A: ve su historial completo');
   pruebas := pruebas + 3;
+
+  -- B elimina su cuenta -------------------------------------------------------------
+  perform pg_temp.como(b);
+  perform public.eliminar_mi_cuenta();
+  execute 'reset role';
+  perform pg_temp.afirmar(not exists (select 1 from auth.users where id = b), 'B: su cuenta se elimina');
+  perform pg_temp.afirmar(not exists (select 1 from public.reportes where autor = b), 'B: sus reportes se eliminan');
+  perform pg_temp.afirmar(exists (select 1 from public.reportes where id = rep_a), 'B: el reporte de A sigue');
+  perform pg_temp.afirmar(exists (select 1 from auth.users where id = a), 'B: la cuenta de A sigue');
+  pruebas := pruebas + 4;
 
   execute 'reset role';
   raise exception 'PRUEBAS_OK: % comprobaciones pasaron (todo se revirtió)', pruebas;
