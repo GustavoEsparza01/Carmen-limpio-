@@ -285,3 +285,15 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Estadísticas:** el cálculo vive en `compartido` (`calcularEstadisticas`), con pruebas, y usa los mismos reportes que la sección Reportes (hasta 1000). El tiempo de cierre es la mediana del envío a atendido o rechazado.
 - **Mapa de calor:** `leaflet.heat` fijo en 0.2.0, porque la 1.0.0 se publicó una semana antes. Usa una sola gama de color. Cada reporte cuenta en su punto marcado o en la ubicación ilustrativa de su lugar; los de lugares sin ubicar se cuentan aparte.
 - **Probado en el emulador:** el camión de V2 apareció y avanzó con posiciones de Supabase. **No probado en pantalla:** la página de Estadísticas (requiere la sesión del administrador). El panel compila con Vite.
+
+## 2026-11-11 · Sitio web (presencia web)
+
+- **Pedido del usuario:** un sitio para dar a conocer la app. La validación de las Fases 5 y 6 queda para la etapa de pruebas (QA).
+- **Solo código por ahora:** `apps/web`, sin publicar. El hosting se decide después.
+- **Sitio estático con Vite:** dos páginas HTML (`index.html` y `privacidad.html`) que no necesitan JavaScript. Al compilar, `contenido.ts` inserta los textos de `compartido` (no oficial, ventanas, horarios, trazado, reportes y aviso de privacidad), para que el sitio diga lo mismo que la app. Si falta un texto, la compilación se detiene.
+- **Botón principal «Próximamente en Android»:** no hay APK todavía, y el sitio no pide datos.
+- **Equipo y contacto:** pendientes; no se inventan. El sitio muestra "Pronto publicaremos…" hasta que se llenen `EQUIPO` y `CONTACTO` en `contenido.ts`.
+- **No se usa la imagen del camión simulado con logos de SOS de la Isla:** la autorización fue para la app, y en un sitio de presentación podría sugerir que el proyecto es oficial. El sitio tampoco muestra la pestaña de avisos, porque incluye un cartel de SOS.
+- **Capturas:** solo las tres que reflejan la app actual (inicio, horario y mapa). Las de seguimiento y avisos eran de la demostración anterior, con botones de "Simular" y avisos de ejemplo, y se quitaron. Faltan capturas nuevas tomadas con la APK y datos limpios; las actuales vienen del development build y muestran su rueda de desarrollo.
+- **Figtree** se sirve desde el sitio con su licencia OFL, sin pedirla a Google.
+- **No revisado:** la vista de teléfono en navegador (la ventana no cambió de tamaño durante la prueba). El escritorio sí se revisó.
