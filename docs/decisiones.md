@@ -245,3 +245,19 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Eliminar pide confirmación en la misma tarjeta,** sin ventanas emergentes del navegador. Al eliminar o reemplazar, la imagen anterior se borra después de guardar, y una imagen subida para un aviso que no se pudo guardar también se borra.
 - **Corrección:** Supabase repite el evento de inicio de sesión al volver a la pestaña, y el panel recargaba todo, perdiendo un aviso a medio escribir. Ahora solo recarga si cambia la persona.
 - **Imágenes de SOS de la Isla en avisos: autorizadas.** El usuario indicó que tienen autorización para usarlas. Es la segunda excepción a la regla de identidad visual de `CLAUDE.md`, junto con el camión simulado. La app sigue diciendo que no es oficial y que los avisos los publica el equipo del proyecto.
+
+## 2026-11-10 · Fase 4: reportes reales
+
+- **Inicio de sesión con correo y contraseña** (elección del usuario). No depende de que lleguen correos para entrar; mínimo 8 caracteres.
+- **Confirmación de correo activa** (el usuario prefirió mantenerla). El enlace confirma la cuenta en Supabase y luego redirige a la "Site URL", hoy `localhost`, que no carga. Pendiente: apagarla o publicar una página de "cuenta confirmada".
+- **Aviso de privacidad antes de pedir datos.** Para crear cuenta primero se acepta el aviso. La versión aceptada queda en `perfiles.privacidad_version` mediante `aceptar_privacidad()`, y la política de inserción de `reportes` exige haberla aceptado. Si el registro necesita confirmar el correo no hay sesión: el aviso se vuelve a pedir al iniciar sesión. Cambiar `VERSION_AVISO_PRIVACIDAD` obliga a aceptarlo de nuevo.
+- **El aviso sigue siendo borrador:** responsable, domicilio y contacto están pendientes de definir.
+- **Vista `reportes_detalle`** (`security_invoker`): da longitud y latitud y respeta la RLS. La app inserta la ubicación como EWKT.
+- **Fotos:** se suben a `fotos-reportes/<usuario>/<marca de tiempo>.jpg`, de hasta 5 MB. Si el reporte no se guarda, la foto se borra. Al enviarlo, se borra la copia local. Se muestran con URL firmada por una hora y sin recortar.
+- **Eliminar cuenta:** la app borra primero las fotos (política "borrar propias") y luego llama a `eliminar_mi_cuenta()`, que borra el usuario y, en cascada, perfil, reportes e historial. Una cuenta de administración no se elimina desde la app.
+- **Se quitaron la sesión y los reportes locales de la demostración** (`estado/demo.tsx` y los servicios locales de `compartido`).
+- **Panel:** la sección Reportes muestra a cada persona con un identificador corto, sin correo. Las incidencias se agrupan con los reportes ya cargados (hasta 500).
+- **Pruebas de RLS:** ya no dependen de los avisos ni reportes reales; cuentan solo los datos que crea la prueba. Son 74 comprobaciones.
+- **Probado en el emulador:** registro, confirmación, inicio de sesión, aceptación del aviso, acumulación con foto, cambio de estado desde el panel y que el vecino ve el nuevo estado y la nota.
+- **No probado con datos reales:** dos "no pasó" de distintas personas formando una incidencia, otro usuario sin acceso a la foto, y eliminar la cuenta. Las tres reglas sí están cubiertas por las pruebas de RLS.
+- **Pendiente:** "Olvidé mi contraseña" (requiere editar la plantilla de correo de Supabase).
