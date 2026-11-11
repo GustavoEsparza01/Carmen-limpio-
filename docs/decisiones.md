@@ -302,3 +302,9 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Las cifras** (15 rutas, 120 lugares, 95 en el mapa) salen del catálogo de `compartido` al compilar.
 - **Anton 5.3.0** (OFL, `@fontsource`, versión fija) para los rótulos. Funciona sin JavaScript y respeta "reducir movimiento". En pantallas angostas el nombre va arriba del teléfono. La vista de teléfono se revisó dentro de un marco de 390 px.
 - **Descarga desde el sitio (pedido del usuario):** la app se distribuirá como APK descargable desde la web. Mientras no exista, el botón dice «Próximamente: descarga la APK aquí» y hay una sección «Descárgala aquí» (`#descargar`), enlazada desde el menú. Al tener la APK (Fase 6), basta con llenar `APK` en `apps/web/contenido.ts` con su dirección y versión: el botón se convierte en descarga real. La sección avisa que Android pedirá permitir la instalación y que solo se descargue desde este sitio. El usuario confirmó el 2026-11-11 que la app es gratuita; el sitio lo dice en la sección de descarga y en las preguntas.
+
+## 2026-11-11 · Sitio en Vercel
+
+- **Proyecto `carmen-limpio` en Vercel:** se configuró con Root Directory `apps/web` y rama de producción `presencia-web`, porque `main` aún no tiene el sitio. Vercel instala desde la raíz del monorepo, así que el sitio puede usar `compartido`. Dirección: https://carmen-limpio.vercel.app
+- **Hallazgo:** el proyecto se había creado con Root Directory `apps/panel` sobre `main`. Eso publicaba el panel viejo de solo lectura, con `datos/propuesta.geojson` descargable por cualquiera, contra la regla de no mostrar la propuesta al público. Con el nuevo despliegue da 404. El despliegue anterior sigue existiendo, pero exige iniciar sesión en Vercel; se puede borrar si el usuario lo decide.
+- **Cuando `main` se fusione,** hay que cambiar la rama de producción de Vercel de vuelta a `main`.
