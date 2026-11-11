@@ -88,7 +88,7 @@
             <article class="leyenda" data-leyenda="0">
               <p class="mono">Ciudad del Carmen, Campeche</p>
               <p class="leyenda-entrada">¿Qué días pasa el camión por tu colonia?</p>
-              <span aria-disabled="true" class="boton boton-oscuro" role="link">Próximamente en Android</span>
+              {{BOTON_DESCARGA}}
             </article>
             <article class="leyenda" data-leyenda="1" id="paso-1">
               <p class="mono">01 / 03</p>
@@ -177,6 +177,24 @@
         </div>
       </section>
 
+      <section class="descarga" id="descargar" aria-labelledby="titulo-descarga">
+        <div class="envoltura descarga-fila">
+          <div>
+            {{ESTADO_DESCARGA}}
+            <h2 class="titular" id="titulo-descarga">Descárgala aquí</h2>
+            <p>
+              La app para Android se podrá descargar como APK directamente desde esta página, sin crear cuenta.
+              Estamos terminando las pruebas.
+            </p>
+            <p class="descarga-nota">
+              Al instalar una APK, Android te pedirá permitir la instalación desde tu navegador. Descárgala solo desde
+              este sitio.
+            </p>
+          </div>
+          {{BOTON_DESCARGA_CLARO}}
+        </div>
+      </section>
+
       <section class="seccion" id="preguntas" aria-labelledby="titulo-preguntas">
         <div class="envoltura angosta">
           <h2 class="titular" id="titulo-preguntas">Preguntas</h2>
@@ -222,7 +240,10 @@
           </details>
           <details>
             <summary>¿Cuándo podré descargarla?</summary>
-            <p>Estamos terminando las pruebas. Cuando esté lista, el botón de esta página te llevará a la descarga.</p>
+            <p>
+              Estamos terminando las pruebas. La APK estará disponible para descargar desde esta página, en la sección
+              <a href="#descargar">Descárgala aquí</a>.
+            </p>
           </details>
         </div>
       </section>
@@ -240,6 +261,7 @@
     <nav class="pildora" aria-label="Secciones">
       <a href="#contenido">Inicio</a>
       <a href="#como-funciona">Cómo funciona</a>
+      <a href="#descargar">Descargar</a>
       <a href="#preguntas">Preguntas</a>
       <a href="/privacidad.html">Privacidad</a>
       <a href="#contacto">Contacto</a>

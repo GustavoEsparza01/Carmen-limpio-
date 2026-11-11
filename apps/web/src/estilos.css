@@ -763,3 +763,71 @@ details p {
     transition: none !important;
   }
 }
+
+/* Descarga de la APK */
+
+.descarga {
+  padding: 88px 0;
+  background: var(--primario);
+  color: var(--superficie);
+}
+
+.descarga .titular {
+  color: var(--superficie);
+}
+
+.descarga-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+}
+
+.descarga-fila > div {
+  max-width: 640px;
+}
+
+.descarga-estado {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.descarga-nota {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+.boton-claro {
+  background: var(--superficie);
+  color: var(--primario);
+}
+
+/* Aún no hay APK: el botón se ve, pero no lleva a ningún lado. */
+.boton-inactivo {
+  cursor: default;
+}
+
+.boton-inactivo::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: #d9822b;
+}
+
+/* La cabecera fija pasa sobre franjas oscuras: lleva su propio fondo claro. */
+.marca {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(244, 243, 240, 0.88);
+}
+
+.leyenda .boton {
+  padding: 0 18px;
+  font-size: 15px;
+  white-space: nowrap;
+}

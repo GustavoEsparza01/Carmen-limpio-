@@ -20,6 +20,24 @@ import {
 export const EQUIPO: readonly { nombre: string; rol: string }[] = [];
 export const CONTACTO: { correo: string } | null = null;
 
+// La app se descargará como APK desde este sitio. Mientras sea null, el sitio dice «Próximamente».
+// Cuando exista (Fase 6), pon aquí su dirección (p. ej. '/descargas/carmen-limpio.apk') y su versión.
+export const APK: { url: string; version: string } | null = null;
+
+function botonDescarga(clase: string): string {
+  if (!APK) {
+    return `<span aria-disabled="true" class="boton ${clase} boton-inactivo" role="link">Próximamente: descarga la APK aquí</span>`;
+  }
+  return `<a class="boton ${clase}" download href="${escapar(APK.url)}">Descargar la APK (versión ${escapar(APK.version)})</a>`;
+}
+
+function estadoDescarga(): string {
+  if (!APK) {
+    return '<p class="mono descarga-estado">Próximamente · APK para Android</p>';
+  }
+  return `<p class="mono descarga-estado">Disponible · versión ${escapar(APK.version)}</p>`;
+}
+
 const escapar = (texto: string) =>
   texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -59,6 +77,9 @@ export function valores(): Record<string, string> {
     VENTANA_MATUTINA: `${VENTANAS.matutino.inicio} a ${VENTANAS.matutino.fin}`,
     VENTANA_VESPERTINA: `${VENTANAS.vespertino.inicio} a ${VENTANAS.vespertino.fin}`,
     SECCIONES_PRIVACIDAD: seccionesPrivacidad(),
+    BOTON_DESCARGA: botonDescarga('boton-oscuro'),
+    BOTON_DESCARGA_CLARO: botonDescarga('boton-claro'),
+    ESTADO_DESCARGA: estadoDescarga(),
     EQUIPO: equipo(),
     CONTACTO: contacto(),
   };
