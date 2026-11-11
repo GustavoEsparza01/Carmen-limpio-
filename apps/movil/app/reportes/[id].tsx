@@ -64,7 +64,8 @@ function Foto({ ruta }: { ruta: string }) {
 
   if (url === undefined) return <Esqueleto alto={200} />;
   if (url === null) return <Text style={TEXTO.apoyo}>No pudimos cargar la foto. Revisa tu conexión.</Text>;
-  return <Image accessibilityLabel="Foto del reporte" source={{ uri: url }} style={estilos.foto} />;
+  // Completa, sin recortar: muchas fotos son verticales.
+  return <Image accessibilityLabel="Foto del reporte" resizeMode="contain" source={{ uri: url }} style={estilos.foto} />;
 }
 
 export default function DetalleReporte() {
@@ -125,7 +126,7 @@ const estilos = StyleSheet.create({
   encabezado: { gap: 2 },
   nota: { ...TARJETA, backgroundColor: COLORES.primarioSuave, gap: 6, padding: 16 },
   tarjeta: { ...TARJETA, gap: 10, padding: 16 },
-  foto: { borderRadius: RADIO.grande, height: 220, width: '100%' },
+  foto: { backgroundColor: COLORES.fondo, borderRadius: RADIO.grande, height: 320, width: '100%' },
   paso: { flexDirection: 'row', gap: 12 },
   guia: { alignItems: 'center', width: 26 },
   marca: {
