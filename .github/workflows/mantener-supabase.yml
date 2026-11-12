@@ -1,8 +1,9 @@
 # El plan gratis de Supabase pausa el proyecto tras 7 días con poca actividad.
 # Esta tarea hace una consulta real a la base cada 3 días para mantenerlo activo.
 # Usa la clave anon (solo lee lo público) guardada en los secretos del repositorio.
-# GitHub desactiva las tareas programadas de un repositorio público tras 60 días sin actividad:
-# si eso pasa, reactívala en la pestaña Actions.
+# GitHub desactiva las tareas programadas de un repositorio público tras 60 días sin commits.
+# El último paso le pide a GitHub mantener activa esta tarea en cada ejecución, sin hacer commits.
+# Si aun así se desactivara, se reactiva en la pestaña Actions.
 name: Mantener Supabase activo
 
 on:
@@ -10,7 +11,9 @@ on:
     - cron: '0 15 */3 * *' # cada 3 días a las 15:00 UTC (9:00 en Ciudad del Carmen)
   workflow_dispatch:
 
-permissions: {}
+# Solo el permiso para mantener activa la tarea; no puede tocar el código.
+permissions:
+  actions: write
 
 jobs:
   consultar:
@@ -36,3 +39,14 @@ jobs:
             exit 1
           fi
           echo "Supabase activo. Respuesta: $respuesta"
+
+      - name: Mantener activa esta tarea en GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl -sS --fail-with-body -X PUT \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/mantener-supabase.yml/enable"
+          echo "Tarea marcada como activa."
