@@ -339,3 +339,9 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **No se publicó `main`:** Vercel importa `main` en la primera compilación, y ahí sigue el panel viejo con `propuesta.geojson` público. Esa compilación se detuvo a propósito con `exit 1`; después se cambió la rama de producción a `presencia-web` y se quitó el comando. En la dirección publicada, `/datos/propuesta.geojson` da 404.
 - **Seguridad:** el panel lleva solo la clave `anon`. Los datos y las acciones de administración los protege la RLS con `es_admin()`, así que la pantalla de acceso es pública, pero sin rol de administrador no se ve nada. Tiene `noindex` para que no aparezca en buscadores. `escenarios.json` (solo cifras) sigue siendo estático, como ya se había decidido.
 - **Cuando `main` se fusione:** cambiar también en este proyecto la rama de producción a `main`.
+
+## 2026-11-12 · Fusión a main
+
+- **`main` reúne todo:** las Fases 3 a 6, el sitio, el panel y la APK se fusionaron sin conflictos. Con eso desaparece de `main` el panel viejo con `propuesta.geojson` público.
+- **Vercel publica desde `main`:** los dos proyectos, `carmen-limpio` (sitio) y `carmen-limpio-panel`, tienen ahora `main` como rama de producción. `presencia-web` y las ramas de fase quedan como historial.
+- **Supabase no se pausa:** la GitHub Action «Mantener Supabase activo» consulta una ruta cada 3 días con los secretos `SUPABASE_URL` y `SUPABASE_ANON_KEY` del repositorio (clave anon). Para que GitHub no apague la tarea tras 60 días sin commits, un último paso la vuelve a marcar como activa en cada ejecución, por la API y con el permiso `actions: write`.
