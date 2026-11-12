@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cuenta confirmada · Carmen Limpio</title>
+    <meta name="description" content="Confirmación de cuenta de Carmen Limpio, app independiente y no oficial de Ciudad del Carmen." />
+    <meta name="robots" content="noindex" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#F4F3F0" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/estilos.css" />
+    <script>
+      // Supabase llega aquí tras confirmar el correo, con la sesión o un error al final de la dirección.
+      // Esta página no usa la sesión: la quita de la barra de direcciones y del historial.
+      (function () {
+        var datos = new URLSearchParams(location.hash.slice(1) || location.search.slice(1));
+        window.confirmacionFallida = datos.has('error') || datos.has('error_code');
+        if (location.hash || location.search) history.replaceState(null, '', location.pathname);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="cabecera">
+      <a class="marca" href="/" aria-label="Carmen Limpio, inicio">CARMEN LIMPIO</a>
+      <span class="sello">App no oficial</span>
+    </header>
+
+    <main class="seccion" id="contenido">
+      <div class="envoltura angosta privacidad">
+        <div id="exito">
+          <h1>Tu cuenta quedó confirmada</h1>
+          <p>Regresa a la app Carmen Limpio e inicia sesión con tu correo y contraseña para enviar reportes.</p>
+        </div>
+        <div id="fallo" hidden>
+          <h1>No pudimos confirmar tu cuenta</h1>
+          <p>
+            El enlace venció o ya se usó. Si ya lo habías abierto, tu cuenta está confirmada: inicia sesión en la app.
+            Si no, vuelve a crear la cuenta desde la app para recibir un enlace nuevo.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="pie">
+      <div class="envoltura pie-fila">
+        <p>{{AVISO_NO_OFICIAL}}</p>
+        <p><a href="/">Ir al inicio</a></p>
+      </div>
+    </footer>
+    <script>
+      if (window.confirmacionFallida) {
+        document.getElementById('exito').hidden = true;
+        document.getElementById('fallo').hidden = false;
+      }
+    </script>
+  </body>
+</html>

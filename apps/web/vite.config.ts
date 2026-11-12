@@ -26,6 +26,7 @@ export default defineConfig({
       input: {
         inicio: resolve(import.meta.dirname, 'index.html'),
         privacidad: resolve(import.meta.dirname, 'privacidad.html'),
+        confirmado: resolve(import.meta.dirname, 'confirmado.html'),
       },
     },
   },

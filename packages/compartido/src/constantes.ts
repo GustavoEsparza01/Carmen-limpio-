@@ -110,6 +110,11 @@ export const AVISO_SIMULACION = 'Simulación: no es la ubicación real de ningú
 
 export const ATRIBUCION_OSM = '© OpenStreetMap';
 
+// Sitio público (apps/web en Vercel). El enlace de confirmación de correo regresa a CONFIRMACION_CORREO;
+// la dirección debe estar en Supabase, Authentication → URL Configuration → Redirect URLs.
+export const URL_SITIO = 'https://carmen-limpio.vercel.app';
+export const CONFIRMACION_CORREO = `${URL_SITIO}/confirmado.html`;
+
 // Paleta propia: no reutiliza la identidad visual de los carteles.
 export const COLORES = {
   errorTexto: '#B3261E',

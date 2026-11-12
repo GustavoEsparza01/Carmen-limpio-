@@ -1,5 +1,6 @@
 import {
   BUCKET_FOTOS_REPORTES,
+  CONFIRMACION_CORREO,
   CONSULTA_REPORTES,
   filaNuevoReporte,
   mensajeError,
@@ -140,7 +141,16 @@ export function ProveedorCuenta({ children }: { children: ReactNode }) {
   };
 
   const registrar = async (correo: string, clave: string) => {
-    const { data } = revisar(await conLimite(cliente().auth.signUp({ email: correo.trim(), password: clave })));
+    const { data } = revisar(
+      await conLimite(
+        cliente().auth.signUp({
+          email: correo.trim(),
+          password: clave,
+          // Sin esto, el enlace del correo regresa a la Site URL de Supabase.
+          options: { emailRedirectTo: CONFIRMACION_CORREO },
+        }),
+      ),
+    );
     // Con la confirmación de correo activa no hay sesión hasta abrir el enlace.
     if (!data.session) return { confirmarCorreo: true };
     // Quien se registra ya leyó y aceptó el aviso en la pantalla anterior.
