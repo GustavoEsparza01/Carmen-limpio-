@@ -121,8 +121,9 @@ export function Reportes() {
         </button>
       </div>
       <p className="suave">
-        {reportes.length} reportes{reportes.length === LIMITE ? ` (los ${LIMITE} más recientes)` : ''} · {pendientes}{' '}
-        pendientes. Los atiende el equipo del proyecto como demostración; no llegan al municipio ni a la empresa recolectora.
+        {reportes.length} {reportes.length === 1 ? 'reporte' : 'reportes'}
+        {reportes.length === LIMITE ? ` (los ${LIMITE} más recientes)` : ''} · {pendientes}{' '}
+        {pendientes === 1 ? 'pendiente' : 'pendientes'}. Los atiende el equipo del proyecto como demostración; no llegan al municipio ni a la empresa recolectora.
       </p>
 
       <div className="acciones">
