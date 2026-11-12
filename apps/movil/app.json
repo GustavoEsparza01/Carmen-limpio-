@@ -23,6 +23,7 @@
     "plugins": [
       "expo-router",
       "./plugins/cmake-moderno.js",
+      "./plugins/firma-propia.js",
       "@maplibre/maplibre-react-native",
       [
         "expo-font",
