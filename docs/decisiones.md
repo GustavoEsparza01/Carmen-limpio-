@@ -332,3 +332,10 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Sin la clave, el release no compila.** Se detiene con «Falta la clave de firma», en lugar de producir una APK sin firmar. El development build no cambia.
 - **Permisos de la APK:** las librerías agregaban permisos que la app no usa. Se quitan con `blockedPermissions` en `app.json`: ubicación precisa y aproximada (la agrega MapLibre, y el aviso de privacidad dice que no se usa el GPS), micrófono (lo agrega el selector de fotos, para video), mostrar sobre otras apps (resto del modo de desarrollo) y la recepción de push de Google (no hay avisos push). Quedan la cámara, las notificaciones locales e internet. En el emulador, el mapa funciona igual sin el permiso de ubicación.
 - **Tamaño:** con los cuatro tipos de procesador, la APK pesa unos 125 MB. La que se publica lleva solo los de teléfono (`-PreactNativeArchitectures=arm64-v8a,armeabi-v7a`), alrededor de 67 MB. El emulador x86_64 no ejecuta esa versión, así que se prueba en la completa y la de teléfonos se revisa en un teléfono real.
+
+## 2026-11-12 · Panel en Vercel
+
+- **Proyecto `carmen-limpio-panel`:** Root Directory `apps/panel`, rama de producción `presencia-web`, con las variables `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` como Config. Dirección: https://carmen-limpio-panel.vercel.app
+- **No se publicó `main`:** Vercel importa `main` en la primera compilación, y ahí sigue el panel viejo con `propuesta.geojson` público. Esa compilación se detuvo a propósito con `exit 1`; después se cambió la rama de producción a `presencia-web` y se quitó el comando. En la dirección publicada, `/datos/propuesta.geojson` da 404.
+- **Seguridad:** el panel lleva solo la clave `anon`. Los datos y las acciones de administración los protege la RLS con `es_admin()`, así que la pantalla de acceso es pública, pero sin rol de administrador no se ve nada. Tiene `noindex` para que no aparezca en buscadores. `escenarios.json` (solo cifras) sigue siendo estático, como ya se había decidido.
+- **Cuando `main` se fusione:** cambiar también en este proyecto la rama de producción a `main`.
