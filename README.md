@@ -20,7 +20,7 @@ setx ANDROID_HOME "%LOCALAPPDATA%\Android\Sdk"
 
 ```bash
 npm install
-cp .env.example .env   # todavía no hace falta llenarlo
+cp .env.example .env   # URL y clave anon de Supabase (nunca la service_role)
 npm run panel          # panel en http://localhost:5173
 npm run android        # compila e instala la app en Android
 ```
@@ -34,6 +34,25 @@ npm run android        # compila e instala la app en Android
 | `SDK location not found` | Define `ANDROID_HOME` y abre una terminal nueva |
 | `Expo stopped waiting for the ADB device discovery operation to finish` | ADB está saturado. Reinícialo con `adb kill-server` y `adb start-server` (`adb` está en `platform-tools` del SDK) y repite el comando |
 | El puerto 8081 está ocupado | Cierra la otra terminal donde corre Metro |
+
+## Base de datos (Supabase en la nube)
+
+La primera vez, en una terminal de PowerShell aparte (piden interacción):
+
+```bash
+npx supabase login
+npx supabase link --project-ref <ref-del-proyecto>
+```
+
+Después, desde la raíz:
+
+```bash
+npm run db:seed       # regenera supabase/seed.sql desde herramientas/rutas
+npm run db:aplicar    # aplica migraciones pendientes (y el seed en una base vacía)
+npm run db:pruebas    # pruebas de RLS: deben terminar con "PRUEBAS_OK"
+```
+
+Las pruebas crean usuarios y reportes de prueba y lo revierten todo al final; el mensaje `PRUEBAS_OK` llega como error a propósito. El CLI pide confirmación antes de escribir en el proyecto.
 
 ## Estructura
 

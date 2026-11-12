@@ -1,11 +1,12 @@
 import {
-  ATRIBUCION_OSM,
   AVISO_HORARIOS,
   AVISO_NO_OFICIAL,
   AVISO_POR_CONFIRMAR,
+  AVISO_SIMULACION,
   AVISO_TRAZADO,
   COLORES,
   DIAS_CARTEL,
+  diasDeRuta,
   etiquetaRuta,
   limitesDe,
   lugaresUbicados,
@@ -16,8 +17,10 @@ import {
   rutaPorId,
   textoHorario,
   trazadoDeRuta,
+  VENTANAS,
   type Dia,
   type ParadaDeRuta,
+  type Turno,
 } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { Camera, GeoJSONSource, Layer, Map as Mapa, type CameraRef } from '@maplibre/maplibre-react-native';
@@ -26,7 +29,6 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Animated,
   FlatList,
-  Linking,
   PanResponder,
   Pressable,
   ScrollView,
@@ -37,32 +39,39 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
+  AtribucionOSM,
   Aviso,
   BarraEstado,
   BotonFlotante,
   DiasSemana,
+  EtiquetaIlustrativa,
   EtiquetaTurno,
   InsigniaRuta,
   Pastilla,
   Pestanas,
 } from '../../componentes/ui';
-import { FUENTE, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
-
-// El servidor público de OpenStreetMap solo sirve para el prototipo.
-const ESTILO_OSM = {
-  version: 8 as const,
-  sources: {
-    osm: {
-      type: 'raster' as const,
-      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-      tileSize: 256,
-      maxzoom: 19,
-    },
-  },
-  layers: [{ id: 'osm', type: 'raster' as const, source: 'osm' }],
-};
+import { CamionRemoto, CamionSimulado } from '../../componentes/CamionSimulado';
+import { ESTILO_MAPA } from '../../componentes/mapaBase';
+import { useCamionSimulado, type EstadoCamion } from '../../estado/camion';
+import { ALTURA_TACTIL, RADIO, SOMBRA, TEXTO } from '../../estilos/tema';
 
 type Pestana = 'lugares' | 'horario';
+
+// Qué decir mientras el camión simulado está activo. Nunca sugiere una hora de llegada.
+function textoSimulacion(camion: EstadoCamion, turno: Turno | undefined): string {
+  switch (camion.tipo) {
+    case 'buscando':
+      return 'Buscando el camión simulado…';
+    case 'sinConexion':
+      return 'Sin conexión no se puede mostrar el camión simulado.';
+    case 'fueraDeServicio': {
+      const ventana = turno ? ` (${VENTANAS[turno].inicio} a ${VENTANAS[turno].fin})` : '';
+      return `El camión simulado solo recorre esta ruta en su ventana${ventana} los días con recolección. ${AVISO_SIMULACION}`;
+    }
+    default:
+      return AVISO_SIMULACION;
+  }
+}
 
 const PESTANAS: { id: Pestana; texto: string }[] = [
   { id: 'lugares', texto: 'Lugares' },
@@ -115,6 +124,8 @@ export default function MapaRuta() {
   const [elegido, setElegido] = useState(lugar);
   const [pestana, setPestana] = useState<Pestana>('lugares');
   const [dia, setDia] = useState<Dia | null>(null);
+  const [simulando, setSimulando] = useState(false);
+  const camion = useCamionSimulado(rutaId, simulando);
   const ruta = rutaPorId(rutaId);
   const trazado = trazadoDeRuta(rutaId);
   const camara = useRef<CameraRef>(null);
@@ -215,7 +226,7 @@ export default function MapaRuta() {
   return (
     <View style={estilos.pantalla}>
       <BarraEstado estilo="dark" />
-      <Mapa attribution={false} logo={false} mapStyle={ESTILO_OSM} style={StyleSheet.absoluteFill}>
+      <Mapa attribution={false} logo={false} mapStyle={ESTILO_MAPA} style={StyleSheet.absoluteFill}>
         <Camera bounds={limites} duration={0} padding={margenMapa} ref={camara} />
         <GeoJSONSource data={linea} id="linea">
           <Layer
@@ -242,14 +253,13 @@ export default function MapaRuta() {
             type="circle"
           />
         </GeoJSONSource>
+        {simulando && camion.tipo === 'local' && <CamionSimulado linea={trazado.linea} />}
+        {simulando && camion.tipo === 'enServicio' && <CamionRemoto punto={camion.punto} />}
       </Mapa>
 
       <View pointerEvents="box-none" style={[estilos.superior, { top: top + 8 }]}>
         <BotonFlotante etiqueta="Regresar" icono="arrow-back" onPress={() => router.back()} />
-        <View style={estilos.ilustrativo}>
-          <Ionicons color={COLORES.acentoTexto} name="alert-circle" size={16} />
-          <Text style={estilos.ilustrativoTexto}>Trazado ilustrativo</Text>
-        </View>
+        <EtiquetaIlustrativa />
         <View style={estilos.equilibrio} />
       </View>
 
@@ -259,15 +269,23 @@ export default function MapaRuta() {
           icono="scan"
           onPress={() => camara.current?.fitBounds(limites, { padding: margenMapa, duration: 500 })}
         />
+        <BotonFlotante
+          etiqueta={simulando ? 'Detener simulación' : 'Simular camión'}
+          icono={simulando ? 'stop' : 'play'}
+          onPress={() => setSimulando((activo) => !activo)}
+        />
       </View>
 
-      <Pressable
-        accessibilityRole="link"
-        onPress={() => Linking.openURL('https://www.openstreetmap.org/copyright')}
-        style={[estilos.atribucion, { top: top + 62 }]}
-      >
-        <Text style={estilos.atribucionTexto}>{ATRIBUCION_OSM}</Text>
-      </Pressable>
+      {simulando && (
+        <View style={[estilos.simulacion, { top: top + 96 }]}>
+          <Ionicons color={COLORES.acentoTexto} name="information-circle" size={16} />
+          <Text style={estilos.simulacionTexto}>{textoSimulacion(camion, ruta?.turno)}</Text>
+        </View>
+      )}
+
+      <View style={[estilos.atribucion, { top: top + 62 }]}>
+        <AtribucionOSM />
+      </View>
 
       <Animated.View
         style={[estilos.panel, { height: alturaAbierto, transform: [{ translateY: desplazamiento }] }]}
@@ -277,6 +295,7 @@ export default function MapaRuta() {
             accessibilityLabel="Cambiar el tamaño del panel"
             accessibilityRole="button"
             onPress={() => moverA(posicion.current === 0 ? paradas[0]! : 0)}
+            hitSlop={{ bottom: 10, top: 10 }}
             style={estilos.asa}
           >
             <View style={estilos.asaLinea} />
@@ -307,8 +326,8 @@ export default function MapaRuta() {
             ListHeaderComponent={
               <ScrollView contentContainerStyle={estilos.dias} horizontal showsHorizontalScrollIndicator={false}>
                 <Pastilla activa={dia === null} onPress={() => setDia(null)} texto="Todos" />
-                {DIAS_CARTEL.map((d) => (
-                  <Pastilla activa={dia === d} key={d} onPress={() => setDia(d)} texto={NOMBRE_DIA[d]} />
+                {diasDeRuta(ruta).map((d) => (
+                  <Pastilla activa={dia === d} key={d} onPress={() => setDia(d)} texto={NOMBRE_DIA[d].replace(/^./, (letra) => letra.toUpperCase())} />
                 ))}
               </ScrollView>
             }
@@ -346,29 +365,24 @@ const estilos = StyleSheet.create({
     position: 'absolute',
     right: 16,
   },
-  equilibrio: { width: 46 },
-  recentrar: { position: 'absolute', right: 16 },
-  ilustrativo: {
+  equilibrio: { width: ALTURA_TACTIL },
+  recentrar: { gap: 10, position: 'absolute', right: 16 },
+  simulacion: {
     ...SOMBRA,
     alignItems: 'center',
     backgroundColor: COLORES.acentoSuave,
-    borderRadius: RADIO.completo,
+    borderRadius: RADIO.chico,
     elevation: 4,
     flexDirection: 'row',
     gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  ilustrativoTexto: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
-  atribucion: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: RADIO.chico,
     left: 16,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     position: 'absolute',
+    right: 74,
   },
-  atribucionTexto: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 12, fontWeight: '500' },
+  simulacionTexto: { ...TEXTO.pequeno, color: COLORES.acentoTexto, flex: 1 },
+  atribucion: { left: 16, position: 'absolute' },
   panel: {
     ...SOMBRA,
     backgroundColor: COLORES.superficie,
@@ -401,8 +415,8 @@ const estilos = StyleSheet.create({
   paradaElegida: { backgroundColor: COLORES.primarioSuave },
   paradaCuerpo: { flex: 1, gap: 2 },
   paradaFlecha: { alignSelf: 'center' },
-  excepcion: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 15, fontWeight: '500', lineHeight: 21 },
+  excepcion: TEXTO.alerta,
   horario: { gap: 14, padding: 20 },
-  ventana: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  ventana: TEXTO.destacado,
   vacio: { padding: 20 },
 });

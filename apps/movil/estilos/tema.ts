@@ -1,4 +1,4 @@
-import { COLORES, type Turno } from '@carmen-limpio/compartido';
+import { COLORES, type EstadoHoy, type Turno } from '@carmen-limpio/compartido';
 import { StyleSheet, type ViewStyle } from 'react-native';
 
 export const FUENTE = 'Figtree';
@@ -8,6 +8,17 @@ export const RADIO = { chico: 8, medio: 12, grande: 16, completo: 999 } as const
 export const COLOR_TURNO: Record<Turno, { fondo: string; texto: string; icono: 'sunny' | 'moon' }> = {
   matutino: { fondo: COLORES.matutinoSuave, texto: COLORES.matutinoTexto, icono: 'sunny' },
   vespertino: { fondo: COLORES.vespertinoSuave, texto: COLORES.vespertinoTexto, icono: 'moon' },
+};
+
+// El texto y el icono dicen lo mismo que el color. Sin íconos de "listo": no sabemos si hubo recolección.
+export const COLOR_ESTADO_HOY: Record<
+  EstadoHoy,
+  { fondo: string; texto: string; icono: 'today' | 'time' | 'calendar-clear' | 'calendar'; etiqueta: string }
+> = {
+  antes: { fondo: COLORES.primario, texto: COLORES.superficie, icono: 'today', etiqueta: 'Hoy' },
+  enCurso: { fondo: COLORES.acentoTexto, texto: COLORES.superficie, icono: 'time', etiqueta: 'Ahora' },
+  terminada: { fondo: COLORES.inactivo, texto: COLORES.texto, icono: 'calendar-clear', etiqueta: 'Terminada' },
+  otroDia: { fondo: COLORES.primarioSuave, texto: COLORES.primario, icono: 'calendar', etiqueta: 'Sin ventana hoy' },
 };
 
 export const SOMBRA: ViewStyle = {
@@ -32,7 +43,25 @@ export const TEXTO = StyleSheet.create({
     letterSpacing: 0.4,
     lineHeight: 20,
   },
+  destacado: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  enlace: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
+  alerta: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 15, fontWeight: '500', lineHeight: 21 },
+  campo: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '500' },
+  pequeno: { color: COLORES.textoSuave, fontFamily: FUENTE, fontSize: 13, fontWeight: '500', lineHeight: 18 },
 });
+
+// Margen y separación de todas las pantallas con desplazamiento.
+export const CONTENIDO: ViewStyle = { gap: 14, padding: 20 };
+
+export const ALTURA_TACTIL = 48;
+
+// Compartido por el Stack raíz y las pestañas.
+export const ENCABEZADO = {
+  headerShadowVisible: false,
+  headerStyle: { backgroundColor: COLORES.superficie },
+  headerTintColor: COLORES.texto,
+  headerTitleStyle: { fontFamily: FUENTE, fontWeight: '700' },
+} as const;
 
 export const TARJETA: ViewStyle = {
   backgroundColor: COLORES.superficie,

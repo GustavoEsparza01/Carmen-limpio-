@@ -1,10 +1,19 @@
-import { COLORES, DIAS_SEMANA, listaDias, VENTANAS, type Dia, type Turno } from '@carmen-limpio/compartido';
+import {
+  ATRIBUCION_OSM,
+  COLORES,
+  DIAS_SEMANA,
+  listaDias,
+  NOMBRE_DIA,
+  VENTANAS,
+  type Dia,
+  type Turno,
+} from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { useCallback, type ComponentProps, type ReactNode } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { COLOR_TURNO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ALTURA_TACTIL, COLOR_TURNO, CONTENIDO, FUENTE, RADIO, SOMBRA, TARJETA, TEXTO } from '../estilos/tema';
 
 type NombreIcono = ComponentProps<typeof Ionicons>['name'];
 
@@ -38,18 +47,47 @@ export function EtiquetaTurno({ turno, conHorario = false }: { turno: Turno; con
   );
 }
 
-export function DiasSemana({ dias }: { dias: readonly Dia[] }) {
+export function DiasSemana({ dias, hoy }: { dias: readonly Dia[]; hoy?: Dia }) {
+  const etiqueta = `Días de recolección: ${listaDias(dias)}${hoy ? `. Hoy es ${NOMBRE_DIA[hoy]}` : ''}`;
   return (
-    <View accessibilityLabel={`Pasa ${listaDias(dias)}`} accessible style={estilos.dias}>
+    <View accessibilityLabel={etiqueta} accessible style={estilos.dias}>
       {DIAS_SEMANA.map((dia) => {
         const activo = dias.includes(dia);
         return (
-          <View key={dia} style={[estilos.dia, activo && estilos.diaActivo]}>
+          <View key={dia} style={[estilos.dia, activo && estilos.diaActivo, dia === hoy && estilos.diaHoy]}>
             <Text style={[estilos.diaTexto, activo && estilos.diaTextoActivo]}>{LETRA_DIA[dia]}</Text>
           </View>
         );
       })}
     </View>
+  );
+}
+
+export function TarjetaAcceso({
+  icono,
+  titulo,
+  subtitulo,
+  onPress,
+}: {
+  icono: NombreIcono;
+  titulo: string;
+  subtitulo: string;
+  // Sin acción, la tarjeta se muestra como no disponible.
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable
+      accessibilityLabel={`${titulo}. ${subtitulo}`}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !onPress }}
+      disabled={!onPress}
+      onPress={onPress}
+      style={({ pressed }) => [estilos.acceso, !onPress && estilos.accesoInactivo, pressed && estilos.filaPresionada]}
+    >
+      <IconoCirculo icono={icono} />
+      <Text style={TEXTO.fila}>{titulo}</Text>
+      <Text style={TEXTO.apoyo}>{subtitulo}</Text>
+    </Pressable>
   );
 }
 
@@ -74,7 +112,7 @@ export function Boton({
   variante?: 'principal' | 'secundario';
 }) {
   const secundario = variante === 'secundario';
-  const color = secundario ? COLORES.primario : '#FFFFFF';
+  const color = secundario ? COLORES.primario : COLORES.superficie;
   return (
     <Pressable
       accessibilityRole="button"
@@ -172,6 +210,57 @@ export function Pastilla({ texto, activa, onPress }: { texto: string; activa: bo
   );
 }
 
+export function PastillaRuta({
+  numero,
+  turno,
+  color,
+  activa,
+  onPress,
+}: {
+  numero: number;
+  turno: Turno;
+  color: string;
+  activa: boolean;
+  onPress: () => void;
+}) {
+  const { icono } = COLOR_TURNO[turno];
+  const tinta = activa ? COLORES.superficie : COLORES.texto;
+  return (
+    <Pressable
+      accessibilityLabel={`Ruta ${numero}, ${turno}`}
+      accessibilityRole="button"
+      accessibilityState={{ selected: activa }}
+      onPress={onPress}
+      style={[estilos.pastilla, estilos.pastillaRuta, activa && estilos.pastillaActiva]}
+    >
+      <View style={[estilos.pastillaColor, { backgroundColor: color }]} />
+      <Text style={[estilos.pastillaTexto, { color: tinta }]}>{numero}</Text>
+      <Ionicons color={tinta} name={icono} size={14} />
+    </Pressable>
+  );
+}
+
+export function EtiquetaIlustrativa() {
+  return (
+    <View style={estilos.ilustrativo}>
+      <Ionicons color={COLORES.acentoTexto} name="alert-circle" size={16} />
+      <Text style={estilos.ilustrativoTexto}>Trazado ilustrativo</Text>
+    </View>
+  );
+}
+
+export function AtribucionOSM() {
+  return (
+    <Pressable
+      accessibilityRole="link"
+      onPress={() => Linking.openURL('https://www.openstreetmap.org/copyright')}
+      style={estilos.atribucion}
+    >
+      <Text style={estilos.atribucionTexto}>{ATRIBUCION_OSM}</Text>
+    </Pressable>
+  );
+}
+
 export function BotonFlotante({
   icono,
   etiqueta,
@@ -190,6 +279,32 @@ export function BotonFlotante({
     >
       <Ionicons color={COLORES.texto} name={icono} size={22} />
     </Pressable>
+  );
+}
+
+export function PantallaVacia({
+  icono,
+  titulo,
+  texto,
+  children,
+}: {
+  icono: NombreIcono;
+  titulo: string;
+  texto: string;
+  children?: ReactNode;
+}) {
+  return (
+    <ScrollView contentContainerStyle={estilos.vaciaContenido}>
+      <BarraEstado estilo="dark" />
+      <View style={estilos.vaciaIcono}>
+        <Ionicons color={COLORES.primario} name={icono} size={44} />
+      </View>
+      <Text accessibilityRole="header" style={[TEXTO.subtitulo, estilos.vaciaTexto]}>
+        {titulo}
+      </Text>
+      <Text style={[TEXTO.cuerpo, estilos.vaciaTexto]}>{texto}</Text>
+      {children && <View style={estilos.vaciaAccion}>{children}</View>}
+    </ScrollView>
   );
 }
 
@@ -223,8 +338,9 @@ const estilos = StyleSheet.create({
     maxWidth: 40,
   },
   diaActivo: { backgroundColor: COLORES.primario },
+  diaHoy: { borderColor: COLORES.acentoTexto, borderWidth: 3 },
   diaTexto: { color: COLORES.inactivoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
-  diaTextoActivo: { color: '#FFFFFF', fontWeight: '700' },
+  diaTextoActivo: { color: COLORES.superficie, fontWeight: '700' },
   insignia: {
     alignItems: 'center',
     borderRadius: RADIO.medio,
@@ -265,6 +381,41 @@ const estilos = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 21,
   },
+  vaciaContenido: { ...CONTENIDO, alignItems: 'center', flexGrow: 1, justifyContent: 'center' },
+  vaciaIcono: {
+    alignItems: 'center',
+    backgroundColor: COLORES.primarioSuave,
+    borderRadius: RADIO.completo,
+    height: 96,
+    justifyContent: 'center',
+    marginBottom: 4,
+    width: 96,
+  },
+  vaciaTexto: { textAlign: 'center' },
+  vaciaAccion: { alignSelf: 'stretch', marginTop: 8 },
+  pastillaRuta: { alignItems: 'center', flexDirection: 'row', gap: 6 },
+  pastillaColor: { borderColor: COLORES.superficie, borderRadius: RADIO.completo, borderWidth: 1.5, height: 16, width: 16 },
+  ilustrativo: {
+    ...SOMBRA,
+    alignItems: 'center',
+    backgroundColor: COLORES.acentoSuave,
+    borderRadius: RADIO.completo,
+    elevation: 4,
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  ilustrativoTexto: { color: COLORES.acentoTexto, fontFamily: FUENTE, fontSize: 14, fontWeight: '600' },
+  atribucion: {
+    backgroundColor: COLORES.superficieTranslucida,
+    borderRadius: RADIO.chico,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  atribucionTexto: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 12, fontWeight: '500' },
+  acceso: { ...TARJETA, flexBasis: 170, flexGrow: 1, gap: 6, minHeight: 48, padding: 14 },
+  accesoInactivo: { backgroundColor: COLORES.inactivo, elevation: 0, shadowOpacity: 0 },
   fila: {
     ...TARJETA,
     alignItems: 'center',
@@ -301,7 +452,7 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
     justifyContent: 'center',
-    minHeight: 46,
+    minHeight: ALTURA_TACTIL,
   },
   pestanaActiva: { borderBottomColor: COLORES.primario },
   pestanaTexto: { fontFamily: FUENTE, fontSize: 16, fontWeight: '500' },
@@ -311,7 +462,7 @@ const estilos = StyleSheet.create({
     backgroundColor: COLORES.inactivo,
     borderRadius: RADIO.chico,
     justifyContent: 'center',
-    minHeight: 40,
+    minHeight: ALTURA_TACTIL,
     paddingHorizontal: 14,
   },
   pastillaActiva: { backgroundColor: COLORES.texto },
@@ -320,18 +471,17 @@ const estilos = StyleSheet.create({
     fontFamily: FUENTE,
     fontSize: 15,
     fontWeight: '600',
-    textTransform: 'capitalize',
   },
-  pastillaTextoActiva: { color: '#FFFFFF' },
+  pastillaTextoActiva: { color: COLORES.superficie },
   flotante: {
     ...SOMBRA,
     alignItems: 'center',
     backgroundColor: COLORES.superficie,
     borderRadius: RADIO.completo,
     elevation: 4,
-    height: 46,
+    height: ALTURA_TACTIL,
     justifyContent: 'center',
-    width: 46,
+    width: ALTURA_TACTIL,
   },
   circulo: {
     alignItems: 'center',

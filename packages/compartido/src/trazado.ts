@@ -36,3 +36,12 @@ export function limitesDe(trazado: Trazado): [oeste: number, sur: number, este: 
 export function paradasDeLugar(trazado: Trazado, lugarId: string): ParadaTrazada[] {
   return trazado.paradas.filter((p) => p.lugarIds.includes(lugarId));
 }
+
+// Punto de un lugar en el trazado de carteles (el primero que lo incluya). Sin ubicar: undefined.
+export function ubicacionDeLugar(lugarId: string): Coordenadas | undefined {
+  for (const trazado of Object.values(TRAZADOS)) {
+    const parada = trazado.paradas.find((p) => p.lugarIds.includes(lugarId));
+    if (parada) return parada.coordenadas;
+  }
+  return undefined;
+}

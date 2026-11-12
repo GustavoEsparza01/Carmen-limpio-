@@ -1,0 +1,1011 @@
+/* Anton (rótulos) y Figtree (texto): ambas con licencia OFL, servidas desde el sitio. */
+@import '@fontsource/anton/latin-400.css';
+
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fuentes/Figtree_400Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fuentes/Figtree_600SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fuentes/Figtree_700Bold.ttf') format('truetype');
+}
+
+/* Paleta propia de la app (compartido/constantes.ts) sobre un fondo claro cálido.
+   No usa la identidad visual de los carteles. */
+:root {
+  --primario: #0b4f6c;
+  --primario-suave: #e3eff4;
+  --acento-suave: #fdf0dc;
+  --acento-texto: #7c3a06;
+  --texto: #16242c;
+  --texto-suave: #4a5c66;
+  --fondo: #f4f3f0;
+  --superficie: #ffffff;
+  --borde: #dcd9d3;
+  --tinta: #10181d;
+  --rotulo: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  --mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', Menlo, Consolas, monospace;
+  --alto-tel: min(76svh, 720px);
+  --ancho-tel: calc(var(--alto-tel) * 0.47);
+  color: var(--texto);
+  font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--primario);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 12px;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0 0 12px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primario);
+  outline-offset: 3px;
+}
+
+.saltar {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 40;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--superficie);
+}
+
+.saltar:focus {
+  top: 12px;
+}
+
+.envoltura {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.angosta {
+  max-width: 820px;
+}
+
+.mono {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nota {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--acento-suave);
+  color: var(--acento-texto);
+  font-size: 15px;
+}
+
+/* Cabecera */
+
+.cabecera {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  pointer-events: none;
+}
+
+.cabecera > * {
+  pointer-events: auto;
+}
+
+.marca {
+  color: var(--tinta);
+  font-family: var(--rotulo);
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.sello {
+  padding: 6px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Escenario: el teléfono al centro y el nombre enorme detrás */
+
+.escena {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 32px;
+  padding: 96px 24px 48px;
+}
+
+.escena::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(38% 42% at 50% 46%, rgba(11, 79, 108, 0.18), transparent 70%),
+    radial-gradient(30% 30% at 58% 70%, rgba(217, 130, 43, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.rotulo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: calc(var(--ancho-tel) * 0.92);
+  margin: 0;
+  color: var(--tinta);
+  font-family: var(--rotulo);
+  font-size: clamp(64px, 12.5vw, 250px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.rotulo span {
+  transition: color 0.5s ease;
+}
+
+.rotulo-a {
+  justify-self: end;
+}
+
+.rotulo-b {
+  justify-self: start;
+}
+
+.escena[data-paso]:not([data-paso='0']) .rotulo span {
+  color: #dedbd5;
+}
+
+.telefono {
+  position: relative;
+  z-index: 2;
+  width: var(--ancho-tel);
+  height: var(--alto-tel);
+  padding: 10px;
+  border-radius: 46px;
+  background: linear-gradient(145deg, #2a3238, #0d1215 60%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 40px 80px -20px rgba(16, 24, 29, 0.45),
+    0 18px 36px -18px rgba(16, 24, 29, 0.35);
+}
+
+.telefono-boton {
+  position: absolute;
+  right: -3px;
+  width: 4px;
+  border-radius: 0 3px 3px 0;
+  background: #1c2328;
+}
+
+.telefono-boton-a {
+  top: 22%;
+  height: 9%;
+}
+
+.telefono-boton-b {
+  top: 35%;
+  height: 14%;
+}
+
+.pantalla {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 37px;
+  background: var(--superficie);
+}
+
+.camara {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: 3;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #05080a;
+  transform: translateX(-50%);
+}
+
+.vista {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Sin JavaScript se ve la pantalla de bloqueo. */
+.vista[data-vista='0'],
+.js .vista[data-activa] {
+  opacity: 1;
+}
+
+.js .vista[data-vista='0']:not([data-activa]) {
+  opacity: 0;
+}
+
+.vista-bloqueo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18% 7% 7%;
+  background:
+    radial-gradient(80% 50% at 70% 85%, rgba(217, 130, 43, 0.55), transparent 70%),
+    linear-gradient(170deg, #0b4f6c 0%, #08364a 55%, #10181d 100%);
+  color: var(--superficie);
+  text-align: center;
+}
+
+.bloqueo-fecha {
+  margin: 0;
+  font-size: clamp(12px, 1.6svh, 15px);
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.bloqueo-hora {
+  margin: 0 0 auto;
+  font-family: var(--rotulo);
+  font-size: clamp(56px, 10svh, 96px);
+  line-height: 1.05;
+}
+
+.notificacion {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--texto);
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.notificacion-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+.notificacion-titulo {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.notificacion-texto {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.bloqueo-ejemplo {
+  margin: 8px 0 14px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.bloqueo-deslizar {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--superficie);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.leyendas {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 24px;
+  width: min(100%, 640px);
+}
+
+.leyenda {
+  padding: 22px 24px;
+  border: 1px solid var(--borde);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.leyenda h2 {
+  font-size: 26px;
+}
+
+.leyenda-entrada {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.leyenda p:not(.mono):not(.nota):not(.leyenda-entrada) {
+  color: var(--texto-suave);
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.boton-oscuro {
+  background: var(--tinta);
+  color: var(--superficie);
+  cursor: default;
+}
+
+/* Con JavaScript: escenario fijo de cuatro pantallas de alto */
+
+.js .escenario {
+  height: 400svh;
+}
+
+.js .escena {
+  position: sticky;
+  top: 0;
+  display: grid;
+  place-items: center;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.js .leyendas {
+  position: absolute;
+  left: max(24px, 5vw);
+  bottom: 9svh;
+  display: block;
+  width: min(340px, calc(50vw - var(--ancho-tel) / 2 - max(24px, 5vw) - 24px));
+}
+
+/* Las inactivas se ocultan del todo al terminar de desvanecerse (también para lectores de pantalla). */
+.js .leyenda {
+  position: absolute;
+  inset: auto 0 0;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0s linear 0.45s;
+}
+
+.js .leyenda[data-activa] {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
+}
+
+/* Cifras */
+
+.cifras {
+  padding: 88px 0;
+  background: var(--tinta);
+  color: #e9eef1;
+}
+
+.cifras .mono {
+  color: #8fa3ae;
+}
+
+.cifras-rejilla {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 24px 0 16px;
+}
+
+.cifras-rejilla div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.cifras-rejilla dd {
+  margin: 0 0 6px;
+  font-family: var(--rotulo);
+  font-size: clamp(56px, 8vw, 104px);
+  line-height: 1;
+}
+
+.cifras-nota {
+  color: #8fa3ae;
+  font-size: 15px;
+}
+
+/* Secciones */
+
+.seccion {
+  padding: 104px 0 72px;
+}
+
+.titular {
+  margin-bottom: 32px;
+  color: var(--tinta);
+  font-family: var(--rotulo);
+  font-size: clamp(52px, 9vw, 132px);
+  font-weight: 400;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.mosaicos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mosaico {
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+  padding: 28px;
+  border-radius: 28px;
+}
+
+.mosaico h3 {
+  margin-top: auto;
+  font-size: 26px;
+}
+
+.mosaico p {
+  max-width: 30em;
+  opacity: 0.9;
+}
+
+.mosaico-numero {
+  font-family: var(--rotulo);
+  font-size: clamp(72px, 9vw, 120px);
+  line-height: 1;
+}
+
+.mosaico-nota {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.mosaico-azul {
+  background: var(--primario);
+  color: var(--superficie);
+}
+
+.mosaico-arena {
+  background: var(--acento-suave);
+  color: var(--acento-texto);
+}
+
+.mosaico-oscuro {
+  background: var(--tinta);
+  color: #e9eef1;
+}
+
+.mosaico-claro {
+  background: var(--primario-suave);
+  color: var(--primario);
+}
+
+/* Preguntas */
+
+details {
+  border-bottom: 1px solid var(--borde);
+}
+
+details:first-of-type {
+  border-top: 1px solid var(--borde);
+}
+
+summary {
+  padding: 20px 0;
+  font-size: 19px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+details p {
+  color: var(--texto-suave);
+}
+
+/* Equipo, contacto y privacidad */
+
+.seccion-contacto {
+  padding-bottom: 104px;
+}
+
+.pendiente {
+  color: var(--texto-suave);
+  font-style: italic;
+}
+
+.equipo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.equipo li {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: var(--superficie);
+}
+
+.equipo span {
+  color: var(--texto-suave);
+}
+
+.privacidad {
+  padding-top: 96px;
+}
+
+.privacidad .bloque {
+  margin-top: 24px;
+}
+
+.privacidad .bloque h2 {
+  font-size: 20px;
+}
+
+.aviso-borrador {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--acento-suave);
+  color: var(--acento-texto);
+  font-weight: 600;
+}
+
+/* Menú tipo píldora */
+
+.pildora {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  gap: 2px;
+  max-width: calc(100% - 24px);
+  padding: 6px;
+  overflow-x: auto;
+  border-radius: 999px;
+  background: rgba(16, 24, 29, 0.86);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
+  scrollbar-width: none;
+}
+
+.pildora a {
+  flex: none;
+  padding: 9px 15px;
+  border-radius: 999px;
+  color: var(--superficie);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pildora a:hover,
+.pildora a[aria-current='page'] {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Pie */
+
+.pie {
+  padding: 40px 0 104px;
+  background: var(--tinta);
+  color: #c9d3d8;
+  font-size: 15px;
+}
+
+.pie a {
+  color: var(--superficie);
+}
+
+.pie-fila {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+/* Pantallas angostas: el nombre arriba y abajo del teléfono, la leyenda en una tarjeta inferior */
+
+@media (max-width: 820px) {
+  :root {
+    /* Deja sitio al nombre arriba y a la tarjeta abajo. */
+    --alto-tel: min(48svh, 520px);
+  }
+
+  /* La cabecera fija lleva franja propia para no tapar el contenido al bajar. */
+  .cabecera {
+    padding: 10px 16px;
+    background: rgba(244, 243, 240, 0.92);
+    backdrop-filter: blur(8px);
+  }
+
+  /* En la portada el nombre ya está enorme: la cabecera no lo repite. */
+  .inicio .marca {
+    visibility: hidden;
+  }
+
+  /* El nombre va completo arriba del teléfono, no detrás. */
+  .rotulo {
+    inset: 64px 0 auto;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    column-gap: 0.22em;
+    font-size: min(15vw, 96px);
+  }
+
+  .js .escena {
+    place-items: start center;
+    padding-top: calc(76px + min(15vw, 96px));
+  }
+
+  .js .leyendas {
+    left: 12px;
+    right: 12px;
+    bottom: 72px;
+    width: auto;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .leyenda {
+    padding: 14px 16px;
+    border-radius: 20px;
+  }
+
+  .leyenda h2 {
+    margin-bottom: 6px;
+    font-size: 19px;
+  }
+
+  .leyenda p {
+    margin-bottom: 8px;
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+
+  .leyenda .mono {
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+
+  .leyenda-entrada {
+    font-size: 18px !important;
+  }
+
+  .js .leyenda .nota {
+    display: none;
+  }
+
+  /* La pantalla de bloqueo se encoge con el teléfono. */
+  .vista-bloqueo {
+    padding: 16% 6% 6%;
+  }
+
+  .bloqueo-fecha {
+    font-size: 11px;
+  }
+
+  .bloqueo-hora {
+    font-size: clamp(40px, 7svh, 64px);
+  }
+
+  .notificacion {
+    padding: 9px 10px;
+    border-radius: 14px;
+  }
+
+  .notificacion-cabeza {
+    font-size: 10.5px;
+  }
+
+  .notificacion-titulo {
+    font-size: 12px;
+  }
+
+  .notificacion-texto {
+    font-size: 11px;
+  }
+
+  .bloqueo-ejemplo {
+    margin-bottom: 0;
+    font-size: 10px;
+  }
+
+  .bloqueo-deslizar {
+    display: none;
+  }
+
+  .cifras-rejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mosaico {
+    min-height: 0;
+  }
+
+  .mosaico h3 {
+    margin-top: 16px;
+  }
+}
+
+/* Pantallas bajas en horizontal (teléfono girado): composición de escritorio, compacta. */
+@media (max-height: 520px) and (orientation: landscape) {
+  :root {
+    --alto-tel: 68svh;
+  }
+
+  .rotulo {
+    inset: 0;
+    grid-template-columns: 1fr 1fr;
+    justify-content: stretch;
+    column-gap: calc(var(--ancho-tel) * 0.92);
+    font-size: 12.5vw;
+  }
+
+  .inicio .marca {
+    visibility: visible;
+  }
+
+  .js .escena {
+    place-items: center;
+    padding-top: 0;
+  }
+
+  .js .leyendas {
+    left: 16px;
+    right: auto;
+    bottom: 64px;
+    width: min(320px, calc(50vw - var(--ancho-tel) / 2 - 32px));
+    margin: 0;
+  }
+
+  .js .leyenda .nota {
+    display: none;
+  }
+
+  .leyenda {
+    padding: 12px 14px;
+  }
+
+  .leyenda h2 {
+    font-size: 17px;
+  }
+
+  .leyenda p {
+    font-size: 13.5px;
+  }
+
+  .bloqueo-hora {
+    font-size: 40px;
+  }
+
+  .cabecera {
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .mosaicos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .vista,
+  .leyenda,
+  .rotulo span {
+    transition: none !important;
+  }
+}
+
+/* Descarga de la APK */
+
+.descarga {
+  padding: 88px 0;
+  background: var(--primario);
+  color: var(--superficie);
+}
+
+.descarga .titular {
+  color: var(--superficie);
+}
+
+.descarga-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+}
+
+.descarga-fila > div {
+  max-width: 640px;
+}
+
+.descarga-estado {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.descarga-nota {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+.boton-claro {
+  background: var(--superficie);
+  color: var(--primario);
+}
+
+/* Aún no hay APK: el botón se ve, pero no lleva a ningún lado. */
+.boton-inactivo {
+  cursor: default;
+}
+
+.boton-inactivo::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: #d9822b;
+}
+
+/* La cabecera fija pasa sobre franjas oscuras: lleva su propio fondo claro. */
+.marca {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(244, 243, 240, 0.88);
+}
+
+.leyenda .boton {
+  padding: 0 18px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+/* Formulario de nueva contraseña (nueva-clave.html) */
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formulario label {
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.formulario input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+.formulario input:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+
+.formulario .apoyo {
+  color: var(--texto-suave);
+  font-size: 15px;
+}
+
+.formulario .error {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.formulario .error:empty {
+  display: none;
+}
+
+.formulario .boton {
+  align-self: flex-start;
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boton-primario {
+  background: var(--primario);
+  color: var(--superficie);
+}
+
+.boton-primario:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nueva contraseña · Carmen Limpio</title>
+    <meta name="description" content="Cambio de contraseña de Carmen Limpio, app independiente y no oficial de Ciudad del Carmen." />
+    <meta name="robots" content="noindex" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#F4F3F0" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/estilos.css" />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="cabecera">
+      <a class="marca" href="/" aria-label="Carmen Limpio, inicio">CARMEN LIMPIO</a>
+      <span class="sello">App no oficial</span>
+    </header>
+
+    <main class="seccion" id="contenido">
+      <div class="envoltura angosta privacidad">
+        <noscript>
+          <h1>Activa JavaScript</h1>
+          <p>Para cambiar tu contraseña, esta página necesita JavaScript.</p>
+        </noscript>
+
+        <form id="formulario" class="formulario" hidden novalidate>
+          <h1>Escribe tu nueva contraseña</h1>
+          <p>Después inicia sesión en la app Carmen Limpio con tu correo y esta contraseña.</p>
+          <label for="clave">Nueva contraseña</label>
+          <input id="clave" name="clave" type="password" autocomplete="new-password" required />
+          <label for="repetir">Repítela</label>
+          <input id="repetir" name="repetir" type="password" autocomplete="new-password" required />
+          <p class="apoyo">Al menos {{LARGO_MINIMO_CLAVE}} caracteres.</p>
+          <p id="error" class="error" role="alert"></p>
+          <button class="boton boton-primario" type="submit">Guardar contraseña</button>
+        </form>
+
+        <div id="listo" hidden>
+          <h1>Tu contraseña quedó cambiada</h1>
+          <p>Regresa a la app Carmen Limpio e inicia sesión con tu correo y tu nueva contraseña.</p>
+        </div>
+
+        <div id="fallo" hidden>
+          <h1>Este enlace ya no sirve</h1>
+          <p>
+            El enlace venció o ya se usó. En la app, toca «Olvidé mi contraseña» en Iniciar sesión para recibir uno
+            nuevo.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="pie">
+      <div class="envoltura pie-fila">
+        <p>{{AVISO_NO_OFICIAL}}</p>
+        <p><a href="/">Ir al inicio</a></p>
+      </div>
+    </footer>
+    <script type="module" src="/src/nueva-clave.ts"></script>
+  </body>
+</html>

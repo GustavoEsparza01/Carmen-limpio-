@@ -11,13 +11,16 @@
   },
   "dependencies": {
     "@carmen-limpio/compartido": "*",
+    "@supabase/supabase-js": "^2.119.0",
     "leaflet": "^1.9.4",
+    "leaflet.heat": "0.2.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",
+    "@types/leaflet.heat": "0.2.5",
     "@types/react": "~19.3.0",
     "@types/react-dom": "~19.3.0",
     "@vitejs/plugin-react": "^6.2.1",

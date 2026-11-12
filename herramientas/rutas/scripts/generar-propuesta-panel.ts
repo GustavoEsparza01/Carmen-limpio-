@@ -1,5 +1,6 @@
 // Genera los datos de comparación del panel. Ejecutar desde herramientas/rutas.
-// La geometría de `propuesta` solo va a apps/panel: nunca a packages/compartido ni a la app ciudadana.
+// Solo cifras: la geometría de `propuesta` ya no se publica como archivo; el panel la pide a Supabase,
+// donde la RLS la reserva a administración.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const leer = (archivo: string) => JSON.parse(readFileSync(archivo, 'utf8'));
@@ -23,7 +24,6 @@ const rutas = carteles.map((r: any) => {
 if (rutas.length !== 15 || servicio.length !== 15) throw new Error('Se esperaban 15 rutas y 15 zonas');
 
 mkdirSync(destino, { recursive: true });
-writeFileSync(`${destino}/propuesta.geojson`, JSON.stringify({ type: 'FeatureCollection', features: servicio }));
 writeFileSync(
   `${destino}/escenarios.json`,
   JSON.stringify({

@@ -2,29 +2,42 @@ import {
   AVISO_HORARIOS,
   AVISO_NO_OFICIAL,
   AVISO_POR_CONFIRMAR,
+  AVISO_SIN_PERMISO,
   COLORES,
+  descripcionRecordatorio,
   ETIQUETA_TIPO,
   lugarPorId,
+  NOMBRE_ETIQUETA,
+  NOMBRE_RECORDATORIO,
+  textoCompartir,
   textoHorario,
   tieneMapa,
+  type EtiquetaLugar,
+  type Recordatorio,
 } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Aviso, BarraEstado, Boton, DiasSemana, EtiquetaTurno } from '../../componentes/ui';
-import { useFavorita } from '../../estado/favorita';
-import { FUENTE, TARJETA, TEXTO } from '../../estilos/tema';
+import { useState } from 'react';
+import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { Aviso, BarraEstado, Boton, DiasSemana, EtiquetaTurno, Pastilla } from '../../componentes/ui';
+import { useGuardados } from '../../estado/guardados';
+import { ALTURA_TACTIL, CONTENIDO, TARJETA, TEXTO } from '../../estilos/tema';
+
+const ETIQUETAS: EtiquetaLugar[] = ['casa', 'trabajo', 'otro'];
+const RECORDATORIOS: Recordatorio[] = ['ninguno', 'nocheAnterior', 'antesDeVentana'];
 
 export default function DetalleLugar() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { favoritaId, cambiarFavorita } = useFavorita();
+  const { guardados, guardar, quitar, cambiarRecordatorio } = useGuardados();
+  const [sinPermiso, setSinPermiso] = useState(false);
   const lugar = lugarPorId(id);
 
   if (!lugar) {
     return <Text style={[TEXTO.cuerpo, estilos.contenido]}>No encontramos este lugar.</Text>;
   }
 
-  const guardada = favoritaId === lugar.id;
+  const guardado = guardados.find((g) => g.lugarId === lugar.id);
+  const descripcion = guardado ? descripcionRecordatorio(guardado.recordatorio) : null;
   const tipo = ETIQUETA_TIPO[lugar.tipo];
 
   return (
@@ -58,7 +71,7 @@ export default function DetalleLugar() {
               style={estilos.enlace}
             >
               <Ionicons color={COLORES.primario} name="map" size={18} />
-              <Text style={estilos.enlaceTexto}>Ver en el mapa</Text>
+              <Text style={TEXTO.enlace}>Ver en el mapa</Text>
             </Pressable>
           )}
         </View>
@@ -68,11 +81,43 @@ export default function DetalleLugar() {
         <Aviso icono="map">Todavía no tenemos este lugar en el mapa. Su horario sí aparece en los carteles.</Aviso>
       )}
 
+      <View style={estilos.tarjeta}>
+        <Text style={TEXTO.fila}>{guardado ? 'Guardado como' : 'Guardar como'}</Text>
+        <View style={estilos.opciones}>
+          {ETIQUETAS.map((etiqueta) => (
+            <Pastilla
+              activa={guardado?.etiqueta === etiqueta}
+              key={etiqueta}
+              onPress={() => guardar(lugar.id, etiqueta)}
+              texto={NOMBRE_ETIQUETA[etiqueta]}
+            />
+          ))}
+        </View>
+        {guardado && (
+          <>
+            <Text style={TEXTO.fila}>Recordatorio</Text>
+            <View style={estilos.opciones}>
+              {RECORDATORIOS.map((tipo) => (
+                <Pastilla
+                  activa={guardado.recordatorio === tipo}
+                  key={tipo}
+                  onPress={async () => setSinPermiso(!(await cambiarRecordatorio(lugar.id, tipo)))}
+                  texto={NOMBRE_RECORDATORIO[tipo]}
+                />
+              ))}
+            </View>
+            {descripcion && <Text style={TEXTO.apoyo}>{descripcion}</Text>}
+            {sinPermiso && <Aviso icono="notifications-off">{AVISO_SIN_PERMISO}</Aviso>}
+            <Boton icono="bookmark" onPress={() => quitar(lugar.id)} texto="Quitar de mis lugares" variante="secundario" />
+          </>
+        )}
+      </View>
+
       <Boton
-        icono={guardada ? 'bookmark' : 'bookmark-outline'}
-        onPress={() => cambiarFavorita(guardada ? null : lugar.id)}
-        texto={guardada ? 'Quitar de mi lugar guardado' : 'Guardar como mi lugar'}
-        variante={guardada ? 'secundario' : 'principal'}
+        icono="share-social"
+        onPress={() => Share.share({ message: textoCompartir(lugar) }).catch(() => {})}
+        texto="Compartir horario"
+        variante="secundario"
       />
 
       <Text style={TEXTO.apoyo}>{AVISO_HORARIOS}</Text>
@@ -82,19 +127,12 @@ export default function DetalleLugar() {
 }
 
 const estilos = StyleSheet.create({
-  contenido: { gap: 14, padding: 20 },
+  contenido: CONTENIDO,
   tarjeta: { ...TARJETA, gap: 12, padding: 16 },
   tarjetaEncabezado: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
-  horario: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  opciones: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  horario: TEXTO.destacado,
   porConfirmar: { alignItems: 'flex-start', flexDirection: 'row', gap: 6 },
-  porConfirmarTexto: {
-    color: COLORES.acentoTexto,
-    flex: 1,
-    fontFamily: FUENTE,
-    fontSize: 15,
-    fontWeight: '500',
-    lineHeight: 21,
-  },
-  enlace: { alignItems: 'center', flexDirection: 'row', gap: 6, minHeight: 44 },
-  enlaceTexto: { color: COLORES.primario, fontFamily: FUENTE, fontSize: 16, fontWeight: '600' },
+  porConfirmarTexto: { ...TEXTO.alerta, flex: 1 },
+  enlace: { alignItems: 'center', flexDirection: 'row', gap: 6, minHeight: ALTURA_TACTIL },
 });

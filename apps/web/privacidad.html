@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aviso de privacidad · Carmen Limpio</title>
+    <meta name="description" content="Aviso de privacidad de Carmen Limpio, app independiente y no oficial de Ciudad del Carmen." />
+    <meta name="theme-color" content="#F4F3F0" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/estilos.css" />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="cabecera">
+      <a class="marca" href="/" aria-label="Carmen Limpio, inicio">CARMEN LIMPIO</a>
+      <span class="sello">App no oficial</span>
+    </header>
+
+    <main class="seccion" id="contenido">
+      <div class="envoltura angosta privacidad">
+        <h1>Aviso de privacidad</h1>
+        <p class="aviso-borrador" role="note">{{AVISO_PRIVACIDAD_BORRADOR}}</p>
+        <p>
+          Este aviso aplica a la app Carmen Limpio, con base en la Ley Federal de Protección de Datos Personales en
+          Posesión de los Particulares. Consultar horarios no pide ningún dato: este aviso aplica cuando creas una
+          cuenta para reportar.
+        </p>
+        {{SECCIONES_PRIVACIDAD}}
+        <p class="nota">Versión {{VERSION_AVISO_PRIVACIDAD}}. Es el mismo texto que muestra la app.</p>
+      </div>
+    </main>
+
+    <nav class="pildora" aria-label="Secciones">
+      <a href="/">Inicio</a>
+      <a href="/#como-funciona">Cómo funciona</a>
+      <a href="/#descargar">Descargar</a>
+      <a href="/#preguntas">Preguntas</a>
+      <a aria-current="page" href="/privacidad.html">Privacidad</a>
+      <a href="/#contacto">Contacto</a>
+    </nav>
+
+    <footer class="pie">
+      <div class="envoltura pie-fila">
+        <p>{{AVISO_NO_OFICIAL}}</p>
+        <p><a href="/">Volver al inicio</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,57 +1,9 @@
-// Genera el mapa Leaflet y el seed de Supabase a partir de salida/*: node scripts/generar-salidas.ts
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// Genera el mapa Leaflet de revisión a partir de salida/*: node scripts/generar-salidas.ts. El seed lo escribe generar-seed.ts.
+import { readFileSync, writeFileSync } from 'node:fs';
 const rutas = JSON.parse(readFileSync('salida/rutas.geojson', 'utf8'));
 const paradas = JSON.parse(readFileSync('salida/paradas.geojson', 'utf8'));
 const { salida, resumen } = JSON.parse(readFileSync('salida/resumen.json', 'utf8'));
 
-// --- Seed PostGIS ---
-const q = (s: string) => `'${String(s).replace(/'/g, "''")}'`;
-const sql: string[] = ['-- Generado por scripts/generar-salidas.ts. Trazos estimados: pendientes de validación oficial.', 'begin;'];
-for (const r of resumen) {
-  const n = +r.ruta.slice(1);
-  sql.push(`insert into rutas (id, turno, numero, validada) values (${q(r.ruta)}, ${q(r.turno)}, ${n}, false);`);
-}
-for (const f of rutas.features) {
-  const p = f.properties;
-  sql.push(`insert into tramos_ruta (ruta_id, tramo, km, geom) values (${q(p.ruta)}, ${q(p.tramo)}, ${p.km}, ST_Multi(ST_SetSRID(ST_GeomFromGeoJSON(${q(JSON.stringify(f.geometry))}), 4326)));`);
-}
-for (const f of paradas.features) {
-  const p = f.properties;
-  sql.push(`insert into paradas_ruta (ruta_id, orden, lugar, confianza, geom) values (${q(p.ruta)}, ${p.orden}, ${q(p.lugar)}, ${q(p.confianza)}, ST_SetSRID(ST_GeomFromGeoJSON(${q(JSON.stringify(f.geometry))}), 4326));`);
-}
-sql.push('commit;');
-mkdirSync('supabase/migrations', { recursive: true });
-writeFileSync('supabase/seed.sql', sql.join('\n') + '\n');
-writeFileSync('supabase/migrations/0001_rutas.sql', `create extension if not exists postgis;
-
-create table rutas (
-  id text primary key,
-  turno text not null check (turno in ('matutino', 'vespertino')),
-  numero int not null,
-  validada boolean not null default false,
-  unique (turno, numero)
-);
-
-create table tramos_ruta (
-  id bigint generated always as identity primary key,
-  ruta_id text not null references rutas (id) on delete cascade,
-  tramo text not null check (tramo in ('servicio', 'traslado')),
-  km numeric(6, 1) not null,
-  geom geometry(MultiLineString, 4326) not null
-);
-create index tramos_ruta_geom_idx on tramos_ruta using gist (geom);
-
-create table paradas_ruta (
-  id bigint generated always as identity primary key,
-  ruta_id text not null references rutas (id) on delete cascade,
-  orden int not null,
-  lugar text not null,
-  confianza text not null check (confianza in ('alta', 'media', 'baja')),
-  geom geometry(Point, 4326) not null,
-  unique (ruta_id, orden)
-);
-create index paradas_ruta_geom_idx on paradas_ruta using gist (geom);
-`);
 
 // --- Mapa de revisión ---
 const datos = JSON.stringify({ rutas, paradas, resumen, salida }).replace(/</g, '\\u003c');
@@ -104,4 +56,4 @@ const pend=D.resumen.filter(r=>r.faltan.length);const tot=pend.reduce((a,r)=>a+r
 document.getElementById('faltan').innerHTML='<h2 class=falta>'+tot+' lugares sin ubicar</h2>'+pend.map(r=>'<details><summary>'+r.ruta+' ('+r.faltan.length+')</summary>'+r.faltan.join(', ')+'</details>').join('');
 </script></body></html>`;
 writeFileSync('salida/mapa-rutas.html', html);
-console.log('ok', (html.length / 1024).toFixed(0) + ' KB html', sql.length, 'lineas sql');
+console.log('ok', (html.length / 1024).toFixed(0) + ' KB html');
