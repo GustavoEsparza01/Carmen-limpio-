@@ -308,3 +308,10 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Proyecto `carmen-limpio` en Vercel:** se configuró con Root Directory `apps/web` y rama de producción `presencia-web`, porque `main` aún no tiene el sitio. Vercel instala desde la raíz del monorepo, así que el sitio puede usar `compartido`. Dirección: https://carmen-limpio.vercel.app
 - **Hallazgo:** el proyecto se había creado con Root Directory `apps/panel` sobre `main`. Eso publicaba el panel viejo de solo lectura, con `datos/propuesta.geojson` descargable por cualquiera, contra la regla de no mostrar la propuesta al público. Con el nuevo despliegue da 404. El despliegue anterior sigue existiendo, pero exige iniciar sesión en Vercel; se puede borrar si el usuario lo decide.
 - **Cuando `main` se fusione,** hay que cambiar la rama de producción de Vercel de vuelta a `main`.
+
+## 2026-11-11 · Revisión de datos antes de la APK
+
+- **Base contra carteles:** se compararon en la base remota los 123 horarios, 120 lugares y 15 rutas con el seed generado desde `rutas.json`. La única diferencia era Bivalvo en V2 (martes, jueves y sábado, por una prueba en el panel); quedó en solo martes, como el cartel.
+- **Datos de prueba:** se borraron el aviso «PRUEBA» con su imagen y el reporte «PRUEBA» con su foto. Se corrigió la ortografía del aviso de descacharrización.
+- **Camión simulado:** todas las líneas de carteles pasan a menos de 150 m de sus lugares ubicados. La V5 tiene solo 1 de 5 lugares ubicados y su línea mide 309 m; se deja así hasta tener ubicaciones confiables, sin inventarlas.
+- **Mapa de calor:** no se dibujaba. `leaflet.heat` se registra en la variable global `L`, y el módulo importado de leaflet no admite propiedades nuevas; ahora recibe una copia extensible. Además, el complemento atenúa cada punto a la mitad por nivel de zoom por debajo de 18, así que se fija `maxZoom` en el zoom de la ciudad para que un reporte se vea completo en esa vista.

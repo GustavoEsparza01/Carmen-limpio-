@@ -27,19 +27,39 @@ const TIPOS = Object.keys(NOMBRE_TIPO_REPORTE) as TipoReporte[];
 // Una sola gama (magnitud): de acento claro a acento oscuro.
 const GRADIENTE = { 0.2: '#f6c88f', 0.5: '#d9822b', 0.8: '#a4520f', 1: '#7c3a06' };
 
+// leaflet.heat se registra en la variable global L. El módulo importado de leaflet no admite propiedades
+// nuevas, así que el complemento recibe una copia extensible y de ella se toma heatLayer. Se carga una vez.
+let cargaCalor: Promise<typeof L.heatLayer> | undefined;
+function cargarCalor() {
+  cargaCalor ??= (async () => {
+    const copia = { ...L } as typeof L;
+    (window as unknown as { L: typeof L }).L = copia;
+    await import('leaflet.heat');
+    if (typeof copia.heatLayer !== 'function') throw new Error('leaflet.heat no se registró');
+    return copia.heatLayer;
+  })();
+  return cargaCalor;
+}
+
 function CapaCalor({ puntos }: { puntos: DatosEstadisticas['puntos'] }) {
   const mapa = useMap();
   useEffect(() => {
     let capa: L.Layer | undefined;
     let vigente = true;
-    // leaflet.heat espera la variable global L.
-    (window as unknown as { L: typeof L }).L = L;
-    import('leaflet.heat').then(() => {
+    cargarCalor().then((heatLayer) => {
       if (!vigente || puntos.length === 0) return;
       const maximo = Math.max(...puntos.map((p) => p.peso));
-      capa = L.heatLayer(
+      // leaflet.heat divide la intensidad entre 2 por cada nivel de zoom por debajo de maxZoom (18 por omisión):
+      // en la vista de la ciudad cada reporte quedaba casi transparente. Con el zoom de la ciudad como tope,
+      // un reporte se ve con toda su intensidad en esa vista y al acercarse.
+      const [oeste, sur, este, norte] = LIMITES_CIUDAD;
+      const zoomCiudad = mapa.getBoundsZoom([
+        [sur, oeste],
+        [norte, este],
+      ]);
+      capa = heatLayer(
         puntos.map((p) => [p.coordenadas[1], p.coordenadas[0], p.peso] as L.HeatLatLngTuple),
-        { radius: 28, blur: 22, max: maximo, minOpacity: 0.35, gradient: GRADIENTE },
+        { radius: 28, blur: 22, max: maximo, maxZoom: zoomCiudad, minOpacity: 0.35, gradient: GRADIENTE },
       ).addTo(mapa);
     });
     return () => {
@@ -213,7 +233,8 @@ export function Estadisticas() {
         <p className="suave">
           Cada reporte cuenta en el punto marcado o, si no lo tiene, en la ubicación ilustrativa de su lugar. Más oscuro,
           más reportes.
-          {datos.sinUbicacion > 0 && ` ${datos.sinUbicacion} reportes son de lugares sin ubicar y no aparecen.`}
+          {datos.sinUbicacion === 1 && ' 1 reporte es de un lugar sin ubicar y no aparece.'}
+          {datos.sinUbicacion > 1 && ` ${datos.sinUbicacion} reportes son de lugares sin ubicar y no aparecen.`}
         </p>
         <MapContainer
           bounds={[
