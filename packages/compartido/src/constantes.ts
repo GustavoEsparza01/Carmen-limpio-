@@ -114,6 +114,8 @@ export const ATRIBUCION_OSM = '© OpenStreetMap';
 // la dirección debe estar en Supabase, Authentication → URL Configuration → Redirect URLs.
 export const URL_SITIO = 'https://carmen-limpio.vercel.app';
 export const CONFIRMACION_CORREO = `${URL_SITIO}/confirmado.html`;
+// El enlace de «Olvidé mi contraseña» abre esta página para escribir la nueva. También va en Redirect URLs.
+export const NUEVA_CLAVE = `${URL_SITIO}/nueva-clave.html`;
 
 // Paleta propia: no reutiliza la identidad visual de los carteles.
 export const COLORES = {

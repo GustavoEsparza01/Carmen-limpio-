@@ -188,10 +188,20 @@ export function pasosDeLinea(reporte: Pick<Reporte, 'estado'>): EstadoReporte[] 
 
 export const LARGO_MINIMO_CLAVE = 8;
 
+export function validarCorreo(correo: string): string | undefined {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo.trim()) ? undefined : 'Escribe un correo válido.';
+}
+
+export function validarClave(clave: string): string | undefined {
+  return clave.length < LARGO_MINIMO_CLAVE ? `Usa al menos ${LARGO_MINIMO_CLAVE} caracteres.` : undefined;
+}
+
 export function validarCuenta(correo: string, clave: string): { correo?: string; clave?: string } {
   const errores: { correo?: string; clave?: string } = {};
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo.trim())) errores.correo = 'Escribe un correo válido.';
-  if (clave.length < LARGO_MINIMO_CLAVE) errores.clave = `Usa al menos ${LARGO_MINIMO_CLAVE} caracteres.`;
+  const errorCorreo = validarCorreo(correo);
+  const errorClave = validarClave(clave);
+  if (errorCorreo) errores.correo = errorCorreo;
+  if (errorClave) errores.clave = errorClave;
   return errores;
 }
 
@@ -209,6 +219,7 @@ export function mensajeError(error: { code?: string; message?: string } | null |
   if (/password/i.test(mensaje) && /(weak|short|at least)/i.test(mensaje)) {
     return `La contraseña es muy débil. Usa al menos ${LARGO_MINIMO_CLAVE} caracteres.`;
   }
+  if (/different from the old/i.test(mensaje)) return 'Usa una contraseña distinta a la anterior.';
   if (/rate limit|too many/i.test(mensaje)) return 'Hubo demasiados intentos. Espera unos minutos y vuelve a intentar.';
   if (/network|fetch|tiempo de espera/i.test(mensaje)) return 'No hay conexión. Revisa tu internet y vuelve a intentar.';
   return 'No se pudo completar. Vuelve a intentar en un momento.';

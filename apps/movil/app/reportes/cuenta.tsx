@@ -127,6 +127,16 @@ export default function Cuenta() {
       >
         <Text style={TEXTO.enlace}>{registro ? 'Ya tengo cuenta' : 'No tengo cuenta: crear una'}</Text>
       </Pressable>
+
+      {!registro && (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push({ pathname: '/reportes/recuperar', params: { correo: correo.trim() } })}
+          style={estilos.enlace}
+        >
+          <Text style={TEXTO.enlace}>Olvidé mi contraseña</Text>
+        </Pressable>
+      )}
     </ScrollView>
   );
 }

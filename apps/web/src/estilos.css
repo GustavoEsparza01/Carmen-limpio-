@@ -949,3 +949,63 @@ details p {
   font-size: 15px;
   white-space: nowrap;
 }
+
+/* Formulario de nueva contraseña (nueva-clave.html) */
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formulario label {
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.formulario input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+.formulario input:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+
+.formulario .apoyo {
+  color: var(--texto-suave);
+  font-size: 15px;
+}
+
+.formulario .error {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.formulario .error:empty {
+  display: none;
+}
+
+.formulario .boton {
+  align-self: flex-start;
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boton-primario {
+  background: var(--primario);
+  color: var(--superficie);
+}
+
+.boton-primario:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

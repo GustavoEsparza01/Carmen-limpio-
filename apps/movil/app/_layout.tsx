@@ -27,6 +27,7 @@ export default function Raiz() {
             <Stack.Screen name="mapa/[rutaId]" options={{ headerShown: false }} />
             <Stack.Screen name="reportes/privacidad" options={{ title: 'Aviso de privacidad' }} />
             <Stack.Screen name="reportes/cuenta" options={{ title: 'Tu cuenta' }} />
+            <Stack.Screen name="reportes/recuperar" options={{ title: 'Olvidé mi contraseña' }} />
             <Stack.Screen name="reportes/nuevo" options={{ title: 'Nuevo reporte' }} />
             <Stack.Screen name="reportes/[id]" options={{ title: 'Reporte' }} />
           </Stack>

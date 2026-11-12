@@ -129,6 +129,10 @@ test('los errores de Supabase se explican sin tecnicismos', () => {
   assert.match(mensajeError({ code: '23505', message: 'duplicate key value' }), /Ya habías reportado/);
   assert.match(mensajeError({ message: 'Ese día no hay recolección en este lugar' }), /cartel/);
   assert.match(mensajeError({ message: 'new row violates row-level security policy' }), /aviso de privacidad/);
+  assert.match(
+    mensajeError({ message: 'New password should be different from the old password.' }),
+    /distinta a la anterior/,
+  );
   assert.match(mensajeError({ message: 'Invalid login credentials' }), /no coinciden/);
   assert.match(mensajeError({ message: 'User already registered' }), /Ya existe una cuenta/);
   assert.match(mensajeError({ message: 'Network request failed' }), /conexión/);

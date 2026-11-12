@@ -3,6 +3,7 @@ import {
   CONFIRMACION_CORREO,
   CONSULTA_REPORTES,
   filaNuevoReporte,
+  NUEVA_CLAVE,
   mensajeError,
   reportesDesdeFilas,
   VERSION_AVISO_PRIVACIDAD,
@@ -66,6 +67,7 @@ interface EstadoCuenta {
   errorReportes: boolean;
   registrar: (correo: string, clave: string) => Promise<{ confirmarCorreo: boolean }>;
   entrar: (correo: string, clave: string) => Promise<void>;
+  recuperarClave: (correo: string) => Promise<void>;
   salir: () => Promise<void>;
   aceptarPrivacidad: () => Promise<void>;
   recargar: () => Promise<void>;
@@ -162,6 +164,11 @@ export function ProveedorCuenta({ children }: { children: ReactNode }) {
     revisar(await conLimite(cliente().auth.signInWithPassword({ email: correo.trim(), password: clave })));
   };
 
+  // Supabase responde igual exista o no la cuenta: así no revela qué correos están registrados.
+  const recuperarClave = async (correo: string) => {
+    revisar(await conLimite(cliente().auth.resetPasswordForEmail(correo.trim(), { redirectTo: NUEVA_CLAVE })));
+  };
+
   const salir = async () => {
     await cliente().auth.signOut();
   };
@@ -230,6 +237,7 @@ export function ProveedorCuenta({ children }: { children: ReactNode }) {
     fotoFirmada,
     privacidadVigente,
     recargar,
+    recuperarClave,
     registrar,
     reportes,
     salir,

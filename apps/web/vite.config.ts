@@ -19,6 +19,8 @@ function textosCompartidos(): Plugin {
 }
 
 export default defineConfig({
+  // Un solo .env en la raíz del monorepo. El sitio solo usa VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY (nueva-clave.html).
+  envDir: '../..',
   plugins: [textosCompartidos()],
   server: { port: 5174 },
   build: {
@@ -27,6 +29,7 @@ export default defineConfig({
         inicio: resolve(import.meta.dirname, 'index.html'),
         privacidad: resolve(import.meta.dirname, 'privacidad.html'),
         confirmado: resolve(import.meta.dirname, 'confirmado.html'),
+        nuevaClave: resolve(import.meta.dirname, 'nueva-clave.html'),
       },
     },
   },
