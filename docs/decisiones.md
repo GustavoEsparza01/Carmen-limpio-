@@ -369,4 +369,11 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Los horarios salen en tarjeta**, la misma de Inicio (`TarjetaHoy` con `compacta`), sin los botones de mapa. El texto se conserva para la voz y el historial. Con dos o tres lugares hay una tarjeta por lugar.
 - **Entrada en Inicio:** el globo «Pregúntame por tu colonia» junto al camarón, en lugar de la tarjeta que quedaba cortada abajo.
 - **Probado en el emulador:** saludo, espera, respuesta de la IA, tarjetas de uno y tres lugares, escucha, teclado abierto, letra a 1.5 y sin animaciones.
-- **Parte B pendiente:** onda de voz, puntos al pensar, entrada suave de mensajes y botones para responder.
+
+## 2026-11-24 · Aspecto del asistente, parte B
+
+- **Visto bueno del usuario a la parte A.** La B va en la misma rama.
+- **Onda de voz:** sigue el volumen real del micrófono mientras escucha. Se mueve también con «quitar animaciones», porque indica que está entrando sonido.
+- **Espera y mensajes:** tres puntos en lugar del círculo y una entrada corta de cada mensaje. Sin animaciones quedan fijos.
+- **Botones para responder:** con varios lugares parecidos se toca el propio (antes había que escribirlo). Después de cada respuesta hay hasta dos sugerencias que no se han preguntado; si la IA falló, solo la que se contesta sin ella.
+- **Probado en el emulador:** opciones de Renovación, sugerencias, espera, escucha en silencio, letra a 1.5 y sin animaciones. El límite de 15 preguntas por dispositivo se alcanzó en vivo y el chat avisó. Falta ver la onda con una voz real.

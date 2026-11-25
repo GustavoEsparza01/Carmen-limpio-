@@ -4,7 +4,9 @@ import {
   COLORES,
   LARGO_MAXIMO_PREGUNTA,
   lugarPorId,
+  PREGUNTAS_SUGERIDAS,
   responderHorario,
+  siguientesPreguntas,
   TEXTO_FALLA_ASISTENTE,
   TEXTO_FALLA_VOZ,
   type FallaVoz,
@@ -13,11 +15,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Animated, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Mascota } from '../componentes/Mascota';
 import { MascotaAnimada, type EstadoMascota } from '../componentes/MascotaAnimada';
+import { Aparecer, PuntosEspera } from '../componentes/movimiento';
+import { OndaVoz } from '../componentes/OndaVoz';
 import { TarjetaHoy } from '../componentes/TarjetaHoy';
 import { Aviso, BarraEstado, Boton, Pastilla } from '../componentes/ui';
 import { useAhora } from '../estado/ahora';
@@ -31,9 +35,10 @@ interface Mensaje extends MensajeAsistente {
   // De dónde salió la respuesta: la persona debe saber cuándo habla la IA.
   origen?: 'datos' | 'ia' | 'falla';
   lugarIds?: string[];
+  opciones?: string[];
 }
 
-const SUGERENCIAS = ['¿Cuándo pasa por mi colonia?', '¿Cómo activo un recordatorio?', '¿Hay avisos?'];
+const SUGERENCIAS = PREGUNTAS_SUGERIDAS.slice(0, 3);
 
 const ORIGEN = {
   datos: { icono: 'document-text-outline', texto: 'Datos de la app' },
@@ -50,7 +55,15 @@ const ESTADO: Record<EstadoMascota, string> = {
 };
 
 // El camarón acompaña el chat. Es grande al inicio y se encoge para dejar lugar a los mensajes.
-function Panel({ estado, titulo, texto, grande }: { estado: EstadoMascota; titulo: string; texto?: string; grande: boolean }) {
+interface PropsPanel {
+  estado: EstadoMascota;
+  titulo: string;
+  texto?: string;
+  grande: boolean;
+  volumen?: Animated.Value;
+}
+
+function Panel({ estado, titulo, texto, grande, volumen }: PropsPanel) {
   return (
     <View style={estilos.panel}>
       <MascotaAnimada estado={estado} tamano={grande ? 88 : 48} />
@@ -58,6 +71,7 @@ function Panel({ estado, titulo, texto, grande }: { estado: EstadoMascota; titul
         <Text style={grande ? estilos.panelTitulo : estilos.panelTituloChico}>{titulo}</Text>
         {texto && <Text style={estilos.panelTexto}>{texto}</Text>}
       </View>
+      {estado === 'escuchando' && volumen && <OndaVoz volumen={volumen} />}
     </View>
   );
 }
@@ -178,7 +192,7 @@ export default function Asistente() {
     }
   };
 
-  const { escuchando, parcial, hablando, escuchar, terminar, hablar, callar } = useVoz({
+  const { escuchando, parcial, hablando, escuchar, terminar, hablar, callar, volumen } = useVoz({
     alEntender: (dicho) => preguntar(dicho, true),
     alFallar: setFallaVoz,
   });
@@ -202,6 +216,12 @@ export default function Asistente() {
   const etiquetaMicrofono = hablando ? 'Dejar de leer' : escuchando ? 'Terminar de hablar' : 'Preguntar por voz';
 
   const vacio = mensajes.length === 0;
+  const ultimo = mensajes.at(-1);
+  const hechas = mensajes.filter((m) => m.de === 'persona').map((m) => m.texto);
+  const respuestasRapidas =
+    esperando || escuchando || ultimo?.de !== 'asistente'
+      ? []
+      : (ultimo.opciones ?? siguientesPreguntas(hechas, ultimo.origen === 'falla'));
   const estado: EstadoMascota = escuchando
     ? 'escuchando'
     : esperando
@@ -220,6 +240,7 @@ export default function Asistente() {
         grande={vacio}
         texto={vacio ? 'Pregunta cuándo pasa por una colonia o cómo usar la app.' : undefined}
         titulo={ESTADO[estado]}
+        volumen={volumen}
       />
       <ScrollView
         contentContainerStyle={estilos.contenido}
@@ -238,7 +259,9 @@ export default function Asistente() {
         )}
         <View accessibilityLiveRegion="polite" style={estilos.mensajes}>
           {mensajes.map((m) => (
-            <Burbuja ahora={ahora} key={m.id} mensaje={m} />
+            <Aparecer key={m.id}>
+              <Burbuja ahora={ahora} mensaje={m} />
+            </Aparecer>
           ))}
           {esperando && (
             <View accessibilityLabel="Pensando" accessible style={estilos.respuesta}>
@@ -246,11 +269,18 @@ export default function Asistente() {
                 <Mascota tamano={28} />
               </View>
               <View style={[estilos.burbuja, estilos.burbujaAjena]}>
-                <ActivityIndicator color={COLORES.primario} />
+                <PuntosEspera color={COLORES.primario} />
               </View>
             </View>
           )}
         </View>
+        {respuestasRapidas.length > 0 && (
+          <View style={estilos.rapidas}>
+            {respuestasRapidas.map((r) => (
+              <Pastilla activa={false} key={r} onPress={() => preguntar(r)} texto={r} />
+            ))}
+          </View>
+        )}
       </ScrollView>
 
       {fallaVoz && (
@@ -327,6 +357,8 @@ const estilos = StyleSheet.create({
     width: 36,
   },
   tarjetas: { flex: 1, gap: 10 },
+  // Alineadas con las respuestas, después del camarón.
+  rapidas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingLeft: 44 },
   contenido: CONTENIDO,
   punto: { flexDirection: 'row', gap: 10 },
   vineta: { marginTop: 8 },

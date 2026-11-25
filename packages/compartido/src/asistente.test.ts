@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { elegirVoz, lugaresEnTexto, responderHorario, textoParaVoz } from './asistente.ts';
+import { elegirVoz, lugaresEnTexto, PREGUNTAS_SUGERIDAS, responderHorario, siguientesPreguntas, textoParaVoz } from './asistente.ts';
 import { LUGARES, lugarPorId } from './catalogo.ts';
 
 // El 10 de noviembre de 2026 es martes; Mérida está en UTC-6.
@@ -30,6 +30,10 @@ test('sin número de sección ofrece todas', () => {
   assert.equal(nombres('¿Cuándo pasa por Renovación?').length, 4);
   assert.match(responder('¿Cuándo pasa por Renovación?')!.texto, /¿Cuál es el tuyo\?/);
   assert.equal(responder('¿Cuándo pasa por Renovación?')!.lugarIds, undefined);
+  // Cada opción, tocada tal cual, debe llevar a un solo lugar.
+  for (const opcion of responder('¿Cuándo pasa por Renovación?')!.opciones!) {
+    assert.equal(responder(opcion)?.lugarIds?.length, 1, opcion);
+  }
   assert.equal(responder('¿Cuándo pasa por Santa Rita?')!.lugarIds?.length, 3);
 });
 
@@ -77,6 +81,14 @@ test('elige una voz en español, de preferencia de México y sin conexión', () 
   assert.equal(elegirVoz([es, usRed]), usRed);
   assert.equal(elegirVoz([us, voz('mx', 'es-MX')])?.identifier, 'mx');
   assert.equal(elegirVoz([ingles, voz('est', 'est-EE')]), undefined);
+});
+
+test('las sugerencias no se repiten y, si la IA falló, se contestan sin ella', () => {
+  const [primera, segunda, tercera] = PREGUNTAS_SUGERIDAS;
+  assert.deepEqual(siguientesPreguntas([segunda!], false), [primera, tercera]);
+  assert.deepEqual(siguientesPreguntas(PREGUNTAS_SUGERIDAS, false), []);
+  const [local] = siguientesPreguntas(PREGUNTAS_SUGERIDAS, true);
+  assert.ok(responder(local!));
 });
 
 test('quejas y otros temas van a la IA', () => {

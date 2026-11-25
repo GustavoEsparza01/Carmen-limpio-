@@ -7,7 +7,7 @@ import {
   type ExpoSpeechRecognitionErrorCode,
 } from 'expo-speech-recognition';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, AppState } from 'react-native';
+import { AccessibilityInfo, Animated, AppState } from 'react-native';
 
 // La voz la resuelve el teléfono: la app nunca recibe ni guarda el audio, solo el texto reconocido.
 
@@ -16,6 +16,10 @@ const IDIOMAS = ['es-MX', 'es-US', 'es-ES'] as const;
 
 // Hay reconocedores que no se detienen solos con el silencio: el micrófono no se queda abierto.
 const ESCUCHA_MAXIMA_MS = 20_000;
+
+const INTERVALO_VOLUMEN_MS = 100;
+// El reconocedor da de -2 a 10, y de 0 para abajo no se oye.
+const VOLUMEN_MAXIMO = 10;
 
 const FALLA: Partial<Record<ExpoSpeechRecognitionErrorCode, FallaVoz>> = {
   'language-not-supported': 'idioma',
@@ -34,6 +38,7 @@ function iniciar(idioma: string) {
     interimResults: true,
     lang: idioma,
     maxAlternatives: 1,
+    volumeChangeEventOptions: { enabled: true, intervalMillis: INTERVALO_VOLUMEN_MS },
   });
 }
 
@@ -46,6 +51,8 @@ export function useVoz({ alEntender, alFallar }: Opciones) {
   const [escuchando, setEscuchando] = useState(false);
   const [parcial, setParcial] = useState('');
   const [hablando, setHablando] = useState(false);
+  // De 0 a 1. Es un valor animado para no volver a dibujar el chat diez veces por segundo.
+  const volumen = useRef(new Animated.Value(0)).current;
   // Solo hay un intento a la vez: su resultado se entrega al terminar el reconocimiento.
   const activo = useRef(false);
   const enPantalla = useRef(false);
@@ -93,9 +100,19 @@ export function useVoz({ alEntender, alFallar }: Opciones) {
 
   useEffect(() => {
     if (!escuchando) return;
+    volumen.setValue(0);
     const reloj = setTimeout(() => Reconocedor.stop(), ESCUCHA_MAXIMA_MS);
     return () => clearTimeout(reloj);
-  }, [escuchando]);
+  }, [escuchando, volumen]);
+
+  useSpeechRecognitionEvent('volumechange', ({ value }) => {
+    if (!activo.current) return;
+    Animated.timing(volumen, {
+      duration: INTERVALO_VOLUMEN_MS,
+      toValue: Math.min(1, Math.max(0, value / VOLUMEN_MAXIMO)),
+      useNativeDriver: true,
+    }).start();
+  });
 
   useSpeechRecognitionEvent('result', ({ results, isFinal }) => {
     if (!activo.current) return;
@@ -189,5 +206,5 @@ export function useVoz({ alEntender, alFallar }: Opciones) {
     });
   };
 
-  return { callar, escuchando, escuchar, hablando, hablar, parcial, terminar: () => Reconocedor.stop() };
+  return { callar, escuchando, escuchar, hablando, hablar, parcial, terminar: () => Reconocedor.stop(), volumen };
 }

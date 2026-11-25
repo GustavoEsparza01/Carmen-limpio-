@@ -83,6 +83,21 @@ export function textoParaVoz(texto: string): string {
     .trim();
 }
 
+const PREGUNTA_LOCAL = '¿Cuándo pasa por mi colonia?';
+export const PREGUNTAS_SUGERIDAS: readonly string[] = [
+  PREGUNTA_LOCAL,
+  '¿Cómo activo un recordatorio?',
+  '¿Hay avisos?',
+  '¿Qué hago si no pasó el camión?',
+  '¿Cómo separo la basura?',
+];
+
+// Sugerencias después de una respuesta, sin repetir. Si la IA falló, solo la que se contesta sin ella.
+export function siguientesPreguntas(hechas: readonly string[], huboFalla: boolean): string[] {
+  if (huboFalla) return [PREGUNTA_LOCAL];
+  return PREGUNTAS_SUGERIDAS.filter((p) => !hechas.includes(p)).slice(0, 2);
+}
+
 export interface MensajeAsistente {
   de: 'persona' | 'asistente';
   texto: string;
@@ -149,6 +164,8 @@ export interface RespuestaLocal {
   texto: string;
   // Lugares de la respuesta: la pantalla muestra su horario en tarjetas. El texto es para la voz y el historial.
   lugarIds?: string[];
+  // Nombres para elegir con un toque cuando hay demasiados lugares parecidos.
+  opciones?: string[];
 }
 
 // Null cuando la pregunta no es de horario o no se reconoce el lugar: entonces contesta la IA.
@@ -167,8 +184,8 @@ export function responderHorario(
   if (!PIDE_HORARIO.test(normal) && !esSoloUnLugar) return null;
 
   if (nombrados.length > 3) {
-    const lista = nombrados.map((l) => l.nombre).join(', ');
-    return { texto: `Hay varios lugares con ese nombre: ${lista}. ¿Cuál es el tuyo?` };
+    const opciones = nombrados.map((l) => l.nombre);
+    return { opciones, texto: `Hay varios lugares con ese nombre: ${opciones.join(', ')}. ¿Cuál es el tuyo?` };
   }
   if (nombrados.length > 0) {
     const texto = [...nombrados.map((l) => parrafo(l, ahora)), AVISO_FUENTE_HOY].join('\n');
