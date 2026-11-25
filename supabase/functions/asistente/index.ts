@@ -11,8 +11,8 @@ const entero = (nombre: string, omision: number) => {
 };
 
 const LIMITE_DISPOSITIVO = entero('ASISTENTE_LIMITE_DISPOSITIVO', 15);
-// Debe quedar por debajo de la cuota diaria que muestre AI Studio.
-const LIMITE_DIARIO = entero('ASISTENTE_LIMITE_DIARIO', 100);
+// Debe quedar por debajo de la cuota diaria de AI Studio (500 para gemini-3.5-flash-lite al 2026-11-24).
+const LIMITE_DIARIO = entero('ASISTENTE_LIMITE_DIARIO', 400);
 const VIGENCIA_DATOS_MS = 5 * 60_000;
 
 const sinSesion = { auth: { persistSession: false, autoRefreshToken: false } };
