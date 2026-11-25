@@ -15,7 +15,7 @@ const ABREVIATURAS: Record<string, string> = {
 };
 
 // Pasa a palabras comparables: sin acentos, sin abreviaturas y con números arábigos.
-function palabras(texto: string): string[] {
+export function palabras(texto: string): string[] {
   return texto
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
@@ -26,7 +26,7 @@ function palabras(texto: string): string[] {
 }
 
 // Tolera las confusiones de escritura más comunes, como "Bivalbo" o "Nacosari".
-function sinFaltas(palabra: string): string {
+export function sinFaltas(palabra: string): string {
   return palabra.replace(/v/g, 'b').replace(/z/g, 's');
 }
 
