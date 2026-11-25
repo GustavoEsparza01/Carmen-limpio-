@@ -89,7 +89,7 @@ export const AVISO_PRIVACIDAD: readonly { titulo: string; texto: string }[] = [
   {
     titulo: 'Asistente (demo)',
     texto:
-      'No requiere cuenta ni se liga a ella. Los horarios se responden en tu teléfono. Las demás preguntas, con los mensajes anteriores de la charla y sin los correos ni teléfonos que se detecten, pasan por Supabase y se envían a Gemini, de Google; con el plan gratuito, Google puede usarlas para mejorar sus productos y una persona puede leerlas. No escribas datos personales. Guardamos solo cuántas preguntas hace al día un identificador aleatorio, para limitar el uso; no guardamos la conversación. Es para mayores de 18 años.',
+      'No requiere cuenta ni se liga a ella. Los horarios se responden en tu teléfono. Las demás preguntas, con los mensajes anteriores de la charla y sin los correos ni teléfonos que se detecten, pasan por Supabase y se envían a Gemini, de Google; con el plan gratuito, Google puede usarlas para mejorar sus productos y una persona puede leerlas. Si usas el micrófono, tu teléfono convierte tu voz en texto y lee la respuesta; según el equipo, puede enviar el audio y la respuesta a su proveedor de voz, como Google. Nosotros no recibimos ni guardamos el audio. No compartas datos personales. Guardamos solo cuántas preguntas hace al día un identificador aleatorio, para limitar el uso; no guardamos la conversación. Es para mayores de 18 años.',
   },
   {
     titulo: 'Tus derechos',

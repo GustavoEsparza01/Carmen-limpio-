@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { lugaresEnTexto, responderHorario } from './asistente.ts';
+import { elegirVoz, lugaresEnTexto, responderHorario, textoParaVoz } from './asistente.ts';
 import { LUGARES, lugarPorId } from './catalogo.ts';
 
 // El 10 de noviembre de 2026 es martes; Mérida está en UTC-6.
@@ -55,6 +55,26 @@ test('"mi colonia" usa el lugar guardado', () => {
   const { id, nombre } = lugaresEnTexto('San Manuel')[0]!;
   assert.ok(responder('¿Hoy pasa por mi colonia?', id)!.texto.startsWith(nombre));
   assert.match(responder('¿Hoy pasa por mi colonia?')!.texto, /Aún no guardas/);
+});
+
+test('en voz alta las horas y abreviaturas se dicen completas', () => {
+  assert.equal(
+    textoParaVoz('Frac. Dorado: martes, 7:00 a 15:00 (ruta 2, turno matutino).\nAbierta hasta las 23:00.'),
+    'Fraccionamiento Dorado: martes, 7 de la mañana a 3 de la tarde, ruta 2, turno matutino. Abierta hasta las 11 de la noche.',
+  );
+  assert.equal(textoParaVoz('12:30 en la ruta M2'), '12 y 30 del día en la ruta M 2');
+});
+
+test('elige una voz en español, de preferencia de México y sin conexión', () => {
+  const voz = (identifier: string, language: string) => ({ identifier, language });
+  const es = voz('es-es-x-local', 'es-ES');
+  const us = voz('es-us-x-local', 'es-US');
+  const usRed = voz('es-us-a-network', 'es-US');
+  const ingles = voz('en-us-x-local', 'en-US');
+  assert.equal(elegirVoz([ingles, es, usRed, us]), us);
+  assert.equal(elegirVoz([es, usRed]), usRed);
+  assert.equal(elegirVoz([us, voz('mx', 'es-MX')])?.identifier, 'mx');
+  assert.equal(elegirVoz([ingles, voz('est', 'est-EE')]), undefined);
 });
 
 test('quejas y otros temas van a la IA', () => {

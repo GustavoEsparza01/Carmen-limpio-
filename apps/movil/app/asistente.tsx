@@ -6,6 +6,8 @@ import {
   lugarPorId,
   responderHorario,
   TEXTO_FALLA_ASISTENTE,
+  TEXTO_FALLA_VOZ,
+  type FallaVoz,
   type MensajeAsistente,
 } from '@carmen-limpio/compartido';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Aviso, BarraEstado, Boton, Pastilla } from '../componentes/ui';
 import { aceptarAviso, avisoAceptado, ErrorAsistente, preguntarIA } from '../estado/asistente';
 import { useGuardados } from '../estado/guardados';
+import { useVoz } from '../estado/voz';
 import { ALTURA_TACTIL, CONTENIDO, FUENTE, RADIO, TEXTO } from '../estilos/tema';
 
 interface Mensaje extends MensajeAsistente {
@@ -86,6 +89,7 @@ export default function Asistente() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [texto, setTexto] = useState('');
   const [esperando, setEsperando] = useState(false);
+  const [fallaVoz, setFallaVoz] = useState<FallaVoz>();
   const lista = useRef<ComponentRef<typeof ScrollView>>(null);
   const siguienteId = useRef(0);
 
@@ -96,9 +100,16 @@ export default function Asistente() {
   const agregar = (nuevo: Omit<Mensaje, 'id'>) =>
     setMensajes((previos) => [...previos, { ...nuevo, id: siguienteId.current++ }]);
 
-  const preguntar = async (entrada: string) => {
-    const pregunta = entrada.trim();
+  // Lo que se pregunta hablando se contesta hablando, y también por escrito.
+  const preguntar = async (entrada: string, porVoz = false) => {
+    const pregunta = entrada.trim().slice(0, LARGO_MAXIMO_PREGUNTA);
     if (!pregunta || esperando) return;
+    callar();
+    setFallaVoz(undefined);
+    const responder = (respuesta: Omit<Mensaje, 'id' | 'de'>) => {
+      agregar({ ...respuesta, de: 'asistente' });
+      if (porVoz) hablar(respuesta.texto);
+    };
     // Los avisos de falla no son parte de la conversación con la IA.
     const anteriores = mensajes.filter((m) => m.origen !== 'falla');
     setTexto('');
@@ -107,18 +118,30 @@ export default function Asistente() {
     const primero = guardados[0];
     const local = responderHorario(pregunta, new Date(), primero && lugarPorId(primero.lugarId));
     if (local) {
-      agregar({ de: 'asistente', origen: 'datos', ...local });
+      responder({ origen: 'datos', ...local });
       return;
     }
     setEsperando(true);
     try {
-      agregar({ de: 'asistente', origen: 'ia', texto: await preguntarIA(pregunta, anteriores) });
+      responder({ origen: 'ia', texto: await preguntarIA(pregunta, anteriores) });
     } catch (e) {
       const falla = e instanceof ErrorAsistente ? e.falla : 'ocupado';
-      agregar({ de: 'asistente', origen: 'falla', texto: TEXTO_FALLA_ASISTENTE[falla] });
+      responder({ origen: 'falla', texto: TEXTO_FALLA_ASISTENTE[falla] });
     } finally {
       setEsperando(false);
     }
+  };
+
+  const { escuchando, parcial, hablando, escuchar, terminar, hablar, callar } = useVoz({
+    alEntender: (dicho) => preguntar(dicho, true),
+    alFallar: setFallaVoz,
+  });
+
+  const tocarMicrofono = () => {
+    setFallaVoz(undefined);
+    if (hablando) callar();
+    else if (escuchando) terminar();
+    else escuchar();
   };
 
   const aceptar = () => {
@@ -129,7 +152,8 @@ export default function Asistente() {
   if (aceptado === undefined) return null;
   if (!aceptado) return <Presentacion onAceptar={aceptar} />;
 
-  const puedeEnviar = texto.trim().length > 0 && !esperando;
+  const puedeEnviar = texto.trim().length > 0 && !esperando && !escuchando;
+  const etiquetaMicrofono = hablando ? 'Dejar de leer' : escuchando ? 'Terminar de hablar' : 'Preguntar por voz';
 
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={altoEncabezado} style={estilos.pantalla}>
@@ -162,17 +186,37 @@ export default function Asistente() {
         </View>
       </ScrollView>
 
+      {fallaVoz && (
+        <Text accessibilityLiveRegion="polite" style={estilos.fallaVoz}>
+          {TEXTO_FALLA_VOZ[fallaVoz]}
+        </Text>
+      )}
       <View style={[estilos.entrada, { paddingBottom: 10 + bottom }]}>
         <TextInput
           accessibilityLabel="Tu pregunta"
+          editable={!escuchando}
           maxLength={LARGO_MAXIMO_PREGUNTA}
           multiline
           onChangeText={setTexto}
-          placeholder="Escribe tu pregunta"
+          placeholder={escuchando ? 'Te escucho…' : 'Escribe o habla'}
           placeholderTextColor={COLORES.textoSuave}
           style={estilos.campo}
-          value={texto}
+          value={escuchando ? parcial : texto}
         />
+        <Pressable
+          accessibilityLabel={etiquetaMicrofono}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: esperando }}
+          disabled={esperando}
+          onPress={tocarMicrofono}
+          style={[estilos.microfono, (escuchando || hablando) && estilos.microfonoActivo]}
+        >
+          <Ionicons
+            color={escuchando || hablando ? COLORES.superficie : esperando ? COLORES.inactivoTexto : COLORES.primario}
+            name={escuchando || hablando ? 'stop' : 'mic'}
+            size={22}
+          />
+        </Pressable>
         <Pressable
           accessibilityLabel="Enviar"
           accessibilityRole="button"
@@ -240,4 +284,14 @@ const estilos = StyleSheet.create({
     width: ALTURA_TACTIL,
   },
   enviarInactivo: { backgroundColor: COLORES.inactivo },
+  microfono: {
+    alignItems: 'center',
+    backgroundColor: COLORES.primarioSuave,
+    borderRadius: RADIO.completo,
+    height: ALTURA_TACTIL,
+    justifyContent: 'center',
+    width: ALTURA_TACTIL,
+  },
+  microfonoActivo: { backgroundColor: COLORES.errorTexto },
+  fallaVoz: { ...TEXTO.alerta, backgroundColor: COLORES.superficie, paddingHorizontal: 16, paddingTop: 10 },
 });

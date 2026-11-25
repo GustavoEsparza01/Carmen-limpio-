@@ -13,14 +13,15 @@ export const HISTORIAL_MAXIMO = 6;
 export const LARGO_MAXIMO_HISTORIAL = 800;
 
 // Cambia la versión cuando cambie el texto: el asistente pedirá aceptarlo de nuevo.
-export const VERSION_AVISO_ASISTENTE = '2026-11-24';
+export const VERSION_AVISO_ASISTENTE = '2026-11-24-voz';
 export const AVISO_ASISTENTE: readonly string[] = [
   'Los horarios se responden con los datos de la app. Para lo demás, tu pregunta y los mensajes anteriores de la charla se envían a Gemini, un servicio de Google.',
   'Con el plan gratuito, Google puede usar lo que escribas para mejorar sus productos y una persona puede leerlo.',
-  'No escribas tu nombre, dirección, teléfono, correo ni otros datos personales.',
+  'Si usas el micrófono, tu teléfono convierte tu voz en texto y lee la respuesta. Según el equipo, puede enviar el audio y la respuesta a su proveedor de voz, como Google. Nosotros no recibimos ni guardamos el audio.',
+  'No escribas ni digas tu nombre, dirección, teléfono, correo ni otros datos personales.',
   'Es una demostración para mayores de 18 años. La IA puede equivocarse y no es un canal oficial.',
 ];
-export const AVISO_ASISTENTE_CORTO = 'La IA puede equivocarse. No escribas datos personales. App no oficial.';
+export const AVISO_ASISTENTE_CORTO = 'La IA puede equivocarse. No compartas datos personales. App no oficial.';
 
 export type FallaAsistente = 'dispositivo' | 'diario' | 'ocupado' | 'invalida' | 'conexion';
 
@@ -31,6 +32,56 @@ export const TEXTO_FALLA_ASISTENTE: Record<FallaAsistente, string> = {
   invalida: 'No pude leer la pregunta. Intenta con una más corta.',
   conexion: 'No pudimos conectar con el asistente. Revisa tu conexión; los horarios siguen disponibles.',
 };
+
+export type FallaVoz = 'permiso' | 'noDisponible' | 'sinVoz' | 'idioma' | 'conexion' | 'sinLectura' | 'otra';
+
+export const TEXTO_FALLA_VOZ: Record<FallaVoz, string> = {
+  permiso: 'Sin permiso de micrófono puedes escribir tu pregunta. Actívalo en los ajustes del teléfono.',
+  noDisponible: 'Este teléfono no tiene reconocimiento de voz. Escribe tu pregunta.',
+  sinVoz: 'No te escuché. Toca el micrófono e inténtalo de nuevo.',
+  idioma: 'El reconocimiento de voz en español no está instalado en este teléfono. Escribe tu pregunta.',
+  conexion: 'El reconocimiento de voz necesita conexión. Escribe tu pregunta.',
+  sinLectura: 'Este teléfono no tiene una voz en español para leer la respuesta. Puedes leerla en pantalla.',
+  otra: 'No se pudo usar el micrófono. Inténtalo de nuevo o escribe tu pregunta.',
+};
+
+export interface VozTelefono {
+  identifier: string;
+  language: string;
+}
+
+const ESPANOL_PREFERIDO = ['es-mx', 'es-us', 'es-419'];
+
+// Prefiere español de México o de América y, entre iguales, una voz que no necesite conexión.
+export function elegirVoz<T extends VozTelefono>(voces: readonly T[]): T | undefined {
+  const puntos = ({ identifier, language }: T) => {
+    const lugar = ESPANOL_PREFERIDO.indexOf(language.toLowerCase());
+    return (lugar < 0 ? ESPANOL_PREFERIDO.length : lugar) * 2 + (identifier.includes('network') ? 1 : 0);
+  };
+  return voces
+    .filter((v) => /^es(-|$)/i.test(v.language))
+    .sort((a, b) => puntos(a) - puntos(b) || a.identifier.localeCompare(b.identifier))[0];
+}
+
+// "15:00" se lee mal en voz alta: se dice como lo diría una persona.
+function horaHablada(horas: number, minutos: number): string {
+  const numero = horas % 12 || 12;
+  const momento = horas < 12 ? 'de la mañana' : horas === 12 ? 'del día' : horas < 19 ? 'de la tarde' : 'de la noche';
+  return `${numero}${minutos ? ` y ${minutos}` : ''} ${momento}`;
+}
+
+export function textoParaVoz(texto: string): string {
+  return texto
+    .replace(/\b([01]?\d|2[0-3]):([0-5]\d)\b/g, (_, h: string, m: string) => horaHablada(Number(h), Number(m)))
+    .replace(/\bFrac\./g, 'Fraccionamiento')
+    .replace(/\bAv\./g, 'Avenida')
+    .replace(/\bPriv\./g, 'Privada')
+    .replace(/\b([MV])(\d)\b/g, '$1 $2')
+    .replace(/\s*\(/g, ', ')
+    .replace(/\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 export interface MensajeAsistente {
   de: 'persona' | 'asistente';
