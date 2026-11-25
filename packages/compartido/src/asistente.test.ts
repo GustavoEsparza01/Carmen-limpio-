@@ -29,6 +29,8 @@ test('gana el nombre más largo', () => {
 test('sin número de sección ofrece todas', () => {
   assert.equal(nombres('¿Cuándo pasa por Renovación?').length, 4);
   assert.match(responder('¿Cuándo pasa por Renovación?')!.texto, /¿Cuál es el tuyo\?/);
+  assert.equal(responder('¿Cuándo pasa por Renovación?')!.lugarIds, undefined);
+  assert.equal(responder('¿Cuándo pasa por Santa Rita?')!.lugarIds?.length, 3);
 });
 
 test('un número suelto no es una colonia', () => {
@@ -38,7 +40,7 @@ test('un número suelto no es una colonia', () => {
 
 test('da días y ventana, no hora de llegada, y cita la fuente', () => {
   const r = responder('¿Qué días pasa por San Manuel?');
-  assert.equal(r?.lugarId, lugaresEnTexto('San Manuel')[0]?.id);
+  assert.deepEqual(r?.lugarIds, [lugaresEnTexto('San Manuel')[0]?.id]);
   assert.match(r!.texto, /martes, jueves y sábado, 7:00 a 15:00/);
   assert.match(r!.texto, /Según carteles públicos/);
 });

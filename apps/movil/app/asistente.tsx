@@ -16,7 +16,11 @@ import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Mascota } from '../componentes/Mascota';
+import { MascotaAnimada, type EstadoMascota } from '../componentes/MascotaAnimada';
+import { TarjetaHoy } from '../componentes/TarjetaHoy';
 import { Aviso, BarraEstado, Boton, Pastilla } from '../componentes/ui';
+import { useAhora } from '../estado/ahora';
 import { aceptarAviso, avisoAceptado, ErrorAsistente, preguntarIA } from '../estado/asistente';
 import { useGuardados } from '../estado/guardados';
 import { useVoz } from '../estado/voz';
@@ -26,7 +30,7 @@ interface Mensaje extends MensajeAsistente {
   id: number;
   // De dónde salió la respuesta: la persona debe saber cuándo habla la IA.
   origen?: 'datos' | 'ia' | 'falla';
-  lugarId?: string;
+  lugarIds?: string[];
 }
 
 const SUGERENCIAS = ['¿Cuándo pasa por mi colonia?', '¿Cómo activo un recordatorio?', '¿Hay avisos?'];
@@ -37,13 +41,33 @@ const ORIGEN = {
   falla: { icono: 'alert-circle-outline', texto: 'Sin respuesta' },
 } as const;
 
+const ESTADO: Record<EstadoMascota, string> = {
+  saludo: '¡Hola! ¿En qué te ayudo?',
+  reposo: '¿Algo más?',
+  escuchando: 'Te escucho…',
+  pensando: 'Pensando…',
+  hablando: 'Leyendo la respuesta',
+};
+
+// El camarón acompaña el chat. Es grande al inicio y se encoge para dejar lugar a los mensajes.
+function Panel({ estado, titulo, texto, grande }: { estado: EstadoMascota; titulo: string; texto?: string; grande: boolean }) {
+  return (
+    <View style={estilos.panel}>
+      <MascotaAnimada estado={estado} tamano={grande ? 88 : 48} />
+      <View style={estilos.panelTextos}>
+        <Text style={grande ? estilos.panelTitulo : estilos.panelTituloChico}>{titulo}</Text>
+        {texto && <Text style={estilos.panelTexto}>{texto}</Text>}
+      </View>
+    </View>
+  );
+}
+
 function Presentacion({ onAceptar }: { onAceptar: () => void }) {
   return (
-    <ScrollView contentContainerStyle={estilos.contenido}>
-      <BarraEstado estilo="dark" />
-      <Text accessibilityRole="header" style={TEXTO.subtitulo}>
-        Antes de preguntar
-      </Text>
+    <View style={estilos.pantalla}>
+      <BarraEstado estilo="light" />
+      <Panel estado="saludo" grande texto="Esto es lo que debes saber." titulo="Antes de preguntar" />
+      <ScrollView contentContainerStyle={estilos.contenido}>
       {AVISO_ASISTENTE.map((texto) => (
         <View key={texto} style={estilos.punto}>
           <Ionicons color={COLORES.primario} name="ellipse" size={8} style={estilos.vineta} />
@@ -53,29 +77,50 @@ function Presentacion({ onAceptar }: { onAceptar: () => void }) {
       <Boton icono="checkmark" onPress={onAceptar} texto="Soy mayor de 18 y acepto" />
       <Boton icono="document-text" onPress={() => router.push('/reportes/privacidad?leer=1')} texto="Aviso de privacidad" variante="secundario" />
       <Boton icono="close" onPress={() => router.back()} texto="Ahora no" variante="secundario" />
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
-function Burbuja({ mensaje }: { mensaje: Mensaje }) {
+function Burbuja({ mensaje, ahora }: { mensaje: Mensaje; ahora: Date }) {
   const propia = mensaje.de === 'persona';
   const origen = mensaje.origen && ORIGEN[mensaje.origen];
-  const { lugarId } = mensaje;
+  const lugares = (mensaje.lugarIds ?? []).map(lugarPorId).filter((l) => l !== undefined);
+  const etiqueta = origen && (
+    <View style={estilos.origen}>
+      <Ionicons color={COLORES.textoSuave} name={origen.icono} size={14} />
+      <Text style={TEXTO.pequeno}>{origen.texto}</Text>
+    </View>
+  );
+
+  if (propia) {
+    return (
+      <View style={[estilos.burbuja, estilos.burbujaPropia]}>
+        <Text selectable style={[estilos.burbujaTexto, estilos.burbujaTextoPropio]}>
+          {mensaje.texto}
+        </Text>
+      </View>
+    );
+  }
   return (
-    <View style={[estilos.burbuja, propia ? estilos.burbujaPropia : estilos.burbujaAjena]}>
-      <Text selectable style={[estilos.burbujaTexto, propia && estilos.burbujaTextoPropio]}>
-        {mensaje.texto}
-      </Text>
-      {origen && (
-        <View style={estilos.origen}>
-          <Ionicons color={COLORES.textoSuave} name={origen.icono} size={14} />
-          <Text style={TEXTO.pequeno}>{origen.texto}</Text>
+    <View style={estilos.respuesta}>
+      <View style={estilos.avatar}>
+        <Mascota tamano={28} />
+      </View>
+      {lugares.length > 0 ? (
+        <View style={estilos.tarjetas}>
+          {lugares.map((l) => (
+            <TarjetaHoy ahora={ahora} compacta key={l.id} lugar={l} />
+          ))}
+          {etiqueta}
         </View>
-      )}
-      {lugarId && (
-        <Pressable accessibilityRole="button" onPress={() => router.push(`/lugar/${lugarId}`)} style={estilos.enlace}>
-          <Text style={TEXTO.enlace}>Ver horario completo</Text>
-        </Pressable>
+      ) : (
+        <View style={[estilos.burbuja, estilos.burbujaAjena]}>
+          <Text selectable style={estilos.burbujaTexto}>
+            {mensaje.texto}
+          </Text>
+          {etiqueta}
+        </View>
       )}
     </View>
   );
@@ -85,6 +130,7 @@ export default function Asistente() {
   const { bottom } = useSafeAreaInsets();
   const altoEncabezado = useHeaderHeight();
   const { guardados } = useGuardados();
+  const ahora = useAhora();
   const [aceptado, setAceptado] = useState<boolean>();
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [texto, setTexto] = useState('');
@@ -155,9 +201,26 @@ export default function Asistente() {
   const puedeEnviar = texto.trim().length > 0 && !esperando && !escuchando;
   const etiquetaMicrofono = hablando ? 'Dejar de leer' : escuchando ? 'Terminar de hablar' : 'Preguntar por voz';
 
+  const vacio = mensajes.length === 0;
+  const estado: EstadoMascota = escuchando
+    ? 'escuchando'
+    : esperando
+      ? 'pensando'
+      : hablando
+        ? 'hablando'
+        : vacio
+          ? 'saludo'
+          : 'reposo';
+
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={altoEncabezado} style={estilos.pantalla}>
-      <BarraEstado estilo="dark" />
+      <BarraEstado estilo="light" />
+      <Panel
+        estado={estado}
+        grande={vacio}
+        texto={vacio ? 'Pregunta cuándo pasa por una colonia o cómo usar la app.' : undefined}
+        titulo={ESTADO[estado]}
+      />
       <ScrollView
         contentContainerStyle={estilos.contenido}
         keyboardShouldPersistTaps="handled"
@@ -166,9 +229,8 @@ export default function Asistente() {
         style={estilos.lista}
       >
         <Aviso>{AVISO_ASISTENTE_CORTO}</Aviso>
-        {mensajes.length === 0 && (
+        {vacio && (
           <View style={estilos.sugerencias}>
-            <Text style={TEXTO.cuerpo}>Pregunta cuándo pasa por una colonia o cómo usar la app.</Text>
             {SUGERENCIAS.map((s) => (
               <Pastilla activa={false} key={s} onPress={() => preguntar(s)} texto={s} />
             ))}
@@ -176,11 +238,16 @@ export default function Asistente() {
         )}
         <View accessibilityLiveRegion="polite" style={estilos.mensajes}>
           {mensajes.map((m) => (
-            <Burbuja key={m.id} mensaje={m} />
+            <Burbuja ahora={ahora} key={m.id} mensaje={m} />
           ))}
           {esperando && (
-            <View accessibilityLabel="Pensando" accessible style={[estilos.burbuja, estilos.burbujaAjena]}>
-              <ActivityIndicator color={COLORES.primario} />
+            <View accessibilityLabel="Pensando" accessible style={estilos.respuesta}>
+              <View style={estilos.avatar}>
+                <Mascota tamano={28} />
+              </View>
+              <View style={[estilos.burbuja, estilos.burbujaAjena]}>
+                <ActivityIndicator color={COLORES.primario} />
+              </View>
             </View>
           )}
         </View>
@@ -235,24 +302,54 @@ export default function Asistente() {
 const estilos = StyleSheet.create({
   pantalla: { flex: 1, backgroundColor: COLORES.fondo },
   lista: { flex: 1 },
+  panel: {
+    alignItems: 'center',
+    backgroundColor: COLORES.primario,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
+    flexDirection: 'row',
+    gap: 14,
+    paddingBottom: 14,
+    paddingHorizontal: 20,
+  },
+  panelTextos: { flex: 1, gap: 2 },
+  panelTitulo: { color: COLORES.superficie, fontFamily: FUENTE, fontSize: 22, fontWeight: '800', lineHeight: 28 },
+  panelTituloChico: { color: COLORES.superficie, fontFamily: FUENTE, fontSize: 17, fontWeight: '700', lineHeight: 23 },
+  panelTexto: { color: COLORES.primarioSuave, fontFamily: FUENTE, fontSize: 16, fontWeight: '500', lineHeight: 22 },
+  respuesta: { alignItems: 'flex-end', flexDirection: 'row', gap: 8 },
+  avatar: {
+    alignItems: 'center',
+    backgroundColor: COLORES.primarioSuave,
+    borderRadius: RADIO.completo,
+    height: 36,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    width: 36,
+  },
+  tarjetas: { flex: 1, gap: 10 },
   contenido: CONTENIDO,
   punto: { flexDirection: 'row', gap: 10 },
   vineta: { marginTop: 8 },
   puntoTexto: { ...TEXTO.cuerpo, flex: 1 },
   sugerencias: { alignItems: 'flex-start', gap: 10 },
   mensajes: { gap: 10 },
-  burbuja: { borderRadius: RADIO.grande, gap: 8, maxWidth: '88%', padding: 14 },
-  burbujaPropia: { alignSelf: 'flex-end', backgroundColor: COLORES.primario },
+  burbuja: { borderRadius: RADIO.grande, gap: 8, padding: 14 },
+  burbujaPropia: {
+    alignSelf: 'flex-end',
+    backgroundColor: COLORES.primario,
+    borderBottomRightRadius: 4,
+    maxWidth: '86%',
+  },
   burbujaAjena: {
-    alignSelf: 'flex-start',
     backgroundColor: COLORES.superficie,
+    borderBottomLeftRadius: 4,
     borderColor: COLORES.borde,
     borderWidth: StyleSheet.hairlineWidth,
+    flexShrink: 1,
   },
   burbujaTexto: { color: COLORES.texto, fontFamily: FUENTE, fontSize: 16, fontWeight: '500', lineHeight: 23 },
   burbujaTextoPropio: { color: COLORES.superficie },
   origen: { alignItems: 'center', flexDirection: 'row', gap: 6 },
-  enlace: { justifyContent: 'center', minHeight: ALTURA_TACTIL },
   entrada: {
     alignItems: 'flex-end',
     backgroundColor: COLORES.superficie,

@@ -23,7 +23,14 @@ export default function Raiz() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="bienvenida" options={{ headerShown: false }} />
             <Stack.Screen name="lugar/[id]" options={{ title: 'Horario' }} />
-            <Stack.Screen name="asistente" options={{ title: 'Asistente' }} />
+            <Stack.Screen
+              name="asistente"
+              options={{
+                headerStyle: { backgroundColor: COLORES.primario },
+                headerTintColor: COLORES.superficie,
+                title: 'Asistente',
+              }}
+            />
             <Stack.Screen name="rutas/index" options={{ title: 'Rutas' }} />
             <Stack.Screen name="mapa/[rutaId]" options={{ headerShown: false }} />
             <Stack.Screen name="reportes/privacidad" options={{ title: 'Aviso de privacidad' }} />

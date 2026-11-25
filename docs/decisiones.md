@@ -361,3 +361,12 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Voz en español:** `expo-speech` en Android solo acepta el idioma (`es`); con `es-MX` usa el del teléfono sin avisar. Por eso se elige una voz en español por su identificador. Sin voz en español no se lee. Con TalkBack tampoco, porque el lector ya lee la respuesta.
 - **Al cambiar permisos bloqueados:** `expo prebuild` sin `--clean` conserva la línea `tools:node="remove"` anterior en el manifiesto generado; hay que quitarla o usar `--clean`.
 - **Prueba con voz real (2026-11-24):** el usuario preguntó hablando; la app entendió y contestó con voz.
+
+## 2026-11-24 · Aspecto del asistente, parte A
+
+- **Rama `asistente-visual`**, creada desde `asistente-ia`. Solo cambia la app: no toca Supabase ni Gemini y no agrega librerías.
+- **El camarón es la cara del asistente.** Hay una sola imagen, así que cada estado (saludo, escuchando, pensando, hablando) se distingue por el movimiento y por un texto que dice lo mismo. Con «quitar animaciones» se queda quieto.
+- **Los horarios salen en tarjeta**, la misma de Inicio (`TarjetaHoy` con `compacta`), sin los botones de mapa. El texto se conserva para la voz y el historial. Con dos o tres lugares hay una tarjeta por lugar.
+- **Entrada en Inicio:** el globo «Pregúntame por tu colonia» junto al camarón, en lugar de la tarjeta que quedaba cortada abajo.
+- **Probado en el emulador:** saludo, espera, respuesta de la IA, tarjetas de uno y tres lugares, escucha, teclado abierto, letra a 1.5 y sin animaciones.
+- **Parte B pendiente:** onda de voz, puntos al pensar, entrada suave de mensajes y botones para responder.

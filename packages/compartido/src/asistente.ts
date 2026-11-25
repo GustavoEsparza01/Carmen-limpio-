@@ -147,8 +147,8 @@ function parrafo(lugar: Lugar, ahora: Date): string {
 
 export interface RespuestaLocal {
   texto: string;
-  // Un solo lugar: la pantalla puede ofrecer su horario completo.
-  lugarId?: string;
+  // Lugares de la respuesta: la pantalla muestra su horario en tarjetas. El texto es para la voz y el historial.
+  lugarIds?: string[];
 }
 
 // Null cuando la pregunta no es de horario o no se reconoce el lugar: entonces contesta la IA.
@@ -172,12 +172,11 @@ export function responderHorario(
   }
   if (nombrados.length > 0) {
     const texto = [...nombrados.map((l) => parrafo(l, ahora)), AVISO_FUENTE_HOY].join('\n');
-    const [unico] = nombrados;
-    return nombrados.length === 1 && unico ? { texto, lugarId: unico.id } : { texto };
+    return { texto, lugarIds: nombrados.map((l) => l.id) };
   }
   if (MI_LUGAR.test(normal)) {
     return guardado
-      ? { texto: [parrafo(guardado, ahora), AVISO_FUENTE_HOY].join('\n'), lugarId: guardado.id }
+      ? { texto: [parrafo(guardado, ahora), AVISO_FUENTE_HOY].join('\n'), lugarIds: [guardado.id] }
       : { texto: 'Aún no guardas tu colonia. Dime cuál es, o búscala en Inicio y guárdala.' };
   }
   return null;
