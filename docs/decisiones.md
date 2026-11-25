@@ -376,4 +376,4 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Onda de voz:** sigue el volumen real del micrófono mientras escucha. Se mueve también con «quitar animaciones», porque indica que está entrando sonido.
 - **Espera y mensajes:** tres puntos en lugar del círculo y una entrada corta de cada mensaje. Sin animaciones quedan fijos.
 - **Botones para responder:** con varios lugares parecidos se toca el propio (antes había que escribirlo). Después de cada respuesta hay hasta dos sugerencias que no se han preguntado; si la IA falló, solo la que se contesta sin ella.
-- **Probado en el emulador:** opciones de Renovación, sugerencias, espera, escucha en silencio, letra a 1.5 y sin animaciones. El límite de 15 preguntas por dispositivo se alcanzó en vivo y el chat avisó. Falta ver la onda con una voz real.
+- **Probado en el emulador:** opciones de Renovación, sugerencias, espera, escucha en silencio, letra a 1.5 y sin animaciones. El límite de 15 preguntas por dispositivo se alcanzó en vivo y el chat avisó. El usuario la probó con voz real en el emulador y lo reconoció.
