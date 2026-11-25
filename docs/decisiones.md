@@ -345,3 +345,15 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **`main` reúne todo:** las Fases 3 a 6, el sitio, el panel y la APK se fusionaron sin conflictos. Con eso desaparece de `main` el panel viejo con `propuesta.geojson` público.
 - **Vercel publica desde `main`:** los dos proyectos, `carmen-limpio` (sitio) y `carmen-limpio-panel`, tienen ahora `main` como rama de producción. `presencia-web` y las ramas de fase quedan como historial.
 - **Supabase no se pausa:** la GitHub Action «Mantener Supabase activo» consulta una ruta cada 3 días con los secretos `SUPABASE_URL` y `SUPABASE_ANON_KEY` del repositorio (clave anon). Para que GitHub no apague la tarea tras 60 días sin commits, un último paso la vuelve a marcar como activa en cada ejecución, por la API y con el permiso `actions: write`.
+
+## 2026-11-24 · Asistente con IA (demo)
+
+- **Pedido del usuario, fuera del alcance original.** Se agrega un asistente por texto y por voz, solo como demo. Cambia la regla «No prometas IA» de `CLAUDE.md` y la sección 5 del prompt. Rama `asistente-ia`, creada desde `origin/main`.
+- **Solo responde dudas y no pide cuenta.** No crea ni consulta reportes.
+- **Los horarios no pasan por la IA.** `responderHorario` (`packages/compartido/src/asistente.ts`) reconoce la colonia y contesta con el catálogo: no gasta cuota, funciona sin conexión y no puede inventar días. Las quejas, los reportes y lo que no reconoce van a la IA.
+- **Proveedor: Gemini, plan gratuito** (`gemini-3.5-flash-lite`), desde la función de Supabase `asistente`. Se eligió por ser gratis. Cambiarlo solo toca `proveedor.ts`. Se usa `generateContent`, sin estado, en lugar de la API de Interactions.
+- **Condiciones del plan gratuito:** Google puede usar lo que se escriba para mejorar sus productos y una persona puede leerlo; pide no enviar datos personales y no permite apps a las que probablemente accedan menores de 18. Por eso es demo. Antes de abrirlo a vecinos hay que pasar a un plan de pago y revisar esos términos.
+- **Privacidad:** aviso propio antes del primer uso, con confirmación de mayoría de edad; correos y teléfonos se ocultan antes de enviarlos (no detecta nombres ni direcciones). No se guardan conversaciones ni se escriben en los registros. El aviso de privacidad cambió de versión, así que la app lo volverá a pedir para reportar.
+- **Límites:** 15 preguntas por dispositivo y 100 en total al día, con `ASISTENTE_LIMITE_DISPOSITIVO` y `ASISTENTE_LIMITE_DIARIO`. El identificador es aleatorio y se puede falsificar; el tope total es el que protege la cuota.
+- **Horas:** si la IA menciona una hora que no está en los horarios o avisos publicados, la función cambia la respuesta por una que dice que no hay hora exacta.
+- **Voz (pendiente):** el teléfono convertirá la voz en texto y leerá la respuesta; si se pregunta por escrito, se contesta por escrito.

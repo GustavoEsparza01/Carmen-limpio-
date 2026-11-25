@@ -29,7 +29,7 @@ Carmen Limpio es una plataforma para consultar y dar seguimiento a la recolecci�
 
 **Visión:** ser una plataforma de referencia para la gestión inteligente de residuos urbanos en Ciudad del Carmen.
 
-No pretende resolver toda la gestión municipal de residuos. En esta versión, lo "inteligente" es el análisis de incidencias; no prometas IA.
+No pretende resolver toda la gestión municipal de residuos. En esta versión, lo "inteligente" es el análisis de incidencias. El asistente con IA es una demo agregada el 2026-11-24 (ver `decisiones.md`).
 
 El documento original está en `recursos/docs/Carmen_Limpio_Documento_de_Presentacion.pdf`.
 
@@ -85,6 +85,7 @@ carmen-limpio/
 - Ver la ruta en el mapa, etiquetada como ilustrativa.
 - Consultar avisos y recibir recordatorios.
 - Crear reportes con cuenta y seguir su estado.
+- Demo: preguntar al asistente por texto o por voz (solo dudas; no crea reportes). Agregado el 2026-11-24.
 
 **Incluye en el panel:**
 - Inicio de sesión de administradores.

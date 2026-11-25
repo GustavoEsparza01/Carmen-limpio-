@@ -23,7 +23,7 @@ Plataforma para consultar y dar seguimiento a la recolección de residuos en Ciu
 - Consultar no requiere cuenta. Reportar y dar seguimiento sí.
 - Aviso de privacidad (LFPDPPP) antes de pedir datos. Las fotos de reportes no son públicas.
 - Los reportes los atiende el equipo como demo: no sugieras que llegan al municipio o a SOS.
-- No prometas IA.
+- IA: solo el asistente, como **demo** (decisión del usuario, 2026-11-24). No la presentes como oficial, optimización ni predicción. Los horarios se responden con datos, sin IA; la clave de Gemini vive solo como secreto de Supabase.
 - No extraigas datos de `sosdelaisla.com` sin autorización del usuario.
 
 ## Datos
@@ -42,7 +42,7 @@ Plataforma para consultar y dar seguimiento a la recolección de residuos en Ciu
 | `apps/movil` | App ciudadana (Expo, solo Android, *development build*) |
 | `apps/panel` | Panel web (React, Vite y Leaflet) |
 | `packages/compartido` | Tipos, validaciones y constantes |
-| `supabase/` | Migraciones y datos iniciales |
+| `supabase/` | Migraciones, datos iniciales y la función `asistente` (Deno) |
 | `herramientas/rutas/` | Datos y scripts del trazado (se ejecutan desde esa carpeta) |
 | `docs/` | Documento original, carteles y decisiones |
 
