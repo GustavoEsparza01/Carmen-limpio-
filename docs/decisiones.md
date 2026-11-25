@@ -345,3 +345,35 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **`main` reúne todo:** las Fases 3 a 6, el sitio, el panel y la APK se fusionaron sin conflictos. Con eso desaparece de `main` el panel viejo con `propuesta.geojson` público.
 - **Vercel publica desde `main`:** los dos proyectos, `carmen-limpio` (sitio) y `carmen-limpio-panel`, tienen ahora `main` como rama de producción. `presencia-web` y las ramas de fase quedan como historial.
 - **Supabase no se pausa:** la GitHub Action «Mantener Supabase activo» consulta una ruta cada 3 días con los secretos `SUPABASE_URL` y `SUPABASE_ANON_KEY` del repositorio (clave anon). Para que GitHub no apague la tarea tras 60 días sin commits, un último paso la vuelve a marcar como activa en cada ejecución, por la API y con el permiso `actions: write`.
+
+## 2026-11-24 · Asistente con IA (demo)
+
+- **Pedido del usuario, fuera del alcance original.** Se agrega un asistente por texto y por voz, solo como demo. Cambia la regla «No prometas IA» de `CLAUDE.md` y la sección 5 del prompt. Rama `asistente-ia`, creada desde `origin/main`.
+- **Solo responde dudas y no pide cuenta.** No crea ni consulta reportes.
+- **Los horarios no pasan por la IA.** `responderHorario` (`packages/compartido/src/asistente.ts`) reconoce la colonia y contesta con el catálogo: no gasta cuota, funciona sin conexión y no puede inventar días. Las quejas, los reportes y lo que no reconoce van a la IA.
+- **Proveedor: Gemini, plan gratuito** (`gemini-3.5-flash-lite`), desde la función de Supabase `asistente`. Se eligió por ser gratis. Cambiarlo solo toca `proveedor.ts`. Se usa `generateContent`, sin estado, en lugar de la API de Interactions.
+- **Condiciones del plan gratuito:** Google puede usar lo que se escriba para mejorar sus productos y una persona puede leerlo; pide no enviar datos personales y no permite apps a las que probablemente accedan menores de 18. Por eso es demo. Antes de abrirlo a vecinos hay que pasar a un plan de pago y revisar esos términos.
+- **Privacidad:** aviso propio antes del primer uso, con confirmación de mayoría de edad; correos y teléfonos se ocultan antes de enviarlos (no detecta nombres ni direcciones). No se guardan conversaciones ni se escriben en los registros. El aviso de privacidad cambió de versión, así que la app lo volverá a pedir para reportar.
+- **Límites:** 15 preguntas por dispositivo y 400 en total al día (AI Studio mostró 500 al día y 15 por minuto para ese modelo, 2026-11-24), con `ASISTENTE_LIMITE_DISPOSITIVO` y `ASISTENTE_LIMITE_DIARIO`. El identificador es aleatorio y se puede falsificar; el tope total es el que protege la cuota.
+- **Horas:** si la IA menciona una hora que no está en los horarios o avisos publicados, la función cambia la respuesta por una que dice que no hay hora exacta.
+- **Voz:** si se pregunta hablando, se contesta hablando y también por escrito; si se pregunta por escrito, solo por escrito. La resuelve el teléfono (`expo-speech-recognition` 58.0.1 y `expo-speech`), sin API de pago: la app solo recibe texto.
+- **Micrófono:** se quitó `RECORD_AUDIO` de `blockedPermissions`. El permiso se pide al tocar el botón; sin él se puede escribir. Se cierra a los 20 segundos (hay reconocedores que no se detienen con el silencio), al salir de la pantalla y al mandar la app a segundo plano.
+- **Voz en español:** `expo-speech` en Android solo acepta el idioma (`es`); con `es-MX` usa el del teléfono sin avisar. Por eso se elige una voz en español por su identificador. Sin voz en español no se lee. Con TalkBack tampoco, porque el lector ya lee la respuesta.
+- **Al cambiar permisos bloqueados:** `expo prebuild` sin `--clean` conserva la línea `tools:node="remove"` anterior en el manifiesto generado; hay que quitarla o usar `--clean`.
+- **Prueba con voz real (2026-11-24):** el usuario preguntó hablando; la app entendió y contestó con voz.
+
+## 2026-11-24 · Aspecto del asistente, parte A
+
+- **Rama `asistente-visual`**, creada desde `asistente-ia`. Solo cambia la app: no toca Supabase ni Gemini y no agrega librerías.
+- **El camarón es la cara del asistente.** Hay una sola imagen, así que cada estado (saludo, escuchando, pensando, hablando) se distingue por el movimiento y por un texto que dice lo mismo. Con «quitar animaciones» se queda quieto.
+- **Los horarios salen en tarjeta**, la misma de Inicio (`TarjetaHoy` con `compacta`), sin los botones de mapa. El texto se conserva para la voz y el historial. Con dos o tres lugares hay una tarjeta por lugar.
+- **Entrada en Inicio:** el globo «Pregúntame por tu colonia» junto al camarón, en lugar de la tarjeta que quedaba cortada abajo.
+- **Probado en el emulador:** saludo, espera, respuesta de la IA, tarjetas de uno y tres lugares, escucha, teclado abierto, letra a 1.5 y sin animaciones.
+
+## 2026-11-24 · Aspecto del asistente, parte B
+
+- **Visto bueno del usuario a la parte A.** La B va en la misma rama.
+- **Onda de voz:** sigue el volumen real del micrófono mientras escucha. Se mueve también con «quitar animaciones», porque indica que está entrando sonido.
+- **Espera y mensajes:** tres puntos en lugar del círculo y una entrada corta de cada mensaje. Sin animaciones quedan fijos.
+- **Botones para responder:** con varios lugares parecidos se toca el propio (antes había que escribirlo). Después de cada respuesta hay hasta dos sugerencias que no se han preguntado; si la IA falló, solo la que se contesta sin ella.
+- **Probado en el emulador:** opciones de Renovación, sugerencias, espera, escucha en silencio, letra a 1.5 y sin animaciones. El límite de 15 preguntas por dispositivo se alcanzó en vivo y el chat avisó. El usuario la probó con voz real en el emulador y lo reconoció.

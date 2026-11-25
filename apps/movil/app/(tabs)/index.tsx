@@ -95,8 +95,25 @@ export default function Inicio() {
               Carmen Limpio
             </Text>
             {!buscando && <Text style={estilos.subtitulo}>¿Qué días pasa el camión por tu colonia?</Text>}
+            {!buscando && (
+              <Pressable
+                accessibilityHint="Abre el asistente"
+                accessibilityRole="button"
+                onPress={() => router.push('/asistente')}
+                style={({ pressed }) => [estilos.preguntar, pressed && estilos.preguntarPresionado]}
+              >
+                <Ionicons color={COLORES.primario} name="chatbubble-ellipses" size={18} />
+                <Text style={estilos.preguntarTexto}>Pregúntame por tu colonia</Text>
+              </Pressable>
+            )}
           </View>
-          <Mascota tamano={buscando ? 44 : 64} />
+          <Pressable
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            onPress={() => router.push('/asistente')}
+          >
+            <Mascota tamano={buscando ? 44 : 84} />
+          </Pressable>
         </View>
 
         <View style={estilos.buscadorFijo}>
@@ -226,6 +243,22 @@ const estilos = StyleSheet.create({
     lineHeight: 22,
     marginTop: 2,
   },
+  // Globo de diálogo: la esquina recta apunta hacia el camarón.
+  preguntar: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: COLORES.superficie,
+    borderRadius: RADIO.grande,
+    borderBottomRightRadius: 4,
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 10,
+    minHeight: 48,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  preguntarPresionado: { backgroundColor: COLORES.primarioSuave },
+  preguntarTexto: { color: COLORES.primario, flexShrink: 1, fontFamily: FUENTE, fontSize: 15, fontWeight: '700', lineHeight: 21 },
   buscadorFijo: { marginTop: -30, paddingHorizontal: 20 },
   buscador: {
     ...SOMBRA,

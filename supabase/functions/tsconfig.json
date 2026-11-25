@@ -1,0 +1,6 @@
+{
+  "extends": "../../packages/compartido/tsconfig.json",
+  "compilerOptions": { "lib": ["ES2023", "DOM", "DOM.Iterable"] },
+  "include": ["asistente"],
+  "exclude": ["asistente/index.ts"]
+}

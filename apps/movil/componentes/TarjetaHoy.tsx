@@ -32,7 +32,8 @@ function FilaRuta({ horario, hoy }: { horario: Horario; hoy: Dia }) {
   );
 }
 
-export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
+// `compacta` es para el chat: el mismo horario, sin los botones de mapa.
+export function TarjetaHoy({ lugar, ahora, compacta = false }: { lugar: Lugar; ahora: Date; compacta?: boolean }) {
   const hoy = estadoDeHoy(lugar.horarios, ahora);
   if (!hoy) return null;
 
@@ -47,10 +48,10 @@ export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
         accessibilityLabel={`${lugar.nombre}. ${etiqueta}. ${mensaje}`}
         accessibilityRole="button"
         onPress={() => router.push(`/lugar/${lugar.id}`)}
-        style={({ pressed }) => [estilos.estado, { backgroundColor: fondo }, pressed && estilos.presionado]}
+        style={({ pressed }) => [estilos.estado, compacta && estilos.estadoCompacto, { backgroundColor: fondo }, pressed && estilos.presionado]}
       >
         <View style={estilos.encabezado}>
-          <Ionicons color={texto} name="bookmark" size={16} />
+          <Ionicons color={texto} name={compacta ? 'location' : 'bookmark'} size={16} />
           <Text numberOfLines={2} style={[estilos.lugar, { color: texto }]}>
             {lugar.nombre}
           </Text>
@@ -61,14 +62,14 @@ export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
           <Text style={[estilos.etiquetaTexto, { color: texto }]}>{etiqueta}</Text>
           {(estado === 'antes' || estado === 'enCurso') && <CamionDecorativo color={texto} />}
         </View>
-        <Text style={[estilos.mensaje, { color: texto }]}>{mensaje}</Text>
+        <Text style={[estilos.mensaje, compacta && estilos.mensajeCompacto, { color: texto }]}>{mensaje}</Text>
       </Pressable>
 
       <View style={estilos.detalle}>
         {lugar.horarios.map((h) => (
           <FilaRuta hoy={dia} horario={h} key={h.rutaId} />
         ))}
-        {conMapa.map((h) => (
+        {!compacta && conMapa.map((h) => (
           <Boton
             icono="map"
             key={h.rutaId}
@@ -77,7 +78,7 @@ export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
             variante="secundario"
           />
         ))}
-        {conMapa.length === 0 && <Text style={TEXTO.apoyo}>Este lugar aún no está ubicado en el mapa.</Text>}
+        {!compacta && conMapa.length === 0 && <Text style={TEXTO.apoyo}>Este lugar aún no está ubicado en el mapa.</Text>}
         <Text style={estilos.fuente}>{AVISO_FUENTE_HOY}</Text>
       </View>
     </View>
@@ -87,12 +88,14 @@ export function TarjetaHoy({ lugar, ahora }: { lugar: Lugar; ahora: Date }) {
 const estilos = StyleSheet.create({
   tarjeta: { ...TARJETA, overflow: 'hidden' },
   estado: { gap: 10, padding: 18 },
+  estadoCompacto: { gap: 6, padding: 14 },
   presionado: { opacity: 0.85 },
   encabezado: { alignItems: 'center', flexDirection: 'row', gap: 6 },
   lugar: { flex: 1, fontFamily: FUENTE, fontSize: 16, fontWeight: '600', lineHeight: 22 },
   etiqueta: { alignItems: 'center', flexDirection: 'row', gap: 6 },
   etiquetaTexto: { fontFamily: FUENTE, fontSize: 15, fontWeight: '700', lineHeight: 21 },
   mensaje: { fontFamily: FUENTE, fontSize: 24, fontWeight: '800', lineHeight: 30 },
+  mensajeCompacto: { fontSize: 18, fontWeight: '700', lineHeight: 24 },
   detalle: { gap: 12, padding: 16 },
   filaRuta: { gap: 10 },
   ruta: { alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between' },

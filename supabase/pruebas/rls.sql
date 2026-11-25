@@ -241,6 +241,23 @@ begin
   perform pg_temp.afirmar(not exists (select 1 from public.posiciones_unidad where origen = 'gps'), 'público: no ve posiciones de GPS');
   pruebas := pruebas + 2;
 
+  -- Asistente: el contador solo lo usa el servidor ------------------------------------
+  perform pg_temp.como(null);
+  perform pg_temp.falla('select * from public.uso_asistente', 'público: no lee el uso del asistente');
+  perform pg_temp.falla('select public.registrar_pregunta(gen_random_uuid(), 1, 1)', 'público: no registra preguntas');
+  perform pg_temp.como(a);
+  perform pg_temp.falla('select * from public.uso_asistente', 'A: no lee el uso del asistente');
+  perform pg_temp.falla('select public.registrar_pregunta(gen_random_uuid(), 1, 1)', 'A: no registra preguntas');
+  execute 'reset role';
+  delete from public.uso_asistente;
+  perform pg_temp.afirmar(public.registrar_pregunta(a, 2, 3) = 'ok', 'asistente: primera pregunta');
+  perform pg_temp.afirmar(public.registrar_pregunta(a, 2, 3) = 'ok', 'asistente: segunda pregunta');
+  perform pg_temp.afirmar(public.registrar_pregunta(a, 2, 3) = 'dispositivo', 'asistente: límite por dispositivo');
+  perform pg_temp.afirmar(public.registrar_pregunta(b, 2, 3) = 'ok', 'asistente: otro dispositivo sigue');
+  perform pg_temp.afirmar(public.registrar_pregunta(b, 2, 3) = 'diario', 'asistente: límite diario');
+  perform pg_temp.afirmar((select sum(preguntas) from public.uso_asistente) = 3, 'asistente: lo rechazado no cuenta');
+  pruebas := pruebas + 10;
+
   -- B elimina su cuenta -------------------------------------------------------------
   perform pg_temp.como(b);
   perform public.eliminar_mi_cuenta();

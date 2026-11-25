@@ -63,6 +63,44 @@ export function Esqueleto({ alto, ancho = '100%' }: { alto: number; ancho?: Dime
   );
 }
 
+const PUNTOS = [0, 1, 2] as const;
+const PASO_PUNTO_MS = 260;
+
+// Espera de una respuesta. Sin animaciones quedan los tres puntos fijos.
+export function PuntosEspera({ color }: { color: string }) {
+  const reducir = useReducirAnimacion();
+  const avance = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    avance.setValue(0);
+    if (reducir) return;
+    const pasos = PUNTOS.length + 1;
+    const ciclo = Animated.loop(
+      Animated.timing(avance, {
+        duration: PASO_PUNTO_MS * pasos,
+        easing: Easing.linear,
+        toValue: pasos,
+        useNativeDriver: true,
+      }),
+    );
+    ciclo.start();
+    return () => ciclo.stop();
+  }, [avance, reducir]);
+
+  return (
+    <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={estilos.puntos}>
+      {PUNTOS.map((i) => {
+        const translateY = avance.interpolate({
+          extrapolate: 'clamp',
+          inputRange: [i, i + 0.5, i + 1],
+          outputRange: [0, -5, 0],
+        });
+        return <Animated.View key={i} style={[estilos.punto, { backgroundColor: color, transform: [{ translateY }] }]} />;
+      })}
+    </View>
+  );
+}
+
 // Decorativo: rebota en su lugar y se detiene. No recorre nada para no sugerir la posición de un camión.
 export function CamionDecorativo({ color }: { color: string }) {
   const reducir = useReducirAnimacion();
@@ -93,5 +131,7 @@ export function CamionDecorativo({ color }: { color: string }) {
 
 const estilos = StyleSheet.create({
   esqueleto: { backgroundColor: COLORES.inactivo, borderRadius: RADIO.grande },
+  puntos: { alignItems: 'center', flexDirection: 'row', gap: 6, height: 23, paddingHorizontal: 4 },
+  punto: { borderRadius: RADIO.completo, height: 8, width: 8 },
   volteado: { transform: [{ scaleX: -1 }] },
 });

@@ -18,6 +18,8 @@
     "expo-linking": "~58.0.16",
     "expo-notifications": "~58.1.8",
     "expo-router": "~58.0.30",
+    "expo-speech": "~58.0.4",
+    "expo-speech-recognition": "^58.0.1",
     "expo-splash-screen": "~58.0.13",
     "expo-status-bar": "~58.0.4",
     "react": "19.3.0",

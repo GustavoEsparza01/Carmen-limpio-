@@ -1,3 +1,4 @@
+export * from './asistente.ts';
 export * from './busqueda.ts';
 export * from './catalogo.ts';
 export * from './ciudad.ts';
