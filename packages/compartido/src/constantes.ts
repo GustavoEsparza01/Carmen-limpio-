@@ -59,7 +59,7 @@ export const TEXTO_PRIVACIDAD_FOTOS = 'La foto solo la ven tú y el equipo del p
 export const AVISO_PRIVACIDAD_BORRADOR = 'Borrador pendiente de revisión legal. Lo marcado como pendiente aún no se define.';
 
 // Cambia la versión cuando cambie el texto: la app pedirá aceptar la nueva.
-export const VERSION_AVISO_PRIVACIDAD = '2026-11-10-borrador';
+export const VERSION_AVISO_PRIVACIDAD = '2026-11-24-borrador';
 
 // Borrador con la estructura de la LFPDPPP. Lo marcado como pendiente no se ha definido.
 export const AVISO_PRIVACIDAD: readonly { titulo: string; texto: string }[] = [
@@ -84,7 +84,12 @@ export const AVISO_PRIVACIDAD: readonly { titulo: string; texto: string }[] = [
   {
     titulo: 'Dónde se guardan',
     texto:
-      'En Supabase, un servicio de base de datos en la nube que los guarda por cuenta del proyecto. No se venden ni se comparten con terceros.',
+      'En Supabase, un servicio de base de datos en la nube que los guarda por cuenta del proyecto. No se venden ni se comparten con terceros, salvo lo que escribas al asistente.',
+  },
+  {
+    titulo: 'Asistente (demo)',
+    texto:
+      'No requiere cuenta ni se liga a ella. Los horarios se responden en tu teléfono. Las demás preguntas, con los mensajes anteriores de la charla y sin los correos ni teléfonos que se detecten, pasan por Supabase y se envían a Gemini, de Google; con el plan gratuito, Google puede usarlas para mejorar sus productos y una persona puede leerlas. No escribas datos personales. Guardamos solo cuántas preguntas hace al día un identificador aleatorio, para limitar el uso; no guardamos la conversación. Es para mayores de 18 años.',
   },
   {
     titulo: 'Tus derechos',

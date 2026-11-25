@@ -187,6 +187,12 @@ export default function Inicio() {
                   subtitulo="Todas las rutas juntas"
                   titulo="Mapa de la ciudad"
                 />
+                <TarjetaAcceso
+                  icono="chatbubbles"
+                  onPress={() => router.push('/asistente')}
+                  subtitulo="Pregunta por tu colonia"
+                  titulo="Asistente"
+                />
               </View>
             </>
           )}

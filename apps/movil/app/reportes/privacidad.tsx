@@ -1,5 +1,5 @@
 import { AVISO_PRIVACIDAD, AVISO_PRIVACIDAD_BORRADOR } from '@carmen-limpio/compartido';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ErrorCampo } from '../../componentes/formularioReporte';
@@ -9,6 +9,8 @@ import { CONTENIDO, TEXTO } from '../../estilos/tema';
 
 // Se muestra antes de pedir cualquier dato (LFPDPPP): al crear la cuenta, o si el aviso cambió.
 export default function Privacidad() {
+  // Desde el asistente solo se lee: ahí no se crea ninguna cuenta.
+  const { leer } = useLocalSearchParams<{ leer?: string }>();
   const { usuario, aceptarPrivacidad } = useCuenta();
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string>();
@@ -42,13 +44,17 @@ export default function Privacidad() {
           <Text style={TEXTO.cuerpo}>{texto}</Text>
         </View>
       ))}
-      <ErrorCampo texto={error} />
-      <Boton
-        icono="checkmark"
-        onPress={aceptar}
-        texto={enviando ? 'Guardando…' : usuario ? 'Acepto' : 'Acepto y creo mi cuenta'}
-      />
-      <Boton icono="close" onPress={() => router.back()} texto="Ahora no" variante="secundario" />
+      {!leer && (
+        <>
+          <ErrorCampo texto={error} />
+          <Boton
+            icono="checkmark"
+            onPress={aceptar}
+            texto={enviando ? 'Guardando…' : usuario ? 'Acepto' : 'Acepto y creo mi cuenta'}
+          />
+          <Boton icono="close" onPress={() => router.back()} texto="Ahora no" variante="secundario" />
+        </>
+      )}
     </ScrollView>
   );
 }
