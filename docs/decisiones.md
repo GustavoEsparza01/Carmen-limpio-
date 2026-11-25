@@ -377,3 +377,8 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Espera y mensajes:** tres puntos en lugar del círculo y una entrada corta de cada mensaje. Sin animaciones quedan fijos.
 - **Botones para responder:** con varios lugares parecidos se toca el propio (antes había que escribirlo). Después de cada respuesta hay hasta dos sugerencias que no se han preguntado; si la IA falló, solo la que se contesta sin ella.
 - **Probado en el emulador:** opciones de Renovación, sugerencias, espera, escucha en silencio, letra a 1.5 y sin animaciones. El límite de 15 preguntas por dispositivo se alcanzó en vivo y el chat avisó. El usuario la probó con voz real en el emulador y lo reconoció.
+
+## 2026-11-24 · Asistente fusionado a main
+
+- **A petición del usuario**, se fusionó `asistente-visual` (que incluye `asistente-ia`). El sitio publica el aviso de privacidad que menciona el asistente.
+- **Sigue siendo demo:** la APK publicada no lo incluye y el número de versión no cambió (0.1.0). Falta probarlo en un teléfono real antes de repartirla.
