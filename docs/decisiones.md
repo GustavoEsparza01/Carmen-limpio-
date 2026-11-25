@@ -360,3 +360,4 @@ Registro de decisiones del proyecto. Lo marcado como **supuesto** sigue sin conf
 - **Micrófono:** se quitó `RECORD_AUDIO` de `blockedPermissions`. El permiso se pide al tocar el botón; sin él se puede escribir. Se cierra a los 20 segundos (hay reconocedores que no se detienen con el silencio), al salir de la pantalla y al mandar la app a segundo plano.
 - **Voz en español:** `expo-speech` en Android solo acepta el idioma (`es`); con `es-MX` usa el del teléfono sin avisar. Por eso se elige una voz en español por su identificador. Sin voz en español no se lee. Con TalkBack tampoco, porque el lector ya lee la respuesta.
 - **Al cambiar permisos bloqueados:** `expo prebuild` sin `--clean` conserva la línea `tools:node="remove"` anterior en el manifiesto generado; hay que quitarla o usar `--clean`.
+- **Prueba con voz real (2026-11-24):** el usuario preguntó hablando; la app entendió y contestó con voz.
